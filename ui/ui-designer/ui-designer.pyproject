@@ -1,0 +1,9 @@
+{
+    "files": [
+        "Dialog.ui",
+        "MainWindow.py",
+        "form.ui",
+        "layout-labels.ui",
+        "resources.qrc"
+    ]
+}

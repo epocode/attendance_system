@@ -1,6 +1,7 @@
 {
     "files": [
         "MainWindow.py",
-        "form.ui"
+        "form.ui",
+        "resources.qrc"
     ]
 }

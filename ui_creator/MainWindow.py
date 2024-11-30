@@ -23,7 +23,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(800, 600)
+        MainWindow.resize(1080, 645)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout = QVBoxLayout(self.centralwidget)
@@ -35,12 +35,35 @@ class Ui_MainWindow(object):
         self.btn_collect_face = QPushButton(self.page_home)
         self.btn_collect_face.setObjectName(u"btn_collect_face")
         self.btn_collect_face.setGeometry(QRect(290, 160, 93, 28))
+        self.btn_face_detect = QPushButton(self.page_home)
+        self.btn_face_detect.setObjectName(u"btn_face_detect")
+        self.btn_face_detect.setGeometry(QRect(290, 210, 93, 28))
         self.stackedWidget.addWidget(self.page_home)
+        self.page_face_detect = QWidget()
+        self.page_face_detect.setObjectName(u"page_face_detect")
+        self.label_2 = QLabel(self.page_face_detect)
+        self.label_2.setObjectName(u"label_2")
+        self.label_2.setGeometry(QRect(320, 200, 69, 19))
+        self.stackedWidget.addWidget(self.page_face_detect)
+        self.page_info_display = QWidget()
+        self.page_info_display.setObjectName(u"page_info_display")
+        self.label_3 = QLabel(self.page_info_display)
+        self.label_3.setObjectName(u"label_3")
+        self.label_3.setGeometry(QRect(300, 230, 69, 19))
+        self.stackedWidget.addWidget(self.page_info_display)
         self.page_face_collect = QWidget()
         self.page_face_collect.setObjectName(u"page_face_collect")
-        self.label = QLabel(self.page_face_collect)
-        self.label.setObjectName(u"label")
-        self.label.setGeometry(QRect(120, 70, 69, 19))
+        self.label_disp_video = QLabel(self.page_face_collect)
+        self.label_disp_video.setObjectName(u"label_disp_video")
+        self.label_disp_video.setGeometry(QRect(10, 10, 1001, 511))
+        self.label_disp_video.setStyleSheet(u"border: 5px solid red;")
+        self.label_disp_video.setWordWrap(False)
+        self.btn_start = QPushButton(self.page_face_collect)
+        self.btn_start.setObjectName(u"btn_start")
+        self.btn_start.setGeometry(QRect(10, 530, 93, 28))
+        self.btn_end = QPushButton(self.page_face_collect)
+        self.btn_end.setObjectName(u"btn_end")
+        self.btn_end.setGeometry(QRect(130, 530, 93, 28))
         self.stackedWidget.addWidget(self.page_face_collect)
 
         self.verticalLayout.addWidget(self.stackedWidget)
@@ -48,7 +71,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 800, 25))
+        self.menubar.setGeometry(QRect(0, 0, 1080, 25))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -56,7 +79,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(3)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -65,6 +88,11 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.btn_collect_face.setText(QCoreApplication.translate("MainWindow", u"\u5f55\u5165\u4eba\u8138", None))
-        self.label.setText(QCoreApplication.translate("MainWindow", u"TextLabel", None))
+        self.btn_face_detect.setText(QCoreApplication.translate("MainWindow", u"\u7b7e\u5230", None))
+        self.label_2.setText(QCoreApplication.translate("MainWindow", u"face detection", None))
+        self.label_3.setText(QCoreApplication.translate("MainWindow", u"dispaly", None))
+        self.label_disp_video.setText("")
+        self.btn_start.setText(QCoreApplication.translate("MainWindow", u"\u5f00\u59cb\u5f55\u5165", None))
+        self.btn_end.setText(QCoreApplication.translate("MainWindow", u"\u505c\u6b62\u5f55\u5165", None))
     # retranslateUi
 

@@ -1,1 +1,0 @@
-VIDEO_PATH = 'data/video/classroom.mp4'

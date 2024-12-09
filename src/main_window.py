@@ -5,7 +5,7 @@ from PySide6.QtWidgets import (
     QLabel,
     QToolBar,
     QDockWidget,
-
+    QStatusBar,
 
 )
 from PySide6.QtCore import (
@@ -32,7 +32,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import config.my_config as my_config
 from face_take import FaceTaker
-
+from src.data_model.db_name_list import TableNameListModel, personInfoModel
     
 class MainWindow(Ui_MainWindow, QMainWindow):
     def __init__(self, *args, **kwargs):
@@ -43,6 +43,10 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         print(os.getcwd())
 
         self.stackedWidget.setCurrentIndex(0)
+
+        #statusbar 
+        self.status_bar = self.statusBar()
+
         #toolbar
         self.toolbar = self.addToolBar("tool bar")
         self.toolbar
@@ -52,12 +56,23 @@ class MainWindow(Ui_MainWindow, QMainWindow):
 
         self.toolbar.addAction(action_back_home)
 
+        #数据库的创建
+        self.table_select_model = TableNameListModel()
+        self.listview_table_select.setModel(self.table_select_model)
+        
+        self.label_curtable = QLabel("未选择表格")
+        self.status_bar.addWidget(self.label_curtable)
+        self.btn_confirm_table.clicked.connect(self.confirm_table)
+
+        self.person_info_model = None
+        
+
         #将工具栏停放到左侧
         dock  = QDockWidget()
         dock.setWidget(self.toolbar)
         self.addDockWidget(Qt.LeftDockWidgetArea, dock)
 
-        # 设置视频显示
+        # 人脸的录入
         self.face_taker = None
 
         #连接槽函数
@@ -93,6 +108,18 @@ class MainWindow(Ui_MainWindow, QMainWindow):
     def closeEvent(self, event):
         self.end_show_video()
         super().closeEvent(event)
+        #记得关闭所有的数据库连接
+
+    def confirm_table(self):
+        selected_indexes = self.listview_table_select.selectedIndexes()
+        if selected_indexes:
+            for index in selected_indexes:
+                table_name = self.table_select_model.data(index, Qt.DisplayRole)
+                self.label_curtable.setText(f"current table:{table_name}")
+                self.table_select_model.cur_table_name = table_name
+                self.person_info_model = personInfoModel(self.table_select_model.conn, self.table_select_model.cur_table_name)
+                self.table_view_show_stu.setModel(self.person_info_model)
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

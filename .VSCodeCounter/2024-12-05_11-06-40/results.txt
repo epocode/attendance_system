@@ -1,0 +1,73 @@
+Date : 2024-12-05 11:06:40
+Directory : c:\Users\shann\Desktop\SE\attendance_system
+Total : 24 files,  99480 codes, 106 comments, 447 blanks, all 100033 lines
+
+Languages
++------------------+------------+------------+------------+------------+------------+
+| language         | files      | code       | comment    | blank      | total      |
++------------------+------------+------------+------------+------------+------------+
+| XML              |          3 |     97,675 |          0 |        250 |     97,925 |
+| Python           |         13 |      1,197 |        106 |        191 |      1,494 |
+| JSON             |          2 |        298 |          0 |          2 |        300 |
+| ui               |          1 |        191 |          0 |          1 |        192 |
+| YAML             |          1 |        106 |          0 |          1 |        107 |
+| Qrc              |          1 |          5 |          0 |          1 |          6 |
+| Batch            |          1 |          4 |          0 |          0 |          4 |
+| pip requirements |          1 |          3 |          0 |          0 |          3 |
+| Markdown         |          1 |          1 |          0 |          1 |          2 |
++------------------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                   | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                      |         24 |     99,480 |        106 |        447 |    100,033 |
+| . (Files)                                                                              |          2 |          4 |          0 |          1 |          5 |
+| config                                                                                 |          1 |          4 |          1 |          0 |          5 |
+| scripts                                                                                |          5 |     69,242 |          0 |        217 |     69,459 |
+| scripts (Files)                                                                        |          1 |          4 |          0 |          0 |          4 |
+| scripts\train_model                                                                    |          4 |     69,238 |          0 |        217 |     69,455 |
+| scripts\train_model (Files)                                                            |          1 |        108 |          0 |          1 |        109 |
+| scripts\train_model\train2                                                             |          3 |     69,130 |          0 |        216 |     69,346 |
+| scripts\train_model\train2 (Files)                                                     |          1 |        106 |          0 |          1 |        107 |
+| scripts\train_model\train2\weights                                                     |          2 |     69,024 |          0 |        215 |     69,239 |
+| src                                                                                    |          9 |        718 |         36 |        112 |        866 |
+| src (Files)                                                                            |          6 |        530 |         27 |         77 |        634 |
+| src\outer_lab                                                                          |          3 |        188 |          9 |         35 |        232 |
+| test                                                                                   |          3 |        318 |         31 |         58 |        407 |
+| tutorial                                                                               |          2 |     28,998 |         38 |         57 |     29,093 |
+| tutorial (Files)                                                                       |          1 |        347 |         38 |         22 |        407 |
+| tutorial\weights                                                                       |          1 |     28,651 |          0 |         35 |     28,686 |
+| ui_creator                                                                             |          2 |        196 |          0 |          2 |        198 |
++----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
+| filename                                                                               | language         | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
+| c:\Users\shann\Desktop\SE\attendance_system\README.md                                  | Markdown         |          1 |          0 |          1 |          2 |
+| c:\Users\shann\Desktop\SE\attendance_system\config\my_config.py                        | Python           |          4 |          1 |          0 |          5 |
+| c:\Users\shann\Desktop\SE\attendance_system\requirements.txt                           | pip requirements |          3 |          0 |          0 |          3 |
+| c:\Users\shann\Desktop\SE\attendance_system\scripts\convert_ui_to_py.bat               | Batch            |          4 |          0 |          0 |          4 |
+| c:\Users\shann\Desktop\SE\attendance_system\scripts\train_model\train.ipynb            | JSON             |        108 |          0 |          1 |        109 |
+| c:\Users\shann\Desktop\SE\attendance_system\scripts\train_model\train2\args.yaml       | YAML             |        106 |          0 |          1 |        107 |
+| c:\Users\shann\Desktop\SE\attendance_system\scripts\train_model\train2\weights\best.pt | XML              |     34,629 |          0 |        115 |     34,744 |
+| c:\Users\shann\Desktop\SE\attendance_system\scripts\train_model\train2\weights\last.pt | XML              |     34,395 |          0 |        100 |     34,495 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\__init__.py                            | Python           |          0 |          0 |          1 |          1 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\face_take.py                           | Python           |        104 |          8 |         30 |        142 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\main.py                                | Python           |          8 |          0 |          3 |         11 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\main_window.py                         | Python           |         76 |          4 |         23 |        103 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\outer_lab\__init__.py                  | Python           |          0 |          0 |          1 |          1 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\outer_lab\hopenet.py                   | Python           |        145 |          6 |         21 |        172 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\outer_lab\node_pose_net.py             | Python           |         43 |          3 |         13 |         59 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\resources.py                           | Python           |        251 |          5 |          8 |        264 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\ui_main_window.py                      | Python           |         91 |         10 |         12 |        113 |
+| c:\Users\shann\Desktop\SE\attendance_system\test\test.ipynb                            | JSON             |        190 |          0 |          1 |        191 |
+| c:\Users\shann\Desktop\SE\attendance_system\test\test.py                               | Python           |         85 |         14 |         35 |        134 |
+| c:\Users\shann\Desktop\SE\attendance_system\test\test_oepnface.py                      | Python           |         43 |         17 |         22 |         82 |
+| c:\Users\shann\Desktop\SE\attendance_system\tutorial\start_window.py                   | Python           |        347 |         38 |         22 |        407 |
+| c:\Users\shann\Desktop\SE\attendance_system\tutorial\weights\best.pt                   | XML              |     28,651 |          0 |         35 |     28,686 |
+| c:\Users\shann\Desktop\SE\attendance_system\ui_creator\form.ui                         | ui               |        191 |          0 |          1 |        192 |
+| c:\Users\shann\Desktop\SE\attendance_system\ui_creator\resources.qrc                   | Qrc              |          5 |          0 |          1 |          6 |
+| Total                                                                                  |                  |     99,480 |        106 |        447 |    100,033 |
++----------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+

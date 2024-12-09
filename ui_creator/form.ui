@@ -27,8 +27,8 @@
        <widget class="QPushButton" name="btn_collect_face">
         <property name="geometry">
          <rect>
-          <x>290</x>
-          <y>160</y>
+          <x>430</x>
+          <y>110</y>
           <width>93</width>
           <height>28</height>
          </rect>
@@ -40,14 +40,50 @@
        <widget class="QPushButton" name="btn_face_detect">
         <property name="geometry">
          <rect>
-          <x>290</x>
-          <y>210</y>
+          <x>430</x>
+          <y>180</y>
           <width>93</width>
           <height>28</height>
          </rect>
         </property>
         <property name="text">
          <string>签到</string>
+        </property>
+       </widget>
+       <widget class="QListView" name="listview_table_select">
+        <property name="geometry">
+         <rect>
+          <x>340</x>
+          <y>250</y>
+          <width>256</width>
+          <height>192</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btn_confirm_table">
+        <property name="geometry">
+         <rect>
+          <x>340</x>
+          <y>450</y>
+          <width>93</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>确认</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_6">
+        <property name="geometry">
+         <rect>
+          <x>350</x>
+          <y>230</y>
+          <width>111</width>
+          <height>19</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>选择数据库</string>
         </property>
        </widget>
       </widget>
@@ -146,8 +182,8 @@
        <widget class="QPushButton" name="btn_confirm">
         <property name="geometry">
          <rect>
-          <x>800</x>
-          <y>170</y>
+          <x>790</x>
+          <y>340</y>
           <width>93</width>
           <height>28</height>
          </rect>
@@ -159,14 +195,93 @@
        <widget class="QPushButton" name="btn_pass">
         <property name="geometry">
          <rect>
-          <x>920</x>
-          <y>170</y>
+          <x>930</x>
+          <y>340</y>
           <width>93</width>
           <height>28</height>
          </rect>
         </property>
         <property name="text">
          <string>放弃</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label">
+        <property name="geometry">
+         <rect>
+          <x>780</x>
+          <y>190</y>
+          <width>69</width>
+          <height>19</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>姓名</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="line_edit_name">
+        <property name="geometry">
+         <rect>
+          <x>850</x>
+          <y>190</y>
+          <width>113</width>
+          <height>25</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_4">
+        <property name="geometry">
+         <rect>
+          <x>790</x>
+          <y>230</y>
+          <width>69</width>
+          <height>19</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>性别</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="line_edit_gender">
+        <property name="geometry">
+         <rect>
+          <x>860</x>
+          <y>230</y>
+          <width>113</width>
+          <height>25</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_5">
+        <property name="geometry">
+         <rect>
+          <x>800</x>
+          <y>270</y>
+          <width>69</width>
+          <height>19</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>年龄</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="line_edit_age">
+        <property name="geometry">
+         <rect>
+          <x>870</x>
+          <y>270</y>
+          <width>113</width>
+          <height>25</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QTableView" name="table_view_show_stu">
+        <property name="geometry">
+         <rect>
+          <x>780</x>
+          <y>390</y>
+          <width>271</width>
+          <height>171</height>
+         </rect>
         </property>
        </widget>
       </widget>

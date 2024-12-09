@@ -14,6 +14,11 @@ from config import my_config
 import torch
 import dlib
 import numpy as np
+from outer_lab.node_pose_net import HeadPosePred
+import time
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class FaceTaker(QThread):
@@ -31,7 +36,10 @@ class FaceTaker(QThread):
 
     def run(self):
         self.cap = cv2.VideoCapture(self.video_source)
+        enter_tips = ""
+
         while True:
+            start_time = time.time()
             ret, frame = self.cap.read()
             if not ret:
                 break
@@ -43,8 +51,12 @@ class FaceTaker(QThread):
             frame_tensor = torch.from_numpy(frame_rgb).permute(2, 0, 1).float()
             frame_tensor = frame_tensor / 255.
             frame_tensor = frame_tensor.unsqueeze(0).to(self.device)
-            results = self.model(frame_tensor)
+            results = self.model(frame_tensor, verbose=False)#返回一个列表，表示一个批量图片预测结果。但是当前批量为1
+
+
+            end_time_yolo = time.time()
             x1, y1, x2, y2 = 0, 0, 0, 0
+            
             for result in results[0].boxes:
                 x1, y1, x2, y2 = result.xyxy[0].tolist()  # 获取框的坐标
                 conf = result.conf[0].tolist()  # 获取置信度
@@ -55,26 +67,32 @@ class FaceTaker(QThread):
                                 #对读取到的图片进行判断，是否满足人脸的要求
 
                     if self.check_flag:
-                        check_result = self.quality_checker.check(frame)
+                        face_h, face_w = y2 - y1, x2 - x1
+                        if face_h > face_w:
+                            face_w = face_h
+                        else:
+                            face_h = face_w
+                        face_frame = frame_rgb[y1:y1+face_h, x1:x1+face_w]
+                        
+                        # end_time_res50 = time.time()
+                        # print(f"""yolo模型检测时间为{(end_time_yolo - start_time) * 1000:.6f}ms,
+                        #        头部姿态检测时间为{(end_time_res50 - start_time) * 1000:.6f}ms""")
+
+                        check_result = self.quality_checker.check(frame, face_frame)
+                        
+                        #check_result (是否满足要求， 不满足要求的原因)
                         if check_result[0]:
-                            face_h, face_w = y2 - y1, x2 - x1
-                            if face_h > face_w:
-                                face_w = face_h
-                            else:
-                                face_h = face_w
-                
-                            face_frame = frame_rgb[y1:y1+face_h, x1:x1+face_w]
                             face_frame = cv2.resize(face_frame, (128, 128))
                             qface_image = QImage(face_frame, 128, 128, 128 * ch, QImage.Format_RGB888)
                             self.select_face_signal.emit(qface_image)
                             self.check_flag = False
                         else:
                             #提示用户人脸录入不正常
-                            pass
+                            enter_tips = check_result[1]
 
                     cv2.rectangle(frame_rgb, (x1, y1), (x2, y2), (0, 255, 0), 2)
-                    cv2.putText(frame_rgb, f"confidence: {conf:.2f}", (int(x1), int(y1) - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-
+                    cv2.putText(frame_rgb, enter_tips, (int(x1), int(y1) - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                    enter_tips = ""
 
             bytes_per_line = w * ch
             qimage = QImage(frame_rgb, w, h, bytes_per_line, QImage.Format_RGB888)
@@ -92,7 +110,7 @@ class FaceTaker(QThread):
 
 class FaceQualityCheck:
     def __init__(self):
-        pass
+        self.head_pose_pred = HeadPosePred()
 
     
     def face_gesture_check(self, frame):
@@ -109,8 +127,15 @@ class FaceQualityCheck:
         else:
             return (False, '亮度过高')
         
-    def check(self, frame):
+    def check(self, frame, face_frame):
         luminance = self.luminance_check(frame)
         if luminance[0] == False:
             return luminance
-        return (True, None)
+        
+        head_pos_rs = self.head_pose_pred.pred_node_pose(face_frame)
+        if head_pos_rs[0] == False:
+            return head_pos_rs
+
+        return (True, '')
+    
+

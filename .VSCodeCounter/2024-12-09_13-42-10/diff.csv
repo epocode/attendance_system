@@ -1,0 +1,12 @@
+"filename", "language", "ui", "JSON", "Python", "comment", "blank", "total"
+"c:\Users\shann\Desktop\SE\attendance_system\config\my_config.py", "Python", 0, 0, 4, 0, 3, 7
+"c:\Users\shann\Desktop\SE\attendance_system\src\data_model\__init__.py", "Python", 0, 0, 0, 0, 1, 1
+"c:\Users\shann\Desktop\SE\attendance_system\src\data_model\db_name_list.py", "Python", 0, 0, 81, 9, 18, 108
+"c:\Users\shann\Desktop\SE\attendance_system\src\main_window.py", "Python", 0, 0, 18, 3, 6, 27
+"c:\Users\shann\Desktop\SE\attendance_system\src\ui_main_window.py", "Python", 0, 0, 36, 0, 0, 36
+"c:\Users\shann\Desktop\SE\attendance_system\test\face_relate.ipynb", "JSON", 0, 156, 0, 0, 1, 157
+"c:\Users\shann\Desktop\SE\attendance_system\test\sql_execute.ipynb", "JSON", 0, 207, 0, 0, 1, 208
+"c:\Users\shann\Desktop\SE\attendance_system\test\test.ipynb", "JSON", 0, -190, 0, 0, -1, -191
+"c:\Users\shann\Desktop\SE\attendance_system\test\test_oepnface.py", "Python", 0, 0, -43, -17, -22, -82
+"c:\Users\shann\Desktop\SE\attendance_system\ui_creator\form.ui", "ui", 115, 0, 0, 0, 0, 115
+"Total", "-", 115, 173, 96, -5, 7, 386

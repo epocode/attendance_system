@@ -1,0 +1,42 @@
+Date : 2024-12-09 13:42:10
+Directory : c:\Users\shann\Desktop\SE\attendance_system
+Total : 10 files,  384 codes, -5 comments, 7 blanks, all 386 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| JSON     |          3 |        173 |          0 |          1 |        174 |
+| ui       |          1 |        115 |          0 |          0 |        115 |
+| Python   |          6 |         96 |         -5 |          6 |         97 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                       | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                          |         10 |        384 |         -5 |          7 |        386 |
+| config                                                                     |          1 |          4 |          0 |          3 |          7 |
+| src                                                                        |          4 |        135 |         12 |         25 |        172 |
+| src (Files)                                                                |          2 |         54 |          3 |          6 |         63 |
+| src\data_model                                                             |          2 |         81 |          9 |         19 |        109 |
+| test                                                                       |          4 |        130 |        -17 |        -21 |         92 |
+| ui_creator                                                                 |          1 |        115 |          0 |          0 |        115 |
++----------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                   | language | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| c:\Users\shann\Desktop\SE\attendance_system\config\my_config.py            | Python   |          4 |          0 |          3 |          7 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\data_model\__init__.py     | Python   |          0 |          0 |          1 |          1 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\data_model\db_name_list.py | Python   |         81 |          9 |         18 |        108 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\main_window.py             | Python   |         18 |          3 |          6 |         27 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\ui_main_window.py          | Python   |         36 |          0 |          0 |         36 |
+| c:\Users\shann\Desktop\SE\attendance_system\test\face_relate.ipynb         | JSON     |        156 |          0 |          1 |        157 |
+| c:\Users\shann\Desktop\SE\attendance_system\test\sql_execute.ipynb         | JSON     |        207 |          0 |          1 |        208 |
+| c:\Users\shann\Desktop\SE\attendance_system\test\test.ipynb                | JSON     |       -190 |          0 |         -1 |       -191 |
+| c:\Users\shann\Desktop\SE\attendance_system\test\test_oepnface.py          | Python   |        -43 |        -17 |        -22 |        -82 |
+| c:\Users\shann\Desktop\SE\attendance_system\ui_creator\form.ui             | ui       |        115 |          0 |          0 |        115 |
+| Total                                                                      |          |        384 |         -5 |          7 |        386 |
++----------------------------------------------------------------------------+----------+------------+------------+------------+------------+

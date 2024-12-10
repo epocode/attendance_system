@@ -4,8 +4,10 @@ from mysql import connector
 import mysql
 import os
 import sys
-
+from annoy import AnnoyIndex
+import faiss
 import mysql.connector
+import numpy as np
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 import config.my_config as my_config
 
@@ -13,7 +15,6 @@ class TableNameListModel(QAbstractListModel):
     def __init__(self):
         super().__init__()
         self.cursor = None
-        self.table_names = []
         self.cur_table_name = ""
 
         try:
@@ -26,28 +27,60 @@ class TableNameListModel(QAbstractListModel):
             if self.conn.is_connected():
                 print("连接成功")
                 self.cursor = self.conn.cursor()
-        except e:
+        except Exception as e:
             print('数据库连接失败， 错误信息：', e)
 
-        query = '''
-        SHOW TABLES'''
-
-        try:
-            self.cursor.execute(query)
-            result = self.cursor.fetchall()
-            for table_name in result:
-                self.table_names.append(table_name[0])
-        except connector.Error as e:
-            print(e)
-
     def rowCount(self, index):
-        return len(self.table_names)
+        sql = 'SHOW TABLES'
+        try:
+            self.cursor.execute(sql)
+            results = self.cursor.fetchall()
+            return len(results)
+        except Exception as e:
+            print('获取表格行数错误')
+            print(e)
 
     def data(self, index, role):
         if role == Qt.DisplayRole:
-            return self.table_names[index.row()]
+            sql = 'SHOW TABLES'
+            try:
+                self.cursor.execute(sql)
+                results = self.cursor.fetchall()
+                return results[index.row()][0]
+            except Exception as e:
+                print('获取模型数据失败')
+                print(e)
+            
         
+    def create_new_table(self, table_name):
+        sql = f"""create table {table_name} (id  INT AUTO_INCREMENT, name VARCHAR(100),
+          gender ENUM('male', 'female'), age INT, PRIMARY KEY (id));"""
+        try:
+            self.cursor.execute(sql)
+            print(f"成功创建新表{table_name}")
+            #创建sql后继续创建对应的向量数据库
+            
+        except Exception as e:
+            print('创建新的表格失败')
+            print(e) 
+        self.layoutChanged.emit()
+    
+    def drop_selected_table(self, table_name):
+        sql = f"DROP TABLE IF EXISTS {table_name}"
+        try:
+            self.cursor.execute(sql)
+            print(f'成功删除{table_name}')
+            self.layoutChanged.emit()
+            #同时删除对应的向量数据库文件
+            vec_file_path = os.path.join(my_config.VEC_DB_PATH, table_name + '.faiss')
+            if os.path.exists(vec_file_path):
+                os.remove(vec_file_path)
+                print('成功删除')
 
+        except Exception as e:
+            print('删除表格失败')
+            print(e)
+        
 
 class personInfoModel(QAbstractTableModel):
     def __init__(self, conn, table_name):
@@ -55,6 +88,30 @@ class personInfoModel(QAbstractTableModel):
         self.cursor = conn.cursor()
         self.conn = conn
         self.table_name = table_name
+
+        #创建或者读取该表对应的向量数据库
+        # self.vec_db = AnnoyIndex(128, 'angular')
+        # vec_db_path = os.path.join(my_config.VEC_DB_PATH, self.table_name + '.ann')
+        self.vec_db = faiss.IndexIDMap(faiss.IndexFlatL2(128))
+        vec_db_path = os.path.join(my_config.VEC_DB_PATH, self.table_name + '.faiss')
+
+
+        if os.path.exists(vec_db_path):
+            try:
+                # old_vec_db = AnnoyIndex(128, 'angular')
+                # old_vec_db.load(vec_db_path )
+                # num_items = old_vec_db.get_n_items()
+                # print("索引中的数据量为", num_items)
+                # for i in range(num_items):
+                #     vector = old_vec_db.get_item_vector(i)
+                #     self.vec_db.add_item(i, vector)
+
+                self.vec_db = faiss.read_index(vec_db_path)
+                print('索引中的向量数目为：', self.vec_db.ntotal)
+
+            except Exception as e:
+                print(e)
+
 
     def data(self, index, role):
         if role == Qt.DisplayRole:
@@ -81,27 +138,37 @@ class personInfoModel(QAbstractTableModel):
         return self.cursor.fetchall()[0][0]
 
     def columnCount(self, index):
-#         sql = """
-#             SELECT COUNT(*)
-#             FROM INFORMATION_SCHEMA.COLUMNS
-#             WHERE table_name = '%s'
-# """   % self.table_name   
-#         self.cursor.execute(sql)
-#         results = self.cursor.fetchone()
-#         return results[0]
         return 2
 
     def insert_data(self, name, gender, age, face_feature=None):
+        # result = self.vec_db.get_nns_by_vector(face_feature, 1, include_distances=True)
+        # if len(result[0]) != 0 and result[1][0] < 0.2:
+        #     print('当前人脸已经存在')
+        #     return
+        face_feature = face_feature.reshape(1, -1)
+        dis, ids = self.vec_db.search(face_feature, 1)
+        if dis[0][0] < 0.35:
+            print('当前人脸已经录入')
+            return
         try:
-            sql = f"INSERT INTO {self.tabel_name} (name, gender, age) VALUES(%s, %s, %s)"
+            sql = f"INSERT INTO {self.table_name} (name, gender, age) VALUES(%s, %s, %s)"
             self.cursor.execute(sql, [name, gender, age])
+            self.conn.commit()
             last_id = self.cursor.lastrowid
             if last_id != 0:
-                #将face的特征跟id存放到向量数据库中
-                pass
-
-        except e:
+                #将人脸特征放到向s量数据库中存储
+                # self.vec_db.add_item(last_id, face_feature)
+                # self.vec_db.build(10)
+                self.vec_db.add_with_ids(face_feature, np.array([last_id]))
+            self.layoutChanged.emit()
+        except Exception as e:
             print('sql insert failed.', e)
+
+    def save_vec_db(self):
+        try:
+            faiss.write_index(self.vec_db, os.path.join(my_config.VEC_DB_PATH, self.table_name + '.faiss'))
+        except Exception as e:
+            print('保存失败')
 
 if __name__ == '__main__':
     db_model = TableNameListModel()

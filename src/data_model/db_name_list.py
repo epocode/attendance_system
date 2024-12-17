@@ -82,7 +82,7 @@ class TableNameListModel(QAbstractListModel):
             print(e)
         
 
-class personInfoModel(QAbstractTableModel):
+class PersonInfoModel(QAbstractTableModel):
     def __init__(self, conn, table_name):
         super().__init__()
         self.cursor = conn.cursor()
@@ -90,22 +90,12 @@ class personInfoModel(QAbstractTableModel):
         self.table_name = table_name
 
         #创建或者读取该表对应的向量数据库
-        # self.vec_db = AnnoyIndex(128, 'angular')
-        # vec_db_path = os.path.join(my_config.VEC_DB_PATH, self.table_name + '.ann')
-        self.vec_db = faiss.IndexIDMap(faiss.IndexFlatL2(128))
+        self.vec_db = faiss.IndexIDMap(faiss.IndexFlatIP(512))
         vec_db_path = os.path.join(my_config.VEC_DB_PATH, self.table_name + '.faiss')
 
 
         if os.path.exists(vec_db_path):
             try:
-                # old_vec_db = AnnoyIndex(128, 'angular')
-                # old_vec_db.load(vec_db_path )
-                # num_items = old_vec_db.get_n_items()
-                # print("索引中的数据量为", num_items)
-                # for i in range(num_items):
-                #     vector = old_vec_db.get_item_vector(i)
-                #     self.vec_db.add_item(i, vector)
-
                 self.vec_db = faiss.read_index(vec_db_path)
                 print('索引中的向量数目为：', self.vec_db.ntotal)
 
@@ -141,13 +131,8 @@ class personInfoModel(QAbstractTableModel):
         return 2
 
     def insert_data(self, name, gender, age, face_feature=None):
-        # result = self.vec_db.get_nns_by_vector(face_feature, 1, include_distances=True)
-        # if len(result[0]) != 0 and result[1][0] < 0.2:
-        #     print('当前人脸已经存在')
-        #     return
-        face_feature = face_feature.reshape(1, -1)
         dis, ids = self.vec_db.search(face_feature, 1)
-        if dis[0][0] < 0.35:
+        if dis[0][0] > 0.9:
             print('当前人脸已经录入')
             return
         try:
@@ -156,9 +141,6 @@ class personInfoModel(QAbstractTableModel):
             self.conn.commit()
             last_id = self.cursor.lastrowid
             if last_id != 0:
-                #将人脸特征放到向s量数据库中存储
-                # self.vec_db.add_item(last_id, face_feature)
-                # self.vec_db.build(10)
                 self.vec_db.add_with_ids(face_feature, np.array([last_id]))
             self.layoutChanged.emit()
         except Exception as e:
@@ -169,6 +151,18 @@ class personInfoModel(QAbstractTableModel):
             faiss.write_index(self.vec_db, os.path.join(my_config.VEC_DB_PATH, self.table_name + '.faiss'))
         except Exception as e:
             print('保存失败')
+
+    def search_id_by_feature(self, feature):
+        dis, ids = self.vec_db.search(feature, 1)
+        if dis[0][0] > 0.9:
+            return ids[0][0]
+        return None
+    
+    def face_info(self, id):
+        q = f"SELECT name FROM {self.table_name} WHERE id = {id}"
+        self.cursor.execute(q)
+        res = self.cursor.fetchall()
+        return res[0][0]
 
 if __name__ == '__main__':
     db_model = TableNameListModel()

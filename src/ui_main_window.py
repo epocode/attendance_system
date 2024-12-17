@@ -15,16 +15,17 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QHBoxLayout, QHeaderView, QLabel,
-    QLineEdit, QListView, QMainWindow, QMenuBar,
-    QPushButton, QSizePolicy, QStackedWidget, QStatusBar,
-    QTableView, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QGridLayout, QHBoxLayout, QHeaderView,
+    QLabel, QLineEdit, QListView, QListWidget,
+    QListWidgetItem, QMainWindow, QMenuBar, QPushButton,
+    QSizePolicy, QStackedWidget, QStatusBar, QTableView,
+    QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(1080, 645)
+        MainWindow.resize(1169, 669)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout = QVBoxLayout(self.centralwidget)
@@ -37,9 +38,9 @@ class Ui_MainWindow(object):
         self.btn_collect_face = QPushButton(self.page_home)
         self.btn_collect_face.setObjectName(u"btn_collect_face")
         self.btn_collect_face.setGeometry(QRect(430, 110, 93, 28))
-        self.btn_face_detect = QPushButton(self.page_home)
-        self.btn_face_detect.setObjectName(u"btn_face_detect")
-        self.btn_face_detect.setGeometry(QRect(430, 180, 93, 28))
+        self.btn_jump_to_face_detect = QPushButton(self.page_home)
+        self.btn_jump_to_face_detect.setObjectName(u"btn_jump_to_face_detect")
+        self.btn_jump_to_face_detect.setGeometry(QRect(430, 180, 93, 28))
         self.listview_table_select = QListView(self.page_home)
         self.listview_table_select.setObjectName(u"listview_table_select")
         self.listview_table_select.setGeometry(QRect(340, 250, 256, 192))
@@ -70,9 +71,20 @@ class Ui_MainWindow(object):
         self.stackedWidget.addWidget(self.page_home)
         self.page_face_detect = QWidget()
         self.page_face_detect.setObjectName(u"page_face_detect")
-        self.label_2 = QLabel(self.page_face_detect)
-        self.label_2.setObjectName(u"label_2")
-        self.label_2.setGeometry(QRect(320, 200, 69, 19))
+        self.label_disp_video_2 = QLabel(self.page_face_detect)
+        self.label_disp_video_2.setObjectName(u"label_disp_video_2")
+        self.label_disp_video_2.setGeometry(QRect(20, 0, 700, 460))
+        self.label_disp_video_2.setStyleSheet(u"border: 5px solid red;")
+        self.label_disp_video_2.setWordWrap(False)
+        self.btn_confirm_face_detect = QPushButton(self.page_face_detect)
+        self.btn_confirm_face_detect.setObjectName(u"btn_confirm_face_detect")
+        self.btn_confirm_face_detect.setGeometry(QRect(190, 510, 93, 28))
+        self.lst_show_absent = QListWidget(self.page_face_detect)
+        self.lst_show_absent.setObjectName(u"lst_show_absent")
+        self.lst_show_absent.setGeometry(QRect(800, 320, 256, 192))
+        self.tb_show_absent = QTableWidget(self.page_face_detect)
+        self.tb_show_absent.setObjectName(u"tb_show_absent")
+        self.tb_show_absent.setGeometry(QRect(800, 60, 256, 192))
         self.stackedWidget.addWidget(self.page_face_detect)
         self.page_info_display = QWidget()
         self.page_info_display.setObjectName(u"page_info_display")
@@ -85,6 +97,11 @@ class Ui_MainWindow(object):
         self.label_disp_video = QLabel(self.page_face_collect)
         self.label_disp_video.setObjectName(u"label_disp_video")
         self.label_disp_video.setGeometry(QRect(10, 10, 700, 460))
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_disp_video.sizePolicy().hasHeightForWidth())
+        self.label_disp_video.setSizePolicy(sizePolicy)
         self.label_disp_video.setStyleSheet(u"border: 5px solid red;")
         self.label_disp_video.setWordWrap(False)
         self.btn_start = QPushButton(self.page_face_collect)
@@ -95,35 +112,80 @@ class Ui_MainWindow(object):
         self.btn_end.setGeometry(QRect(130, 530, 93, 28))
         self.label_face = QLabel(self.page_face_collect)
         self.label_face.setObjectName(u"label_face")
-        self.label_face.setGeometry(QRect(820, 30, 150, 150))
+        self.label_face.setGeometry(QRect(810, 30, 150, 150))
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy1.setHorizontalStretch(150)
+        sizePolicy1.setVerticalStretch(150)
+        sizePolicy1.setHeightForWidth(self.label_face.sizePolicy().hasHeightForWidth())
+        self.label_face.setSizePolicy(sizePolicy1)
         self.label_face.setStyleSheet(u"border: 5px solid red;")
-        self.btn_confirm = QPushButton(self.page_face_collect)
-        self.btn_confirm.setObjectName(u"btn_confirm")
-        self.btn_confirm.setGeometry(QRect(790, 340, 93, 28))
-        self.btn_pass = QPushButton(self.page_face_collect)
-        self.btn_pass.setObjectName(u"btn_pass")
-        self.btn_pass.setGeometry(QRect(930, 340, 93, 28))
-        self.label = QLabel(self.page_face_collect)
-        self.label.setObjectName(u"label")
-        self.label.setGeometry(QRect(780, 190, 69, 19))
-        self.line_edit_name = QLineEdit(self.page_face_collect)
-        self.line_edit_name.setObjectName(u"line_edit_name")
-        self.line_edit_name.setGeometry(QRect(850, 190, 113, 25))
-        self.label_4 = QLabel(self.page_face_collect)
-        self.label_4.setObjectName(u"label_4")
-        self.label_4.setGeometry(QRect(790, 230, 69, 19))
-        self.line_edit_gender = QLineEdit(self.page_face_collect)
-        self.line_edit_gender.setObjectName(u"line_edit_gender")
-        self.line_edit_gender.setGeometry(QRect(860, 230, 113, 25))
-        self.label_5 = QLabel(self.page_face_collect)
-        self.label_5.setObjectName(u"label_5")
-        self.label_5.setGeometry(QRect(800, 270, 69, 19))
-        self.line_edit_age = QLineEdit(self.page_face_collect)
-        self.line_edit_age.setObjectName(u"line_edit_age")
-        self.line_edit_age.setGeometry(QRect(870, 270, 113, 25))
         self.table_view_show_stu = QTableView(self.page_face_collect)
         self.table_view_show_stu.setObjectName(u"table_view_show_stu")
         self.table_view_show_stu.setGeometry(QRect(780, 390, 271, 171))
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        sizePolicy2.setHorizontalStretch(150)
+        sizePolicy2.setVerticalStretch(150)
+        sizePolicy2.setHeightForWidth(self.table_view_show_stu.sizePolicy().hasHeightForWidth())
+        self.table_view_show_stu.setSizePolicy(sizePolicy2)
+        self.layoutWidget1 = QWidget(self.page_face_collect)
+        self.layoutWidget1.setObjectName(u"layoutWidget1")
+        self.layoutWidget1.setGeometry(QRect(780, 190, 213, 91))
+        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        sizePolicy3.setHorizontalStretch(150)
+        sizePolicy3.setVerticalStretch(150)
+        sizePolicy3.setHeightForWidth(self.layoutWidget1.sizePolicy().hasHeightForWidth())
+        self.layoutWidget1.setSizePolicy(sizePolicy3)
+        self.gridLayout = QGridLayout(self.layoutWidget1)
+        self.gridLayout.setObjectName(u"gridLayout")
+        self.gridLayout.setContentsMargins(0, 0, 0, 0)
+        self.label = QLabel(self.layoutWidget1)
+        self.label.setObjectName(u"label")
+
+        self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
+
+        self.line_edit_name = QLineEdit(self.layoutWidget1)
+        self.line_edit_name.setObjectName(u"line_edit_name")
+
+        self.gridLayout.addWidget(self.line_edit_name, 0, 1, 1, 2)
+
+        self.label_4 = QLabel(self.layoutWidget1)
+        self.label_4.setObjectName(u"label_4")
+
+        self.gridLayout.addWidget(self.label_4, 1, 0, 1, 1)
+
+        self.line_edit_gender = QLineEdit(self.layoutWidget1)
+        self.line_edit_gender.setObjectName(u"line_edit_gender")
+
+        self.gridLayout.addWidget(self.line_edit_gender, 1, 1, 1, 2)
+
+        self.label_5 = QLabel(self.layoutWidget1)
+        self.label_5.setObjectName(u"label_5")
+
+        self.gridLayout.addWidget(self.label_5, 2, 0, 1, 2)
+
+        self.line_edit_age = QLineEdit(self.layoutWidget1)
+        self.line_edit_age.setObjectName(u"line_edit_age")
+
+        self.gridLayout.addWidget(self.line_edit_age, 2, 2, 1, 1)
+
+        self.layoutWidget2 = QWidget(self.page_face_collect)
+        self.layoutWidget2.setObjectName(u"layoutWidget2")
+        self.layoutWidget2.setGeometry(QRect(790, 340, 195, 30))
+        sizePolicy3.setHeightForWidth(self.layoutWidget2.sizePolicy().hasHeightForWidth())
+        self.layoutWidget2.setSizePolicy(sizePolicy3)
+        self.horizontalLayout_2 = QHBoxLayout(self.layoutWidget2)
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.btn_confirm = QPushButton(self.layoutWidget2)
+        self.btn_confirm.setObjectName(u"btn_confirm")
+
+        self.horizontalLayout_2.addWidget(self.btn_confirm)
+
+        self.btn_pass = QPushButton(self.layoutWidget2)
+        self.btn_pass.setObjectName(u"btn_pass")
+
+        self.horizontalLayout_2.addWidget(self.btn_pass)
+
         self.stackedWidget.addWidget(self.page_face_collect)
 
         self.verticalLayout.addWidget(self.stackedWidget)
@@ -131,7 +193,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1080, 25))
+        self.menubar.setGeometry(QRect(0, 0, 1169, 25))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -139,7 +201,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(3)
+        self.stackedWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -148,21 +210,22 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.btn_collect_face.setText(QCoreApplication.translate("MainWindow", u"\u5f55\u5165\u4eba\u8138", None))
-        self.btn_face_detect.setText(QCoreApplication.translate("MainWindow", u"\u7b7e\u5230", None))
+        self.btn_jump_to_face_detect.setText(QCoreApplication.translate("MainWindow", u"\u7b7e\u5230", None))
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"\u9009\u62e9\u6570\u636e\u5e93", None))
         self.btn_confirm_table.setText(QCoreApplication.translate("MainWindow", u"\u9009\u62e9", None))
         self.btn_create_table.setText(QCoreApplication.translate("MainWindow", u"\u521b\u5efa", None))
         self.btn_drop_table.setText(QCoreApplication.translate("MainWindow", u"\u5220\u9664", None))
-        self.label_2.setText(QCoreApplication.translate("MainWindow", u"face detection", None))
+        self.label_disp_video_2.setText("")
+        self.btn_confirm_face_detect.setText(QCoreApplication.translate("MainWindow", u"\u5f00\u59cb", None))
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"dispaly", None))
         self.label_disp_video.setText("")
         self.btn_start.setText(QCoreApplication.translate("MainWindow", u"\u5f00\u59cb\u5f55\u5165", None))
         self.btn_end.setText(QCoreApplication.translate("MainWindow", u"\u505c\u6b62\u5f55\u5165", None))
         self.label_face.setText("")
-        self.btn_confirm.setText(QCoreApplication.translate("MainWindow", u"\u786e\u8ba4\u5f55\u5165", None))
-        self.btn_pass.setText(QCoreApplication.translate("MainWindow", u"\u653e\u5f03", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"\u59d3\u540d", None))
         self.label_4.setText(QCoreApplication.translate("MainWindow", u"\u6027\u522b", None))
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"\u5e74\u9f84", None))
+        self.btn_confirm.setText(QCoreApplication.translate("MainWindow", u"\u786e\u8ba4\u5f55\u5165", None))
+        self.btn_pass.setText(QCoreApplication.translate("MainWindow", u"\u653e\u5f03", None))
     # retranslateUi
 

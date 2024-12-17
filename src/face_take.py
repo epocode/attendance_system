@@ -19,6 +19,7 @@ import time
 import logging
 import os
 from PIL import Image, ImageDraw, ImageFont
+from src.outer_lab.facenet_pytorch import InceptionResnetV1
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +30,8 @@ class FaceTaker(QThread):
 
     def __init__(self, video_source):
         super().__init__()
+
+        self.is_running = True
         self.video_source = video_source
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         self.model = YOLO(my_config.MODEL_PATH).to(self.device)
@@ -37,9 +40,9 @@ class FaceTaker(QThread):
         self.quality_checker = FaceQualityCheck()
 
         self.landmarks_extractor = dlib.shape_predictor(my_config.LANDMARK_PATH)
-        self.face_feature_extractor = dlib.face_recognition_model_v1(my_config.FACE_FEATURE_MODEL_PATH)
-
-        self.stored_face_bgr = None
+        # self.face_feature_extractor = dlib.face_recognition_model_v1(my_config.FACE_FEATURE_MODEL_PATH)
+        self.face_feature_extractor = InceptionResnetV1(pretrained='vggface2').eval().to(self.device)
+        self.stored_face_rgb = None
 
         self.blank_img = cv2.cvtColor(cv2.imread(os.path.join(my_config.PHOTO_PATH, 'blank.jpg')), cv2.COLOR_BGR2RGB)
         self.send_img(self.blank_img, self.update_frame_signal)
@@ -53,7 +56,7 @@ class FaceTaker(QThread):
         #每次运行人脸录入模块的时候，都要重新构建对应的向量数据库
         
 
-        while True:
+        while self.is_running:
             start_time = time.time()
             ret, frame = self.cap.read()
             if not ret:
@@ -107,7 +110,7 @@ class FaceTaker(QThread):
                             #check_result 格式(是否满足要求， 不满足要求的原因)
                             if check_result[0]:
                                 #将当前的bgr格式的人脸保存下来，便于后面进行特征的提取
-                                self.stored_face_bgr = aligned_face_bgr
+                                self.stored_face_rgb = aligned_face_rgb
 
                                 self.send_img(aligned_face_rgb, self.select_face_signal)
                                 self.check_flag = False
@@ -124,6 +127,8 @@ class FaceTaker(QThread):
             # self.mutex.unlock()
             cv2.waitKey(1000 // 30)  # 控制帧率
 
+        self.cap.release()
+
     def put_text_to_img(self, img, text,  x, y):
         font_path = my_config.FONT_PAHT
         font = ImageFont.truetype(font_path, 40)
@@ -137,7 +142,7 @@ class FaceTaker(QThread):
     def stop(self):
         self.send_img(self.blank_img, self.update_frame_signal)
         self.send_img(self.blank_img_s, self.select_face_signal)
-        self.cap.release()
+        self.is_running = False
         self.quit()
         self.wait()  
 
@@ -152,10 +157,12 @@ class FaceTaker(QThread):
         self.check_flag = True
 
     def get_face_feature(self):
-        if self.stored_face_bgr is None:
+        if self.stored_face_rgb is None:
             return
-        face_feature = self.face_feature_extractor.compute_face_descriptor(self.stored_face_bgr)
-        return np.array(face_feature)
+        face_feature = self.face_feature_extractor(torch.from_numpy(self.stored_face_rgb).permute(2, 0, 1).unsqueeze(0).float().to(self.device))
+        face_feature = face_feature.cpu().detach().numpy()
+        self.stored_face_rgb = None
+        return face_feature
 
 class FaceQualityCheck:
     def __init__(self):

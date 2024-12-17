@@ -8,6 +8,7 @@ from PySide6.QtWidgets import (
     QStatusBar,
     QInputDialog,
     QLineEdit,
+    QMessageBox,
     
 )
 from PySide6.QtCore import (
@@ -34,8 +35,10 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import config.my_config as my_config
 from face_take import FaceTaker
-from src.data_model.db_name_list import TableNameListModel, personInfoModel
-    
+from src.data_model.db_name_list import TableNameListModel, PersonInfoModel
+from face_detect import FaceDetection    
+
+
 class MainWindow(Ui_MainWindow, QMainWindow):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -80,11 +83,16 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.face_taker = None
         self.cur_face = None
 
+        #人脸的检测
+        self.face_detector = None
+
         #连接槽函数
         self.btn_collect_face.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(3))
-        self.btn_face_detect.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(1))
+        self.btn_jump_to_face_detect.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(1))
         self.btn_start.clicked.connect(self.start_show_video)
         self.btn_end.clicked.connect(self.end_show_video)
+        
+        self.btn_confirm_face_detect.clicked.connect(self.detect_face)
 
     def start_show_video(self):
         if self.face_taker is not None:
@@ -109,6 +117,11 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             #每次录入完人脸后，都要将对应的向量数据库进行保存
             self.person_info_model.save_vec_db()
 
+    def end_label_face_detection(self):
+        if self.face_detector is not None:
+            self.face_detector.stop()
+            self.face_detector = None
+
 
     def face_get(self, qimage):
         self.cur_face = qimage
@@ -117,6 +130,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
     
     def closeEvent(self, event):
         self.end_show_video()
+        self.end_label_face_detection()
         super().closeEvent(event)
         #记得关闭所有的数据库连接
 
@@ -127,7 +141,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
                 table_name = self.list_model_tables.data(index, Qt.DisplayRole)
                 self.label_curtable.setText(f"current table:{table_name}")
                 self.list_model_tables.cur_table_name = table_name
-                self.person_info_model = personInfoModel(self.list_model_tables.conn, self.list_model_tables.cur_table_name)
+                self.person_info_model = PersonInfoModel(self.list_model_tables.conn, self.list_model_tables.cur_table_name)
                 self.table_view_show_stu.setModel(self.person_info_model)
 
     def confirm_face_taken(self):
@@ -146,6 +160,10 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             return
         
         #然后人脸的信息，包括特征传递给数据库对象进行保存
+        if self.person_info_model is None:
+            QMessageBox.warning(self, "", "请选择数据库", QMessageBox.Ok)
+            return 
+        
         self.person_info_model.insert_data(name, gender, age, face_feature)
 
         self.face_taker.resume()
@@ -167,6 +185,23 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             for idx in selected_indexes:
                 table_name = self.list_model_tables.data(idx, Qt.DisplayRole)
                 self.list_model_tables.drop_selected_table(table_name)
+
+    def detect_face(self):
+        if self.face_detector != None:
+            return 
+        self.face_detector = FaceDetection(my_config.VIDEO_PATH, self.person_info_model)
+        self.face_detector.update_frame_signal.connect(self.update_frame_detect)
+        self.face_detector.transform_face_ids.connect(self.update_absent)
+        
+        self.face_detector.start()
+
+
+    def update_frame_detect(self, frame):
+        pixmap = QPixmap.fromImage(frame)
+        self.label_disp_video_2.setPixmap(pixmap)
+
+    def update_absent(self, id):
+        pass
 
 
 if __name__ == "__main__":

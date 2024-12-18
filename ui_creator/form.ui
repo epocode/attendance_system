@@ -21,7 +21,7 @@
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="page_home">
        <widget class="QPushButton" name="btn_collect_face">
@@ -140,24 +140,40 @@
          <string>开始</string>
         </property>
        </widget>
-       <widget class="QListWidget" name="lst_show_absent">
+       <widget class="QTableView" name="table_view_show_absent">
         <property name="geometry">
          <rect>
-          <x>800</x>
-          <y>320</y>
+          <x>790</x>
+          <y>180</y>
           <width>256</width>
           <height>192</height>
          </rect>
         </property>
        </widget>
-       <widget class="QTableWidget" name="tb_show_absent">
+       <widget class="QPushButton" name="btn_end_face_detect">
+        <property name="geometry">
+         <rect>
+          <x>400</x>
+          <y>510</y>
+          <width>75</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>停止</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_2">
         <property name="geometry">
          <rect>
           <x>800</x>
-          <y>60</y>
-          <width>256</width>
-          <height>192</height>
+          <y>150</y>
+          <width>231</width>
+          <height>16</height>
          </rect>
+        </property>
+        <property name="text">
+         <string>未签到的学生名单</string>
         </property>
        </widget>
       </widget>
@@ -357,7 +373,7 @@
      <x>0</x>
      <y>0</y>
      <width>1169</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

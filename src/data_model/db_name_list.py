@@ -163,6 +163,44 @@ class PersonInfoModel(QAbstractTableModel):
         self.cursor.execute(q)
         res = self.cursor.fetchall()
         return res[0][0]
+    
+class AbsentTableModel(QAbstractTableModel):
+    def __init__(self, cursor, table_name):
+        super().__init__()
+        self.cursor = cursor
+        self.table = None #用于保存id与name的键值对
+        try:
+            sql = f'SELECT id, name FROM {table_name}'
+            self.cursor.execute(sql)
+            self.table = self.cursor.fetchall()
+        except Exception as e:
+            print(e)
+    
+    def rowCount(self, idx):
+        return len(self.table)
+    
+    def columnCount(self, parent = ...):
+        return 2
+    
+    def data(self, index, role):
+        if role == Qt.DisplayRole:
+            return self.table[index.row()][index.column()]
+        
+    def headerData(self, section, orientation, role = ...):
+        header = ['id', 'name']
+        if role == Qt.DisplayRole:
+            if orientation == Qt.Horizontal:
+                return header[section]
+
+    def delete_row(self, id):
+        for i, line in enumerate(self.table):
+            if line[0] == id:
+                del self.table[i]
+        
+        self.layoutChanged.emit()
+
+    
+        
 
 if __name__ == '__main__':
     db_model = TableNameListModel()

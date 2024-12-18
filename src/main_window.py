@@ -35,7 +35,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import config.my_config as my_config
 from face_take import FaceTaker
-from src.data_model.db_name_list import TableNameListModel, PersonInfoModel
+from src.data_model.db_name_list import TableNameListModel, PersonInfoModel, AbsentTableModel
 from face_detect import FaceDetection    
 
 
@@ -85,6 +85,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
 
         #人脸的检测
         self.face_detector = None
+        self.btn_end_face_detect.clicked.connect(self.end_label_face_detection)
 
         #连接槽函数
         self.btn_collect_face.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(3))
@@ -143,6 +144,9 @@ class MainWindow(Ui_MainWindow, QMainWindow):
                 self.list_model_tables.cur_table_name = table_name
                 self.person_info_model = PersonInfoModel(self.list_model_tables.conn, self.list_model_tables.cur_table_name)
                 self.table_view_show_stu.setModel(self.person_info_model)
+                #同时创建用于表示缺席的学生列表
+                self.absent_table_model = AbsentTableModel(self.list_model_tables.conn.cursor(), self.list_model_tables.cur_table_name)
+                self.table_view_show_absent.setModel(self.absent_table_model)
 
     def confirm_face_taken(self):
         #确认录入人脸，先获取人脸的特征
@@ -187,12 +191,14 @@ class MainWindow(Ui_MainWindow, QMainWindow):
                 self.list_model_tables.drop_selected_table(table_name)
 
     def detect_face(self):
+        #点击检测的开始按钮，开始检测人脸
         if self.face_detector != None:
             return 
         self.face_detector = FaceDetection(my_config.VIDEO_PATH, self.person_info_model)
         self.face_detector.update_frame_signal.connect(self.update_frame_detect)
         self.face_detector.transform_face_ids.connect(self.update_absent)
         
+        self.face_detector.transform_face_ids.connect(self.update_absent)
         self.face_detector.start()
 
 
@@ -201,7 +207,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.label_disp_video_2.setPixmap(pixmap)
 
     def update_absent(self, id):
-        pass
+        self.absent_table_model.delete_row(id)
 
 
 if __name__ == "__main__":

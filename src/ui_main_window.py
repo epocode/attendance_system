@@ -16,10 +16,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QGridLayout, QHBoxLayout, QHeaderView,
-    QLabel, QLineEdit, QListView, QListWidget,
-    QListWidgetItem, QMainWindow, QMenuBar, QPushButton,
-    QSizePolicy, QStackedWidget, QStatusBar, QTableView,
-    QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget)
+    QLabel, QLineEdit, QListView, QMainWindow,
+    QMenuBar, QPushButton, QSizePolicy, QStackedWidget,
+    QStatusBar, QTableView, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -79,12 +78,12 @@ class Ui_MainWindow(object):
         self.btn_confirm_face_detect = QPushButton(self.page_face_detect)
         self.btn_confirm_face_detect.setObjectName(u"btn_confirm_face_detect")
         self.btn_confirm_face_detect.setGeometry(QRect(190, 510, 93, 28))
-        self.lst_show_absent = QListWidget(self.page_face_detect)
-        self.lst_show_absent.setObjectName(u"lst_show_absent")
-        self.lst_show_absent.setGeometry(QRect(800, 320, 256, 192))
-        self.tb_show_absent = QTableWidget(self.page_face_detect)
-        self.tb_show_absent.setObjectName(u"tb_show_absent")
-        self.tb_show_absent.setGeometry(QRect(800, 60, 256, 192))
+        self.table_view_show_absent = QTableView(self.page_face_detect)
+        self.table_view_show_absent.setObjectName(u"table_view_show_absent")
+        self.table_view_show_absent.setGeometry(QRect(790, 180, 256, 192))
+        self.btn_end_face_detect = QPushButton(self.page_face_detect)
+        self.btn_end_face_detect.setObjectName(u"btn_end_face_detect")
+        self.btn_end_face_detect.setGeometry(QRect(400, 510, 75, 23))
         self.stackedWidget.addWidget(self.page_face_detect)
         self.page_info_display = QWidget()
         self.page_info_display.setObjectName(u"page_info_display")
@@ -193,7 +192,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1169, 25))
+        self.menubar.setGeometry(QRect(0, 0, 1169, 21))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -201,7 +200,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -217,6 +216,7 @@ class Ui_MainWindow(object):
         self.btn_drop_table.setText(QCoreApplication.translate("MainWindow", u"\u5220\u9664", None))
         self.label_disp_video_2.setText("")
         self.btn_confirm_face_detect.setText(QCoreApplication.translate("MainWindow", u"\u5f00\u59cb", None))
+        self.btn_end_face_detect.setText(QCoreApplication.translate("MainWindow", u"\u505c\u6b62", None))
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"dispaly", None))
         self.label_disp_video.setText("")
         self.btn_start.setText(QCoreApplication.translate("MainWindow", u"\u5f00\u59cb\u5f55\u5165", None))

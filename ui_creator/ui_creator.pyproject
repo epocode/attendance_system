@@ -2,6 +2,7 @@
     "files": [
         "MainWindow.py",
         "form.ui",
+        "login.ui",
         "resources.qrc"
     ]
 }

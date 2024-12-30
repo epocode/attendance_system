@@ -18,17 +18,26 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QGridLayout, QHBoxLayout, QHeaderView,
     QLabel, QLineEdit, QListView, QMainWindow,
     QMenuBar, QPushButton, QSizePolicy, QStackedWidget,
-    QStatusBar, QTableView, QVBoxLayout, QWidget)
+    QStatusBar, QTableView, QTreeWidget, QTreeWidgetItem,
+    QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(1169, 669)
+        MainWindow.resize(1561, 884)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.verticalLayout = QVBoxLayout(self.centralwidget)
-        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.horizontalLayout_3 = QHBoxLayout(self.centralwidget)
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.tree_widget = QTreeWidget(self.centralwidget)
+        QTreeWidgetItem(self.tree_widget)
+        QTreeWidgetItem(self.tree_widget)
+        QTreeWidgetItem(self.tree_widget)
+        self.tree_widget.setObjectName(u"tree_widget")
+
+        self.horizontalLayout_3.addWidget(self.tree_widget)
+
         self.stackedWidget = QStackedWidget(self.centralwidget)
         self.stackedWidget.setObjectName(u"stackedWidget")
         self.stackedWidget.setStyleSheet(u"")
@@ -36,10 +45,10 @@ class Ui_MainWindow(object):
         self.page_home.setObjectName(u"page_home")
         self.btn_collect_face = QPushButton(self.page_home)
         self.btn_collect_face.setObjectName(u"btn_collect_face")
-        self.btn_collect_face.setGeometry(QRect(430, 110, 93, 28))
-        self.btn_jump_to_face_detect = QPushButton(self.page_home)
-        self.btn_jump_to_face_detect.setObjectName(u"btn_jump_to_face_detect")
-        self.btn_jump_to_face_detect.setGeometry(QRect(430, 180, 93, 28))
+        self.btn_collect_face.setGeometry(QRect(340, 490, 93, 28))
+        self.btn_detect_face = QPushButton(self.page_home)
+        self.btn_detect_face.setObjectName(u"btn_detect_face")
+        self.btn_detect_face.setGeometry(QRect(510, 490, 93, 28))
         self.listview_table_select = QListView(self.page_home)
         self.listview_table_select.setObjectName(u"listview_table_select")
         self.listview_table_select.setGeometry(QRect(340, 250, 256, 192))
@@ -72,7 +81,7 @@ class Ui_MainWindow(object):
         self.page_face_detect.setObjectName(u"page_face_detect")
         self.label_disp_video_2 = QLabel(self.page_face_detect)
         self.label_disp_video_2.setObjectName(u"label_disp_video_2")
-        self.label_disp_video_2.setGeometry(QRect(20, 0, 700, 460))
+        self.label_disp_video_2.setGeometry(QRect(10, 10, 621, 460))
         self.label_disp_video_2.setStyleSheet(u"border: 5px solid red;")
         self.label_disp_video_2.setWordWrap(False)
         self.btn_confirm_face_detect = QPushButton(self.page_face_detect)
@@ -80,13 +89,13 @@ class Ui_MainWindow(object):
         self.btn_confirm_face_detect.setGeometry(QRect(190, 510, 93, 28))
         self.table_view_show_absent = QTableView(self.page_face_detect)
         self.table_view_show_absent.setObjectName(u"table_view_show_absent")
-        self.table_view_show_absent.setGeometry(QRect(790, 180, 256, 192))
+        self.table_view_show_absent.setGeometry(QRect(690, 270, 231, 171))
         self.btn_end_face_detect = QPushButton(self.page_face_detect)
         self.btn_end_face_detect.setObjectName(u"btn_end_face_detect")
         self.btn_end_face_detect.setGeometry(QRect(400, 510, 75, 23))
         self.label_2 = QLabel(self.page_face_detect)
         self.label_2.setObjectName(u"label_2")
-        self.label_2.setGeometry(QRect(800, 150, 231, 16))
+        self.label_2.setGeometry(QRect(710, 180, 231, 16))
         self.stackedWidget.addWidget(self.page_face_detect)
         self.page_info_display = QWidget()
         self.page_info_display.setObjectName(u"page_info_display")
@@ -190,12 +199,14 @@ class Ui_MainWindow(object):
 
         self.stackedWidget.addWidget(self.page_face_collect)
 
-        self.verticalLayout.addWidget(self.stackedWidget)
+        self.horizontalLayout_3.addWidget(self.stackedWidget)
 
+        self.horizontalLayout_3.setStretch(0, 1)
+        self.horizontalLayout_3.setStretch(1, 5)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1169, 21))
+        self.menubar.setGeometry(QRect(0, 0, 1561, 21))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -203,7 +214,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(3)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -211,9 +222,22 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
+        ___qtreewidgetitem = self.tree_widget.headerItem()
+        ___qtreewidgetitem.setText(0, QCoreApplication.translate("MainWindow", u"\u529f\u80fd\u9009\u9879", None));
+
+        __sortingEnabled = self.tree_widget.isSortingEnabled()
+        self.tree_widget.setSortingEnabled(False)
+        ___qtreewidgetitem1 = self.tree_widget.topLevelItem(0)
+        ___qtreewidgetitem1.setText(0, QCoreApplication.translate("MainWindow", u"\u5207\u6362\u767b\u9646", None));
+        ___qtreewidgetitem2 = self.tree_widget.topLevelItem(1)
+        ___qtreewidgetitem2.setText(0, QCoreApplication.translate("MainWindow", u"\u73ed\u7ea7\u4fe1\u606f", None));
+        ___qtreewidgetitem3 = self.tree_widget.topLevelItem(2)
+        ___qtreewidgetitem3.setText(0, QCoreApplication.translate("MainWindow", u"\u5f00\u59cb\u7b7e\u5230", None));
+        self.tree_widget.setSortingEnabled(__sortingEnabled)
+
         self.btn_collect_face.setText(QCoreApplication.translate("MainWindow", u"\u5f55\u5165\u4eba\u8138", None))
-        self.btn_jump_to_face_detect.setText(QCoreApplication.translate("MainWindow", u"\u7b7e\u5230", None))
-        self.label_6.setText(QCoreApplication.translate("MainWindow", u"\u9009\u62e9\u6570\u636e\u5e93", None))
+        self.btn_detect_face.setText(QCoreApplication.translate("MainWindow", u"\u7b7e\u5230", None))
+        self.label_6.setText(QCoreApplication.translate("MainWindow", u"\u9009\u62e9\u73ed\u7ea7", None))
         self.btn_confirm_table.setText(QCoreApplication.translate("MainWindow", u"\u9009\u62e9", None))
         self.btn_create_table.setText(QCoreApplication.translate("MainWindow", u"\u521b\u5efa", None))
         self.btn_drop_table.setText(QCoreApplication.translate("MainWindow", u"\u5220\u9664", None))

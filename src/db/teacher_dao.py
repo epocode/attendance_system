@@ -25,3 +25,13 @@ class TeacherDAO:
         params = [name, username, pswd]
         res = self.db.execute(query, params)
         return res
+    
+    def get_len(self):
+        query = 'SELECT COUNT(*) FROM  teacher;'
+        res = self.db.fetchall(query)
+        return res[0][0]
+    
+    def get_data(self):
+        query = 'SELECT name, username FROM teacher;'
+        res = self.db.fetchall(query)
+        return res

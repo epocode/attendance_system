@@ -13,5 +13,7 @@ USER_NAME = 'root'
 PSWD = 'root'
 
 VEC_DB_PATH = 'data/vec_databases'
+VEC_FEATURE_LEN = 512
+
 PHOTO_PATH = 'data/photos'
 FONT_PAHT = 'C:/Windows/Fonts/simsun.ttc'

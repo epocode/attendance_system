@@ -8,16 +8,17 @@ from PySide6.QtGui import (
     QImage,
 
 )
+import os
+
 import cv2
 from ultralytics import YOLO
 from config import my_config
 import torch
 import dlib
 import numpy as np
-from outer_lab.node_pose_net import HeadPosePred
+from src.outer_lab.node_pose_net  import HeadPosePred
 import time
 import logging
-import os
 from PIL import Image, ImageDraw, ImageFont
 from src.outer_lab.facenet_pytorch import InceptionResnetV1
 

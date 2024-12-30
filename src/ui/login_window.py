@@ -1,22 +1,48 @@
 from src.ui.ui_files.ui_login import Ui_Form
 from PySide6.QtWidgets import QWidget, QMessageBox, QDialog, QFormLayout, QLineEdit, QPushButton
+from PySide6.QtCore import QEventLoop
 from src.db.database import DataBase
-from src.db.teacherDAO import TeacherDAO
-from src.ui.main_window import MainWindow
+from src.db.teacher_dao import TeacherDAO
+from src.ui.admin_window import AdminWindow
 
 
 class LoginWindow(Ui_Form, QWidget):
-    def __init__(self, db=None):
+    def __init__(self, db=None, main_window=None):
         super().__init__()
         self.setupUi(self)
         
         if db is None:
             self.db = DataBase()
+        else:
+            self.db = db
         
         self.teacher_dao = TeacherDAO(self.db)
-    
-        self.btn_login.clicked.connect(self.login)
+
+        if main_window is None:
+            self.btn_login.clicked.connect(self.login)
+
+        else:
+            self.main_window = main_window
+            self.btn_login.clicked.connect(self.change_user)
+
+        
         self.btn_register.clicked.connect(self.register)
+        self.btn_admin.clicked.connect(self.enter_admin)
+        
+
+    def change_user(self):
+        username = self.line_edit_uername.text()
+        pswd = self.line_edit_pswd.text()
+        res = self.teacher_dao.check_login(username, pswd)
+        if res is None:
+            QMessageBox.warning(self, '登陆失败', '当前用户名不存在或者密码错误')
+            return False
+
+        teacher_name, username = res
+
+        
+        self.main_window.change_user(teacher_name, username)
+        self.close()
     
     def login(self):
         username = self.line_edit_uername.text()
@@ -27,6 +53,8 @@ class LoginWindow(Ui_Form, QWidget):
             return False
 
         teacher_name, username = res
+
+        from src.ui.main_window import MainWindow
         main_window = MainWindow(teacher_name, username, self.db)
         main_window.show()
         self.close()
@@ -40,6 +68,16 @@ class LoginWindow(Ui_Form, QWidget):
                 QMessageBox.warning(self, '注册失败', '当前用户名已存在')
             else:
                 QMessageBox.information(self, '注册成功', '注册成功，请登陆')
+
+    def enter_admin(self):
+        self.admin_window = AdminWindow()
+        self.admin_window.show()
+        self.close()
+            
+    def exec_(self):
+        self._event_loop = QEventLoop()
+        self.show()
+        self._event_loop.exec_()
         
 class InputDialog(QDialog):
     def __init__(self):

@@ -14,7 +14,7 @@ from ultralytics import YOLO
 from config import my_config
 import dlib
 import numpy as np
-from src.db.db_name_list import PersonInfoModel
+from src.data_model.qt_data_models import PersonInfoModel
 from typing import cast
 from PIL import Image, ImageDraw, ImageFont
 import time

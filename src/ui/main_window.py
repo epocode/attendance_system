@@ -25,17 +25,18 @@ from PySide6.QtGui import (
     QPixmap,
 
 )
+
+import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 from src.ui.ui_files.ui_main_window import Ui_MainWindow
 import src.ui.ui_files.resources as resources
-import sys
 import cv2
 from ultralytics import YOLO
 import torch
-import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import config.my_config as my_config
 from src.core.face_take import FaceTaker
-from src.db.db_name_list import TableNameListModel, PersonInfoModel, AbsentTableModel
+from src.data_model.qt_data_models import ClassListModel, PersonInfoModel, AbsentTableModel
 from src.core.face_detect import FaceDetection    
 
 
@@ -45,43 +46,34 @@ class MainWindow(Ui_MainWindow, QMainWindow):
 
         self.setupUi(self)
 
-        #从登陆界面得到的对象
+        #主界面要维护的信息
         self.teacher_name = teacher_name
         self.username = username
+        self.class_name = ''
         self.db = db
+
+        self.person_info_model = None
 
         self.stackedWidget.setCurrentIndex(0)
 
         #statusbar 
         self.status_bar = self.statusBar()
 
-        #toolbar
-        self.toolbar = self.addToolBar("tool bar")
-        self.toolbar
-        
-        action_back_home = QAction(QIcon(":/icons/home"), 'home', self)
-        action_back_home.triggered.connect(lambda: self.stackedWidget.setCurrentIndex(0))
 
-        self.toolbar.addAction(action_back_home)
 
         #数据库的创建
-        self.list_model_tables = TableNameListModel()
-        self.listview_table_select.setModel(self.list_model_tables)
+        self.class_list_model = ClassListModel(self.db, self.username)
+        self.listview_table_select.setModel(self.class_list_model)
         
         self.label_curtable = QLabel("未选择表格")
         self.status_bar.addWidget(self.label_curtable)
-        self.btn_confirm_table.clicked.connect(self.confirm_table)
+        self.btn_confirm_table.clicked.connect(self.confirm_cur_class)
 
         self.person_info_model = None
 
-        self.btn_create_table.clicked.connect(self.create_new_table)
-        self.btn_drop_table.clicked.connect(self.drop_table)
+        self.btn_create_table.clicked.connect(self.create_new_class)
+        self.btn_drop_table.clicked.connect(self.delete_class)
         
-
-        #将工具栏停放到左侧
-        dock  = QDockWidget()
-        dock.setWidget(self.toolbar)
-        self.addDockWidget(Qt.LeftDockWidgetArea, dock)
 
         # 人脸的录入
         self.face_taker = None
@@ -92,12 +84,32 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.btn_end_face_detect.clicked.connect(self.end_label_face_detection)
 
         #连接槽函数
-        self.btn_collect_face.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(3))
-        self.btn_jump_to_face_detect.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(1))
+        self.btn_collect_face.clicked.connect(self.enter_face_collection)
+        self.btn_detect_face.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(1))
         self.btn_start.clicked.connect(self.start_show_video)
         self.btn_end.clicked.connect(self.end_show_video)
         
         self.btn_confirm_face_detect.clicked.connect(self.detect_face)
+
+        #左侧功能选项
+        self.tree_widget.itemClicked.connect(self.on_tree_widget_clicked)
+        
+
+    def on_tree_widget_clicked(self, item, column):
+        item_name = item.text(column)
+        if item_name == '切换登陆':
+            from src.ui.login_window import LoginWindow
+            login_window = LoginWindow(self.db, self)
+            login_window.exec_()
+        
+        elif item_name == '班级信息':
+            self.stackedWidget.setCurrentIndex(0)
+
+
+    #更改用户
+    def change_user(self, teacher_name, username):
+        self.teacher_name = teacher_name
+        self.username = username
 
     def start_show_video(self):
         if self.face_taker is not None:
@@ -139,18 +151,18 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         super().closeEvent(event)
         #记得关闭所有的数据库连接
 
-    def confirm_table(self):
+    def confirm_cur_class(self):
         selected_indexes = self.listview_table_select.selectedIndexes()
         if selected_indexes:
             for index in selected_indexes:
-                table_name = self.list_model_tables.data(index, Qt.DisplayRole)
-                self.label_curtable.setText(f"current table:{table_name}")
-                self.list_model_tables.cur_table_name = table_name
-                self.person_info_model = PersonInfoModel(self.list_model_tables.conn, self.list_model_tables.cur_table_name)
-                self.table_view_show_stu.setModel(self.person_info_model)
-                #同时创建用于表示缺席的学生列表
-                self.absent_table_model = AbsentTableModel(self.list_model_tables.conn.cursor(), self.list_model_tables.cur_table_name)
-                self.table_view_show_absent.setModel(self.absent_table_model)
+                class_name = self.class_list_model.data(index, Qt.DisplayRole)
+                self.label_curtable.setText(f"current table:{class_name}")
+                self.class_list_model.cur_class_name = class_name
+                # self.person_info_model = PersonInfoModel(self.list_model_tables.conn, self.list_model_tables.cur_table_name)
+                # self.table_view_show_stu.setModel(self.person_info_model)
+                # #同时创建用于表示缺席的学生列表
+                # self.absent_table_model = AbsentTableModel(self.list_model_tables.conn.cursor(), self.list_model_tables.cur_table_name)
+                # self.table_view_show_absent.setModel(self.absent_table_model)
 
     def confirm_face_taken(self):
         #确认录入人脸，先获取人脸的特征
@@ -180,19 +192,19 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.cur_face = None
 
 
-    def create_new_table(self):
+    def create_new_class(self):
         text, ok = QInputDialog.getText(self, '输入表名', '表名', QLineEdit.Normal)
         if ok and text:
-            self.list_model_tables.create_new_table(text)
+            self.class_list_model.create_new_class(text)
         else:
             print('取消新表的创建')
 
-    def drop_table(self):
+    def delete_class(self):
         selected_indexes = self.listview_table_select.selectedIndexes()
         if len(selected_indexes) != 0:
             for idx in selected_indexes:
-                table_name = self.list_model_tables.data(idx, Qt.DisplayRole)
-                self.list_model_tables.drop_selected_table(table_name)
+                class_name = self.class_list_model.data(idx, Qt.DisplayRole)
+                self.class_list_model.delete_class(class_name)
 
     def detect_face(self):
         #点击检测的开始按钮，开始检测人脸
@@ -214,10 +226,30 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.absent_table_model.delete_row(id)
 
 
+    #选中对应的班级进入人脸录入界面
+    def enter_face_collection(self):
+        selected_indexes = self.listview_table_select.selectedIndexes()
+        if len(selected_indexes) == 0:
+            #如果没有选中任何选项
+            print('请选择一个班级')
+        else:
+            for index in selected_indexes:
+                class_name = self.class_list_model.data(index, Qt.DisplayRole)
+                self.label_curtable.setText(f"current table:{class_name}")
+                self.class_name = class_name
+                #因为人脸录入的时候需要用到学生列表的model,因此要初始化对应的对象
+                self.person_info_model = PersonInfoModel(self.db, self.username, self.class_name)
+                self.table_view_show_stu.setModel(self.person_info_model)
+                
+                self.stackedWidget.setCurrentIndex(3)
+
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
 
-    mainwindow = MainWindow()
-    mainwindow.show()
+    from src.ui.login_window import LoginWindow
+
+    login_window = LoginWindow()
+    login_window.show()
 
     app.exec()

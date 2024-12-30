@@ -1,63 +1,90 @@
-from PySide6.QtWidgets import QApplication, QMainWindow, QSplitter, QWidget, QVBoxLayout, QPushButton, QListView, QStackedWidget, QHBoxLayout
-from PySide6.QtCore import Qt, QStringListModel
+from PySide6.QtWidgets import (QApplication, QWidget, QLabel, QLineEdit, QPushButton,
+                                 QVBoxLayout, QHBoxLayout, QGridLayout, QGroupBox, QRadioButton)
+from PySide6.QtGui import QPixmap
+from PySide6.QtCore import Qt
 
-class MainWindow(QMainWindow):
+class FaceRecognitionApp(QWidget):
     def __init__(self):
         super().__init__()
+        self.setWindowTitle("Face Recognition System")
 
-        # 创建分割器
-        splitter = QSplitter(Qt.Horizontal)
+        # Main layout
+        main_layout = QHBoxLayout()
 
-        # 创建左侧的功能选项
-        left_widget = QWidget()
-        left_layout = QVBoxLayout(left_widget)
-        list_view = QListView()
-        options = QStringListModel(["功能1", "功能2", "功能3"])
-        list_view.setModel(options)
-        left_layout.addWidget(list_view)
+        # Left: Camera view
+        self.camera_view = QLabel("摄像头捕获画面")
+        self.camera_view.setFixedSize(640, 480)
+        self.camera_view.setStyleSheet("border: 2px solid red;")
+        self.camera_view.setAlignment(Qt.AlignCenter)
+        main_layout.addWidget(self.camera_view)
 
-        # 创建右侧的内容显示区域
-        right_widget = QStackedWidget()
-        page1 = QWidget()
-        page2 = QWidget()
-        page3 = QWidget()
+        # Right: Info and Controls
+        right_layout = QVBoxLayout()
 
-        # 在右侧页面上添加内容
-        page1_layout = QVBoxLayout(page1)
-        page1_layout.addWidget(QPushButton("这是功能1的界面"))
+        # Face preview
+        self.face_preview = QLabel("捕获的人脸")
+        self.face_preview.setFixedSize(200, 200)
+        self.face_preview.setStyleSheet("border: 2px solid red;")
+        self.face_preview.setAlignment(Qt.AlignCenter)
+        right_layout.addWidget(self.face_preview, alignment=Qt.AlignCenter)
 
-        page2_layout = QVBoxLayout(page2)
-        page2_layout.addWidget(QPushButton("这是功能2的界面"))
+        # Form for user input
+        form_group = QGroupBox("人脸信息")
+        form_layout = QGridLayout()
 
-        page3_layout = QVBoxLayout(page3)
-        page3_layout.addWidget(QPushButton("这是功能3的界面"))
+        self.name_label = QLabel("姓名:")
+        self.name_input = QLineEdit()
+        self.name_input.setPlaceholderText("请输入姓名")
 
-        # 添加页面到 QStackedWidget
-        right_widget.addWidget(page1)
-        right_widget.addWidget(page2)
-        right_widget.addWidget(page3)
+        self.gender_label = QLabel("性别:")
+        self.male_radio = QRadioButton("男")
+        self.female_radio = QRadioButton("女")
 
-        # 将左右布局添加到分割器
-        splitter.addWidget(left_widget)
-        splitter.addWidget(right_widget)
+        self.age_label = QLabel("年龄:")
+        self.age_input = QLineEdit()
+        self.age_input.setPlaceholderText("请输入年龄")
 
-        # 将分割器设置为主窗口的中央部件
-        self.setCentralWidget(splitter)
+        form_layout.addWidget(self.name_label, 0, 0)
+        form_layout.addWidget(self.name_input, 0, 1)
 
-        # 当点击列表选项时，切换右侧界面的内容
-        list_view.selectionModel().currentChanged.connect(self.on_option_selected)
+        form_layout.addWidget(self.gender_label, 1, 0)
+        gender_layout = QHBoxLayout()
+        gender_layout.addWidget(self.male_radio)
+        gender_layout.addWidget(self.female_radio)
+        form_layout.addLayout(gender_layout, 1, 1)
 
-    def on_option_selected(self, index):
-        selected_option = index.data()
-        if selected_option == "功能1":
-            self.centralWidget().widget(1).setCurrentIndex(0)  # 显示第一个界面
-        elif selected_option == "功能2":
-            self.centralWidget().widget(1).setCurrentIndex(1)  # 显示第二个界面
-        elif selected_option == "功能3":
-            self.centralWidget().widget(1).setCurrentIndex(2)  # 显示第三个界面
+        form_layout.addWidget(self.age_label, 2, 0)
+        form_layout.addWidget(self.age_input, 2, 1)
+
+        form_group.setLayout(form_layout)
+        right_layout.addWidget(form_group)
+
+        # Buttons for actions
+        button_layout = QHBoxLayout()
+        self.confirm_button = QPushButton("确认录入")
+        self.confirm_button.setStyleSheet("background-color: green; color: white;")
+        self.cancel_button = QPushButton("放弃")
+        self.cancel_button.setStyleSheet("background-color: red; color: white;")
+        button_layout.addWidget(self.confirm_button)
+        button_layout.addWidget(self.cancel_button)
+        right_layout.addLayout(button_layout)
+
+        # Start/Stop buttons
+        action_layout = QHBoxLayout()
+        self.start_button = QPushButton("开始录入")
+        self.stop_button = QPushButton("停止录入")
+        action_layout.addWidget(self.start_button)
+        action_layout.addWidget(self.stop_button)
+        right_layout.addLayout(action_layout)
+
+        # Add right layout to main layout
+        main_layout.addLayout(right_layout)
+
+        # Set main layout to the window
+        self.setLayout(main_layout)
 
 if __name__ == "__main__":
     app = QApplication([])
-    window = MainWindow()
+    window = FaceRecognitionApp()
     window.show()
     app.exec()

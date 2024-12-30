@@ -18,16 +18,22 @@ class DataBase:
     def close(self):
         self.conn.close()
 
-    def fetchall(self, query, params:list):
+    def fetchall(self, query, params:list=None):
         with self.conn.cursor() as cursor:
             try:
-                cursor.execute(query, params)
+                if params is None:
+                    cursor.execute(query)
+                else:
+                    cursor.execute(query, params)
                 res = cursor.fetchall()
                 return res
             except Exception as e:
                 print(e)
             
         return False
+    
+    
+
     
     def execute(self, query, params):
         with self.conn.cursor() as cursor:

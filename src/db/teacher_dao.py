@@ -32,6 +32,28 @@ class TeacherDAO:
         return res[0][0]
     
     def get_data(self):
+        #->[(name, username)]
         query = 'SELECT name, username FROM teacher;'
         res = self.db.fetchall(query)
         return res
+
+    def check_single_username(self, username):
+        query = 'SELECT COUNT(*) FROM teacher WHERE  username = %s;'
+        params = [username]
+        res = self.db.fetchall(query, params)
+        if res[0][0] == 0:
+            return True
+        else:
+            return False
+        
+    def add_new(self, name, username, pswd):
+        query = 'INSERT INTO teacher (name, username, password) VALUES(%s, %s, %s);'
+        params = [name, username, pswd]
+        self.db.execute(query, params)
+
+    def delete_row(self, row):
+        res = self.get_data()
+        username = res[row][1]
+        query = 'DELETE FROM teacher WHERE username = %s;'
+        params = [username]
+        self.db.execute(query, params)

@@ -1,7 +1,7 @@
-
+from src.db.database import DataBase
 
 class ClassDAO:
-    def __init__(self, db, username=None):
+    def __init__(self, db:DataBase, username=None):
         self.db = db
         self.username = username
 
@@ -37,3 +37,26 @@ class ClassDAO:
         params = [class_name, self.username]
         self.db.execute(query, params)
 
+    def delete_class_by_row(self, row):
+        query = 'SELECT * FROM class;'
+        res = self.db.fetchall(query)
+        class_name = res[row][0]
+        query = 'DELETE FROM class WHERE class_name = %s;'
+        params = [class_name]
+        self.db.execute(query, params)
+
+
+    def check_single_class_name(self, class_name):
+        query = 'SELECT COUNT(*) FROM class WHERE class_name = %s;'
+        params = [class_name]
+        res = self.db.fetchall(query, params)[0][0]
+        if res == 0:
+            return True
+        else:
+            return False
+        
+    def add_new(self, class_name, teacher_username):
+        query = 'INSERT INTO class (class_name, teacher_username) VALUES (%s, %s);'
+        params = [class_name, teacher_username]
+        self.db.execute(query, params)
+        

@@ -47,3 +47,13 @@ class DataBase:
         
         return False
 
+    def execute_with_lastid(self, query, params):
+        with self.conn.cursor() as cursor:
+            try:
+                cursor.execute(query, params)
+                self.conn.commit()
+                return cursor.lastrowid
+            except Exception as e:
+                print(e)
+        
+        return False

@@ -10,12 +10,17 @@ from PySide6.QtWidgets import (
     QAbstractItemView,
     QComboBox
 )
+from PySide6.QtGui import QPixmap
 from src.ui.ui_files.ui_admin_window import Ui_AdminWindow
 from src.db.database import DataBase
 from src.db.teacher_dao import TeacherDAO
 from src.data_model.teacher_table_model import TeacherTableModel
 from src.db.class_dao import ClassDAO
 from src.data_model.class_table_model import ClassTableModel
+from src.db.student_dao import StudentDAO
+from src.data_model.student_table_model import StudentTableModel
+from src.core.face_take import FaceTaker
+import config.my_config as my_config
 
 class AdminWindow(Ui_AdminWindow, QMainWindow):
     def __init__(self):
@@ -41,10 +46,76 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         self.btn_add_class.clicked.connect(self.on_add_class_clicked)
         self.btn_delete_class.clicked.connect(self.on_delete_class_clicked)
 
+        #学生界面
+        self.student_dao = StudentDAO(self.db)
+        self.student_table_model = StudentTableModel(self.student_dao)
+        self.table_view_students.setModel(self.student_table_model) 
+        self.table_view_students.setSelectionBehavior(QAbstractItemView.SelectRows) 
+        self.btn_add_stu.clicked.connect(self.on_add_student_clicked)
+
+        #人脸录入相关
+        self.face_taker = None
+        self.cur_face = None
+
+        self.btn_start_enter.clicked.connect(self.start_enter_face)
+        self.btn_end_enter.clicked.connect(self.end_enter_face)
+        
         #绑定功能切换
         self.stacked_widget.setCurrentIndex(0)
         self.tree_widget.itemClicked.connect(self.on_tree_widget_clicked)
         
+
+    #人脸录入相关函数
+    def start_enter_face(self):
+        if self.face_taker is not None:
+            return
+        self.face_taker = FaceTaker(my_config.VIDEO_PATH)
+        self.face_taker.update_frame_signal.connect(self.update_frame)
+        self.face_taker.select_face_signal.connect(self.get_face)
+
+        self.btn_confirm_collect.clicked.connect(self.confirm_face_take)
+        self.btn_pass_collect.clicked.connect(self.face_taker.resume)
+        self.face_taker.start()
+
+    def confirm_face_take(self):
+        if self.cur_face is None:
+            return
+        face_feature = self.face_taker.get_face_feature()
+
+        name = self.line_edit_name.text()
+        age = self.line_edit_age.text()
+        if self.rbtn_male.isChecked():
+            gender = '男'
+        elif self.rbtn_female.isChecked():
+            gender = '女'
+        else:
+            gender = ''
+
+        if name == ' ' or age == '  ' or gender == '':
+            print('请输入正确的人脸信息')
+            return
+        
+        self.student_dao.add_student(face_feature, name, gender, age)
+        self.student_table_model.layoutChanged.emit()
+        self.face_taker.resume()
+
+        self.cur_face = None
+
+    def update_frame(self, qimage):
+        pixmap = QPixmap.fromImage(qimage)
+        self.label_camp_frame.setPixmap(pixmap)
+
+    def get_face(self, qimage):
+        self.cur_face = qimage
+        pixmap = QPixmap.fromImage(qimage)
+        self.label_face.setPixmap(pixmap)
+
+    def end_enter_face(self):
+        if self.face_taker is not None:
+            self.face_taker.stop()
+            self.face_taker = None
+            self.student_dao.save_vec_db()
+            self.stacked_widget.setCurrentIndex(3)
 
     def on_add_teacher_clicked(self):
         #创建新的老师信息
@@ -64,6 +135,8 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
             print('成功添加新老师')
             self.teacher_table_model.layoutChanged.emit()
             
+    def on_add_student_clicked(self):
+        self.stacked_widget.setCurrentIndex(2)
 
     def on_delete_teacher_clicked(self):
         selected_indexes = self.table_view_teachers.selectionModel().selectedRows()
@@ -113,6 +186,13 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         else: 
             pass
 
+    def closeEvent(self, event):
+        if self.face_taker is not None:
+            self.face_taker.stop()
+            self.face_taker = None
+            self.student_dao.save_vec_db()
+
+        return super().closeEvent(event)
 class TeacherInputDialog(QDialog):
     def __init__(self):
         super().__init__()

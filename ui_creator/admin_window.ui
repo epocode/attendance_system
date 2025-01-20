@@ -47,7 +47,7 @@
     <item>
      <widget class="QStackedWidget" name="stacked_widget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="page">
        <layout class="QVBoxLayout" name="verticalLayout">
@@ -129,9 +129,6 @@
           <property name="text">
            <string>摄像头捕获画面</string>
           </property>
-          <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignCenter</set>
-          </property>
           <property name="wordWrap">
            <bool>false</bool>
           </property>
@@ -176,9 +173,6 @@
             <property name="text">
              <string>捕获的人脸</string>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignmentFlag::AlignCenter</set>
-            </property>
            </widget>
           </item>
           <item>
@@ -220,7 +214,7 @@ QGroupBox::title {
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="QLineEdit" name="line_edit_name_2">
+              <widget class="QLineEdit" name="line_edit_name">
                <property name="text">
                 <string/>
                </property>
@@ -259,7 +253,7 @@ QGroupBox::title {
               </widget>
              </item>
              <item row="2" column="1">
-              <widget class="QLineEdit" name="line_edit_age_2"/>
+              <widget class="QLineEdit" name="line_edit_age"/>
              </item>
             </layout>
            </widget>
@@ -295,7 +289,7 @@ QPushButton:pressed {
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="btn_pass_2">
+             <widget class="QPushButton" name="btn_pass_collect">
               <property name="styleSheet">
                <string notr="true">QPushButton {
     background-color: #3498db; /* 按钮背景颜色（蓝色） */
@@ -327,14 +321,14 @@ QPushButton:pressed {
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_6">
             <item>
-             <widget class="QPushButton" name="btn_start">
+             <widget class="QPushButton" name="btn_start_enter">
               <property name="text">
                <string>开始录入</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="btn_end">
+             <widget class="QPushButton" name="btn_end_enter">
               <property name="text">
                <string>停止录入</string>
               </property>
@@ -381,7 +375,7 @@ QPushButton:pressed {
      <x>0</x>
      <y>0</y>
      <width>1187</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>

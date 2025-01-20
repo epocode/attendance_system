@@ -112,7 +112,6 @@ class Ui_AdminWindow(object):
 "    text-align: center;       /* \u6587\u5b57\u5c45\u4e2d */\n"
 "}\n"
 "")
-        self.label_camp_frame.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label_camp_frame.setWordWrap(False)
 
         self.horizontalLayout_7.addWidget(self.label_camp_frame)
@@ -135,7 +134,6 @@ class Ui_AdminWindow(object):
 "    text-align: center;        /* \u6587\u5b57\u5c45\u4e2d */\n"
 "}\n"
 "")
-        self.label_face.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_4.addWidget(self.label_face)
 
@@ -167,10 +165,10 @@ class Ui_AdminWindow(object):
 
         self.formLayout.setWidget(0, QFormLayout.LabelRole, self.label_2)
 
-        self.line_edit_name_2 = QLineEdit(self.groupBox)
-        self.line_edit_name_2.setObjectName(u"line_edit_name_2")
+        self.line_edit_name = QLineEdit(self.groupBox)
+        self.line_edit_name.setObjectName(u"line_edit_name")
 
-        self.formLayout.setWidget(0, QFormLayout.FieldRole, self.line_edit_name_2)
+        self.formLayout.setWidget(0, QFormLayout.FieldRole, self.line_edit_name)
 
         self.label_6 = QLabel(self.groupBox)
         self.label_6.setObjectName(u"label_6")
@@ -197,10 +195,10 @@ class Ui_AdminWindow(object):
 
         self.formLayout.setWidget(2, QFormLayout.LabelRole, self.label_7)
 
-        self.line_edit_age_2 = QLineEdit(self.groupBox)
-        self.line_edit_age_2.setObjectName(u"line_edit_age_2")
+        self.line_edit_age = QLineEdit(self.groupBox)
+        self.line_edit_age.setObjectName(u"line_edit_age")
 
-        self.formLayout.setWidget(2, QFormLayout.FieldRole, self.line_edit_age_2)
+        self.formLayout.setWidget(2, QFormLayout.FieldRole, self.line_edit_age)
 
 
         self.verticalLayout_4.addWidget(self.groupBox)
@@ -231,9 +229,9 @@ class Ui_AdminWindow(object):
 
         self.horizontalLayout.addWidget(self.btn_confirm_collect)
 
-        self.btn_pass_2 = QPushButton(self.page_4)
-        self.btn_pass_2.setObjectName(u"btn_pass_2")
-        self.btn_pass_2.setStyleSheet(u"QPushButton {\n"
+        self.btn_pass_collect = QPushButton(self.page_4)
+        self.btn_pass_collect.setObjectName(u"btn_pass_collect")
+        self.btn_pass_collect.setStyleSheet(u"QPushButton {\n"
 "    background-color: #3498db; /* \u6309\u94ae\u80cc\u666f\u989c\u8272\uff08\u84dd\u8272\uff09 */\n"
 "    color: white;             /* \u6309\u94ae\u6587\u5b57\u989c\u8272\uff08\u767d\u8272\uff09 */\n"
 "    border: 2px solid #2980b9; /* \u8fb9\u6846\u989c\u8272\uff08\u6df1\u84dd\uff09 */\n"
@@ -253,22 +251,22 @@ class Ui_AdminWindow(object):
 "}\n"
 "")
 
-        self.horizontalLayout.addWidget(self.btn_pass_2)
+        self.horizontalLayout.addWidget(self.btn_pass_collect)
 
 
         self.verticalLayout_4.addLayout(self.horizontalLayout)
 
         self.horizontalLayout_6 = QHBoxLayout()
         self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
-        self.btn_start = QPushButton(self.page_4)
-        self.btn_start.setObjectName(u"btn_start")
+        self.btn_start_enter = QPushButton(self.page_4)
+        self.btn_start_enter.setObjectName(u"btn_start_enter")
 
-        self.horizontalLayout_6.addWidget(self.btn_start)
+        self.horizontalLayout_6.addWidget(self.btn_start_enter)
 
-        self.btn_end = QPushButton(self.page_4)
-        self.btn_end.setObjectName(u"btn_end")
+        self.btn_end_enter = QPushButton(self.page_4)
+        self.btn_end_enter.setObjectName(u"btn_end_enter")
 
-        self.horizontalLayout_6.addWidget(self.btn_end)
+        self.horizontalLayout_6.addWidget(self.btn_end_enter)
 
 
         self.verticalLayout_4.addLayout(self.horizontalLayout_6)
@@ -314,7 +312,7 @@ class Ui_AdminWindow(object):
         AdminWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(AdminWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1187, 21))
+        self.menubar.setGeometry(QRect(0, 0, 1187, 25))
         AdminWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(AdminWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -322,7 +320,7 @@ class Ui_AdminWindow(object):
 
         self.retranslateUi(AdminWindow)
 
-        self.stacked_widget.setCurrentIndex(3)
+        self.stacked_widget.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(AdminWindow)
@@ -353,15 +351,15 @@ class Ui_AdminWindow(object):
         self.label_face.setText(QCoreApplication.translate("AdminWindow", u"\u6355\u83b7\u7684\u4eba\u8138", None))
         self.groupBox.setTitle(QCoreApplication.translate("AdminWindow", u"\u5b66\u751f\u4fe1\u606f ", None))
         self.label_2.setText(QCoreApplication.translate("AdminWindow", u"\u59d3\u540d", None))
-        self.line_edit_name_2.setText("")
+        self.line_edit_name.setText("")
         self.label_6.setText(QCoreApplication.translate("AdminWindow", u"\u6027\u522b", None))
         self.rbtn_male.setText(QCoreApplication.translate("AdminWindow", u"\u7537", None))
         self.rbtn_female.setText(QCoreApplication.translate("AdminWindow", u"\u5973", None))
         self.label_7.setText(QCoreApplication.translate("AdminWindow", u"\u5e74\u9f84", None))
         self.btn_confirm_collect.setText(QCoreApplication.translate("AdminWindow", u"\u786e\u8ba4\u5f55\u5165", None))
-        self.btn_pass_2.setText(QCoreApplication.translate("AdminWindow", u"\u653e\u5f03", None))
-        self.btn_start.setText(QCoreApplication.translate("AdminWindow", u"\u5f00\u59cb\u5f55\u5165", None))
-        self.btn_end.setText(QCoreApplication.translate("AdminWindow", u"\u505c\u6b62\u5f55\u5165", None))
+        self.btn_pass_collect.setText(QCoreApplication.translate("AdminWindow", u"\u653e\u5f03", None))
+        self.btn_start_enter.setText(QCoreApplication.translate("AdminWindow", u"\u5f00\u59cb\u5f55\u5165", None))
+        self.btn_end_enter.setText(QCoreApplication.translate("AdminWindow", u"\u505c\u6b62\u5f55\u5165", None))
         self.btn_add_stu.setText(QCoreApplication.translate("AdminWindow", u"\u5f55\u5165", None))
         self.btn_delete_stu.setText(QCoreApplication.translate("AdminWindow", u"\u5220\u9664", None))
     # retranslateUi

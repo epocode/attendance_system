@@ -16,7 +16,7 @@ class StudentDAO:
         query = 'SELECT id, name, gender, age FROM student;'
         res = self.db.fetchall(query)
         return res
-    
+     
     def add_student(self, face_feature, name, gender, age):
         dis, ids = self.vec_db.search(face_feature, 1)
         if dis[0][0] > 0.9:
@@ -27,6 +27,14 @@ class StudentDAO:
         last_id = self.db.execute_with_lastid(query, params)  
         if last_id != 0:
             self.vec_db.add_with_ids(face_feature, np.array([last_id]))
+
+    def delete_student(self, row):
+        res = self.get_student_info()
+        id = res[row][0]
+        query = 'DELETE FROM student WHERE id = %s;'    
+        params = (id,)
+        self.db.execute(query, params)
+        self.vec_db.delete(np.array([id]))
 
     def save_vec_db(self):
         self.vec_db.save()

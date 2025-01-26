@@ -3,13 +3,16 @@ from PySide6.QtWidgets import (
     QDialog,
     QFormLayout,
     QLineEdit,
-    QLabel,
     QPushButton,
     QHBoxLayout,
     QVBoxLayout,
     QAbstractItemView,
-    QComboBox
+    QComboBox,
+    QStyledItemDelegate,
+    QWidget,
+
 )
+from PySide6.QtCore import Signal, QTimer  
 from PySide6.QtGui import QPixmap
 from src.ui.ui_files.ui_admin_window import Ui_AdminWindow
 from src.db.database import DataBase
@@ -52,6 +55,8 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         self.table_view_students.setModel(self.student_table_model) 
         self.table_view_students.setSelectionBehavior(QAbstractItemView.SelectRows) 
         self.btn_add_stu.clicked.connect(self.on_add_student_clicked)
+        self.btn_delete_stu.clicked.connect(self.on_delete_stu_clicked)
+        # QTimer.singleShot(0, self.set_btn_delegate)
 
         #人脸录入相关
         self.face_taker = None
@@ -64,7 +69,20 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         self.stacked_widget.setCurrentIndex(0)
         self.tree_widget.itemClicked.connect(self.on_tree_widget_clicked)
         
+    # def set_btn_delegate(self):
+    #     delegate = ButtonDelegate(self.table_view_students)
+    #     delegate.button_clicked_signal.connect(self.on_add_stu_to_class)
+    #     self.table_view_students.setItemDelegateForColumn(4, delegate)
 
+    def on_add_stu_to_class(self, row):
+        print('加入班级')
+    
+    def on_delete_stu_clicked(self):
+        selected_indexes = self.table_view_students.selectionModel().selectedRows()
+        if selected_indexes:
+            selected_row = selected_indexes[0].row()
+            self.student_dao.delete_student(selected_row)
+            self.student_table_model.layoutChanged.emit()
     #人脸录入相关函数
     def start_enter_face(self):
         if self.face_taker is not None:
@@ -193,6 +211,65 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
             self.student_dao.save_vec_db()
 
         return super().closeEvent(event)
+
+class ButtonDelegate(QStyledItemDelegate):
+    button_clicked_signal = Signal(int)
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.button = None
+
+    def createEditor(self, parent, option, index):
+        if self.button == None:
+            self.button = QPushButton('加入班级', parent)
+            self.button.setStyleSheet("""
+            QPushButton {
+                background-color: lightblue;  /* 背景色 */
+                color: white;  /* 文字颜色 */
+                border-radius: 5px;  /* 圆角 */
+                border: 1px solid #007BFF;  /* 边框 */
+                padding: 5px 10px;  /* 内边距 */
+            }
+            QPushButton:hover {
+                background-color: #007BFF;  /* 悬停时背景色 */
+            }
+            QPushButton:pressed {
+                background-color: #0056b3;  /* 按下时背景色 */
+            }
+        """)
+            self.button.clicked.connect(lambda:self.button_clicked_signal.emit(index.row()))
+            self.button.setGeometry(option.rect)
+            self.button.show()
+        return self.button
+    
+
+        # editor = QWidget(parent)
+        # layout = QHBoxLayout(editor)
+        # button = QPushButton("加入班级", editor)
+        # button.setStyleSheet("""
+        #     QPushButton {
+        #         background-color: lightblue;  /* 背景色 */
+        #         color: white;  /* 文字颜色 */
+        #         border-radius: 5px;  /* 圆角 */
+        #         border: 1px solid #007BFF;  /* 边框 */
+        #         padding: 5px 10px;  /* 内边距 */
+        #     }
+        #     QPushButton:hover {
+        #         background-color: #007BFF;  /* 悬停时背景色 */
+        #     }
+        #     QPushButton:pressed {
+        #         background-color: #0056b3;  /* 按下时背景色 */
+        #     }
+        # """)
+        # layout.addWidget(button)
+        # layout.setContentsMargins(0, 0, 0, 0)
+        # editor.setLayout(layout)
+        # button.clicked.connect(lambda:self.button_clicked_signal.emit(index.row()))
+        # return editor
+    
+    def updateEditorGeometry(self, editor, option, index):
+        editor.setGeometry(option.rect)
+
 class TeacherInputDialog(QDialog):
     def __init__(self):
         super().__init__()

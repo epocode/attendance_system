@@ -20,5 +20,13 @@ class StudentTableModel(QAbstractTableModel):
     
     def data(self, index, role= ...):
         if role == Qt.DisplayRole:
-            res = self.student_dao.get_student_info()
-            return res[index.row()][index.column()]
+            if index.column() <4:
+                res = self.student_dao.get_student_info()
+                return res[index.row()][index.column()]
+            else:
+                return "加入班级"
+    def flags(self, index):
+        if index.column() == 4:  # 假设按钮在第5列 (索引为4)
+            return Qt.ItemIsEnabled | Qt.ItemIsSelectable | Qt.ItemIsEditable
+        return Qt.ItemIsEnabled | Qt.ItemIsSelectable  # 其他列可选但不可编辑
+    

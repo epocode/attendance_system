@@ -30,3 +30,7 @@ class VecDB:
             faiss.write_index(self.vec_db, os.path.join(my_config.VEC_DB_PATH, 'vecdb' + '.faiss'))
         except Exception as e:
             print('保存失败')
+
+    def delete(self, id):
+        self.vec_db.remove_ids(id)
+        

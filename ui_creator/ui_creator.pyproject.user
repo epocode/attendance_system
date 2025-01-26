@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 14.0.2, 2025-01-08T17:33:00. -->
+<!-- Written by QtCreator 12.0.2, 2025-01-20T17:37:39. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -91,8 +91,8 @@
   <variable>ProjectExplorer.Project.Target.0</variable>
   <valuemap type="QVariantMap">
    <value type="QString" key="DeviceType">Desktop</value>
-   <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Python 3.11.7</value>
-   <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Python 3.11.7</value>
+   <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">%{Python:Name}</value>
+   <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">%{Python:Name}</value>
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">{cb8f1b99-2dc6-4c2f-a6bf-2c4036546d85}</value>
    <value type="qlonglong" key="ProjectExplorer.Target.ActiveBuildConfiguration">0</value>
    <value type="qlonglong" key="ProjectExplorer.Target.ActiveDeployConfiguration">0</value>
@@ -122,8 +122,6 @@
     <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges"/>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Python 3.11.7 Virtual Environment</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Python.PySideBuildConfiguration</value>
-    <value type="QString" key="python">C:/Users/shann/Desktop/SE/attendance_system/ui_creator/.qtcreator/Python_3_11_7venv/Scripts/python.exe</value>
-    <value type="QString" key="venv">C:/Users/shann/Desktop/SE/attendance_system/ui_creator/.qtcreator/Python_3_11_7venv</value>
    </valuemap>
    <value type="qlonglong" key="ProjectExplorer.Target.BuildConfigurationCount">1</value>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.DeployConfiguration.0">
@@ -148,7 +146,6 @@
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
     <value type="bool" key="PE.EnvironmentAspect.PrintOnRun">false</value>
-    <value type="QString" key="PerfRecordArgsId">-e cpu-cycles --call-graph &quot;dwarf,4096&quot; -F 250</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">MainWindow.py</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.C:/Users/shann/Desktop/SE/attendance_system/ui_creator/MainWindow.py</value>
     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">C:/Users/shann/Desktop/SE/attendance_system/ui_creator/MainWindow.py</value>
@@ -165,8 +162,8 @@
   <variable>ProjectExplorer.Project.Target.1</variable>
   <valuemap type="QVariantMap">
    <value type="QString" key="DeviceType">Desktop</value>
-   <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Python-yolov5</value>
-   <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Python-yolov5</value>
+   <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">%{Python:Name}</value>
+   <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">%{Python:Name}</value>
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">{ae9efbdf-abd9-4ad9-90f8-39d9b2cc707c}</value>
    <value type="qlonglong" key="ProjectExplorer.Target.ActiveBuildConfiguration">1</value>
    <value type="qlonglong" key="ProjectExplorer.Target.ActiveDeployConfiguration">0</value>
@@ -178,7 +175,6 @@
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Python.PysideBuildStep</value>
       <value type="QString" key="Python.PySideProjectTool">C:\Users\shann\anaconda3\envs\yolov5\Scripts\pyside6-project.exe</value>
-      <value type="QString" key="Python.PySideUic">C:\Users\shann\anaconda3\envs\yolov5\Scripts\pyside6-uic.exe</value>
      </valuemap>
      <value type="qlonglong" key="ProjectExplorer.BuildStepList.StepsCount">1</value>
      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Build</value>
@@ -198,7 +194,6 @@
     <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges"/>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Python-yolov5</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Python.PySideBuildConfiguration</value>
-    <value type="QString" key="python">C:/Users/shann/anaconda3/envs/yolov5/python.exe</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.1">
     <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">C:\Users\shann\Desktop\SE\attendance_system\ui_creator\.qtcreator\Python_yolov5venv</value>
@@ -225,8 +220,6 @@
     <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges"/>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Python-yolov5 Virtual Environment</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Python.PySideBuildConfiguration</value>
-    <value type="QString" key="python">C:/Users/shann/Desktop/SE/attendance_system/ui_creator/.qtcreator/Python_yolov5venv/Scripts/python.exe</value>
-    <value type="QString" key="venv">C:/Users/shann/Desktop/SE/attendance_system/ui_creator/.qtcreator/Python_yolov5venv</value>
    </valuemap>
    <value type="qlonglong" key="ProjectExplorer.Target.BuildConfigurationCount">2</value>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.DeployConfiguration.0">
@@ -251,7 +244,6 @@
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
     <value type="bool" key="PE.EnvironmentAspect.PrintOnRun">false</value>
-    <value type="QString" key="PerfRecordArgsId">-e cpu-cycles --call-graph &quot;dwarf,4096&quot; -F 250</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.CustomExecutableRunConfiguration</value>
     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey"></value>

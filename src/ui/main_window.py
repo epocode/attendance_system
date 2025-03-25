@@ -36,20 +36,20 @@ from ultralytics import YOLO
 import torch
 import config.my_config as my_config
 from src.core.face_take import FaceTaker
-from src.data_model.qt_data_models import ClassListModel, PersonInfoModel, AbsentTableModel
+from src.data_model.qt_data_models import CourseListModel, PersonInfoModel, AbsentTableModel
 from src.core.face_detect import FaceDetection    
 
 
 class MainWindow(Ui_MainWindow, QMainWindow):
     def __init__(self, teacher_name, username, db, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)   
 
         self.setupUi(self)
 
         #主界面要维护的信息
         self.teacher_name = teacher_name
         self.username = username
-        self.class_name = ''
+        self.course_name = ''
         self.db = db
 
         self.person_info_model = None
@@ -62,17 +62,17 @@ class MainWindow(Ui_MainWindow, QMainWindow):
 
 
         #数据库的创建
-        self.class_list_model = ClassListModel(self.db, self.username)
-        self.listview_table_select.setModel(self.class_list_model)
+        self.course_list_model = CourseListModel(self.db, self.username)
+        self.listview_table_select.setModel(self.course_list_model)
         
         self.label_curtable = QLabel("未选择表格")
         self.status_bar.addWidget(self.label_curtable)
-        self.btn_confirm_table.clicked.connect(self.confirm_cur_class)
+        self.btn_confirm_table.clicked.connect(self.confirm_cur_course)
 
         self.person_info_model = None
 
-        self.btn_create_table.clicked.connect(self.create_new_class)
-        self.btn_drop_table.clicked.connect(self.delete_class)
+        self.btn_create_table.clicked.connect(self.create_new_course)
+        self.btn_drop_table.clicked.connect(self.delete_course)
         
 
         # 人脸的录入
@@ -102,7 +102,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             login_window = LoginWindow(self.db, self)
             login_window.exec_()
         
-        elif item_name == '班级信息':
+        elif item_name == '课程信息':
             self.stackedWidget.setCurrentIndex(0)
 
 
@@ -151,13 +151,13 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         super().closeEvent(event)
         #记得关闭所有的数据库连接
 
-    def confirm_cur_class(self):
+    def confirm_cur_course(self):
         selected_indexes = self.listview_table_select.selectedIndexes()
         if selected_indexes:
             for index in selected_indexes:
-                class_name = self.class_list_model.data(index, Qt.DisplayRole)
-                self.label_curtable.setText(f"current table:{class_name}")
-                self.class_list_model.cur_class_name = class_name
+                course_name = self.course_list_model.data(index, Qt.DisplayRole)
+                self.label_curtable.setText(f"current table:{course_name}")
+                self.course_list_model.cur_course_name = course_name
                 # self.person_info_model = PersonInfoModel(self.list_model_tables.conn, self.list_model_tables.cur_table_name)
                 # self.table_view_show_stu.setModel(self.person_info_model)
                 # #同时创建用于表示缺席的学生列表
@@ -192,19 +192,19 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.cur_face = None
 
 
-    def create_new_class(self):
+    def create_new_course(self):
         text, ok = QInputDialog.getText(self, '输入表名', '表名', QLineEdit.Normal)
         if ok and text:
-            self.class_list_model.create_new_class(text)
+            self.course_list_model.create_new_course(text)
         else:
             print('取消新表的创建')
 
-    def delete_class(self):
+    def delete_course(self):
         selected_indexes = self.listview_table_select.selectedIndexes()
         if len(selected_indexes) != 0:
             for idx in selected_indexes:
-                class_name = self.class_list_model.data(idx, Qt.DisplayRole)
-                self.class_list_model.delete_class(class_name)
+                course_name = self.course_list_model.data(idx, Qt.DisplayRole)
+                self.course_list_model.delete_course(course_name)
 
     def detect_face(self):
         #点击检测的开始按钮，开始检测人脸
@@ -226,19 +226,19 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.absent_table_model.delete_row(id)
 
 
-    #选中对应的班级进入人脸录入界面
+    #选中对应的课程进入人脸录入界面
     def enter_face_collection(self):
         selected_indexes = self.listview_table_select.selectedIndexes()
         if len(selected_indexes) == 0:
             #如果没有选中任何选项
-            print('请选择一个班级')
+            print('请选择一个课程')
         else:
             for index in selected_indexes:
-                class_name = self.class_list_model.data(index, Qt.DisplayRole)
-                self.label_curtable.setText(f"current table:{class_name}")
-                self.class_name = class_name
+                course_name = self.course_list_model.data(index, Qt.DisplayRole)
+                self.label_curtable.setText(f"current table:{course_name}")
+                self.course_name = course_name
                 #因为人脸录入的时候需要用到学生列表的model,因此要初始化对应的对象
-                self.person_info_model = PersonInfoModel(self.db, self.username, self.class_name)
+                self.person_info_model = PersonInfoModel(self.db, self.username, self.course_name)
                 self.table_view_show_stu.setModel(self.person_info_model)
                 
                 self.stackedWidget.setCurrentIndex(3)

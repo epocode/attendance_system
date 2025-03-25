@@ -15,11 +15,11 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFormLayout, QGroupBox, QHBoxLayout,
-    QHeaderView, QLabel, QLineEdit, QMainWindow,
-    QMenuBar, QPushButton, QRadioButton, QSizePolicy,
-    QStackedWidget, QStatusBar, QTableView, QTreeWidget,
-    QTreeWidgetItem, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QComboBox, QFormLayout, QGroupBox,
+    QHBoxLayout, QHeaderView, QLabel, QLineEdit,
+    QMainWindow, QMenuBar, QPushButton, QRadioButton,
+    QSizePolicy, QStackedWidget, QStatusBar, QTableView,
+    QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget)
 
 class Ui_AdminWindow(object):
     def setupUi(self, AdminWindow):
@@ -36,6 +36,10 @@ class Ui_AdminWindow(object):
         QTreeWidgetItem(self.tree_widget)
         QTreeWidgetItem(self.tree_widget)
         self.tree_widget.setObjectName(u"tree_widget")
+        self.tree_widget.setStyleSheet(u"QTreeWidget::item:selected {\n"
+"background-color:#2E3B4E;\n"
+"color: white;\n"
+"}")
 
         self.horizontalLayout_9.addWidget(self.tree_widget)
 
@@ -70,22 +74,22 @@ class Ui_AdminWindow(object):
         self.page_2.setObjectName(u"page_2")
         self.verticalLayout_2 = QVBoxLayout(self.page_2)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.table_view_classes = QTableView(self.page_2)
-        self.table_view_classes.setObjectName(u"table_view_classes")
+        self.table_view_course = QTableView(self.page_2)
+        self.table_view_course.setObjectName(u"table_view_course")
 
-        self.verticalLayout_2.addWidget(self.table_view_classes)
+        self.verticalLayout_2.addWidget(self.table_view_course)
 
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.btn_add_class = QPushButton(self.page_2)
-        self.btn_add_class.setObjectName(u"btn_add_class")
+        self.btn_add_course = QPushButton(self.page_2)
+        self.btn_add_course.setObjectName(u"btn_add_course")
 
-        self.horizontalLayout_3.addWidget(self.btn_add_class)
+        self.horizontalLayout_3.addWidget(self.btn_add_course)
 
-        self.btn_delete_class = QPushButton(self.page_2)
-        self.btn_delete_class.setObjectName(u"btn_delete_class")
+        self.btn_delete_course = QPushButton(self.page_2)
+        self.btn_delete_course.setObjectName(u"btn_delete_course")
 
-        self.horizontalLayout_3.addWidget(self.btn_delete_class)
+        self.horizontalLayout_3.addWidget(self.btn_delete_course)
 
 
         self.verticalLayout_2.addLayout(self.horizontalLayout_3)
@@ -136,6 +140,11 @@ class Ui_AdminWindow(object):
 "")
 
         self.verticalLayout_4.addWidget(self.label_face)
+
+        self.combo_box_video_source = QComboBox(self.page_4)
+        self.combo_box_video_source.setObjectName(u"combo_box_video_source")
+
+        self.verticalLayout_4.addWidget(self.combo_box_video_source)
 
         self.groupBox = QGroupBox(self.page_4)
         self.groupBox.setObjectName(u"groupBox")
@@ -272,9 +281,9 @@ class Ui_AdminWindow(object):
         self.verticalLayout_4.addLayout(self.horizontalLayout_6)
 
         self.verticalLayout_4.setStretch(0, 1)
-        self.verticalLayout_4.setStretch(1, 4)
-        self.verticalLayout_4.setStretch(2, 1)
+        self.verticalLayout_4.setStretch(2, 4)
         self.verticalLayout_4.setStretch(3, 1)
+        self.verticalLayout_4.setStretch(4, 1)
 
         self.horizontalLayout_7.addLayout(self.verticalLayout_4)
 
@@ -338,15 +347,15 @@ class Ui_AdminWindow(object):
         ___qtreewidgetitem2 = self.tree_widget.topLevelItem(1)
         ___qtreewidgetitem2.setText(0, QCoreApplication.translate("AdminWindow", u"\u8001\u5e08\u7ba1\u7406", None));
         ___qtreewidgetitem3 = self.tree_widget.topLevelItem(2)
-        ___qtreewidgetitem3.setText(0, QCoreApplication.translate("AdminWindow", u"\u73ed\u7ea7\u7ba1\u7406", None));
+        ___qtreewidgetitem3.setText(0, QCoreApplication.translate("AdminWindow", u"\u8bfe\u7a0b\u7ba1\u7406", None));
         ___qtreewidgetitem4 = self.tree_widget.topLevelItem(3)
         ___qtreewidgetitem4.setText(0, QCoreApplication.translate("AdminWindow", u"\u5b66\u751f\u7ba1\u7406", None));
         self.tree_widget.setSortingEnabled(__sortingEnabled)
 
         self.btn_add_teacher.setText(QCoreApplication.translate("AdminWindow", u"\u65b0\u589e", None))
         self.btn_delete_teacher.setText(QCoreApplication.translate("AdminWindow", u"\u5220\u9664", None))
-        self.btn_add_class.setText(QCoreApplication.translate("AdminWindow", u"\u65b0\u589e", None))
-        self.btn_delete_class.setText(QCoreApplication.translate("AdminWindow", u"\u5220\u9664", None))
+        self.btn_add_course.setText(QCoreApplication.translate("AdminWindow", u"\u65b0\u589e", None))
+        self.btn_delete_course.setText(QCoreApplication.translate("AdminWindow", u"\u5220\u9664", None))
         self.label_camp_frame.setText(QCoreApplication.translate("AdminWindow", u"\u6444\u50cf\u5934\u6355\u83b7\u753b\u9762", None))
         self.label_face.setText(QCoreApplication.translate("AdminWindow", u"\u6355\u83b7\u7684\u4eba\u8138", None))
         self.groupBox.setTitle(QCoreApplication.translate("AdminWindow", u"\u5b66\u751f\u4fe1\u606f ", None))

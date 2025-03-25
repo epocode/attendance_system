@@ -10,6 +10,7 @@ from PySide6.QtWidgets import (
     QComboBox,
     QStyledItemDelegate,
     QWidget,
+    QFileDialog
 
 )
 from PySide6.QtCore import Signal, QTimer  
@@ -18,8 +19,8 @@ from src.ui.ui_files.ui_admin_window import Ui_AdminWindow
 from src.db.database import DataBase
 from src.db.teacher_dao import TeacherDAO
 from src.data_model.teacher_table_model import TeacherTableModel
-from src.db.class_dao import ClassDAO
-from src.data_model.class_table_model import ClassTableModel
+from src.db.course_dao import CourseDAO
+from src.data_model.course_table_model import CourseTableModel
 from src.db.student_dao import StudentDAO
 from src.data_model.student_table_model import StudentTableModel
 from src.core.face_take import FaceTaker
@@ -30,6 +31,7 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         super().__init__()
         self.setupUi(self)
 
+        self.tree_widget.setCurrentItem(self.tree_widget.topLevelItem(1))
         #当前窗口要维护的信息
         self.db = DataBase()
         
@@ -41,13 +43,13 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         self.btn_add_teacher.clicked.connect(self.on_add_teacher_clicked)
         self.btn_delete_teacher.clicked.connect(self.on_delete_teacher_clicked)
 
-        #班级界面
-        self.class_dao = ClassDAO(self.db)
-        self.class_table_model = ClassTableModel(self.class_dao)
-        self.table_view_classes.setModel(self.class_table_model)
-        self.table_view_classes.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.btn_add_class.clicked.connect(self.on_add_class_clicked)
-        self.btn_delete_class.clicked.connect(self.on_delete_class_clicked)
+        #课程界面
+        self.course_dao = CourseDAO(self.db)
+        self.course_table_model = CourseTableModel(self.course_dao)
+        self.table_view_course.setModel(self.course_table_model)
+        self.table_view_course.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.btn_add_course.clicked.connect(self.on_add_course_clicked)
+        self.btn_delete_course.clicked.connect(self.on_delete_course_clicked)
 
         #学生界面
         self.student_dao = StudentDAO(self.db)
@@ -71,11 +73,36 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         
     # def set_btn_delegate(self):
     #     delegate = ButtonDelegate(self.table_view_students)
-    #     delegate.button_clicked_signal.connect(self.on_add_stu_to_class)
+    #     delegate.button_clicked_signal.connect(self.on_add_stu_to_course)
     #     self.table_view_students.setItemDelegateForColumn(4, delegate)
 
-    def on_add_stu_to_class(self, row):
-        print('加入班级')
+        # 初始化下拉框的内容。
+        self.setup_source_combo_box()
+
+    #选择视频来源
+    def setup_source_combo_box(self):
+        self.combo_box_video_source.addItem("摄像头", 0)
+        self.combo_box_video_source.addItem("视频文件", 'video_file')
+        my_config.VIDEO_PATH = 0
+        self.combo_box_video_source.currentIndexChanged.connect(self.on_source_selection_changed)
+
+    def on_source_selection_changed(self, index):
+        data = self.combo_box_video_source.itemData(index)
+
+        if data == "video_file":
+            file_path, _ = QFileDialog.getOpenFileName(self, "选择视频文件", "", "视频文件(*.mp4 *.avi)")
+            if file_path:
+                my_config.VIDEO_PATH = file_path
+            else:
+                self.combo_box_video_source.setCurrentIndex(0)
+                my_config.VIDEO_PATH = 0
+        else:
+            my_config.VIDEO_PATH = 0
+             
+
+
+    def on_add_stu_to_course(self, row):
+        print('加入课程')
     
     def on_delete_stu_clicked(self):
         selected_indexes = self.table_view_students.selectionModel().selectedRows()
@@ -163,28 +190,28 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
             self.teacher_dao.delete_row(selected_row)
             self.teacher_table_model.layoutChanged.emit()
 
-    def on_add_class_clicked(self):
-        #新增班级
-        input_dialog = ClassInputDialog(self.teacher_dao)
+    def on_add_course_clicked(self):
+        #新增课程
+        input_dialog = CourseInputDialog(self.teacher_dao)
         if input_dialog.exec() == QDialog.Accepted:
             res = input_dialog.get_value()
             if len(res) == 0:
-                print('请输入正确的班级信息')
+                print('请输入正确的课程信息')
                 return
-            class_name = res['class_name']
+            course_name = res['course_name']
             teacher_username = res['teacher_username']
-            if not self.class_dao.check_single_class_name(class_name):
-                print('当前班级名已经存在')
+            if not self.course_dao.check_single_course_name(course_name):
+                print('当前课程名已经存在')
                 return
-            self.class_dao.add_new(class_name, teacher_username)
-            self.class_table_model.layoutChanged.emit()
+            self.course_dao.add_new(course_name, teacher_username)
+            self.course_table_model.layoutChanged.emit()
         
-    def on_delete_class_clicked(self):
-        indexes = self.table_view_classes.selectionModel().selectedRows()
+    def on_delete_course_clicked(self):
+        indexes = self.table_view_course.selectionModel().selectedRows()
         if indexes:
             row = indexes[0].row()
-            self.class_dao.delete_class_by_row(row)
-            self.class_table_model.layoutChanged.emit()
+            self.course_dao.delete_course_by_row(row)
+            self.course_table_model.layoutChanged.emit()
             
 
 
@@ -192,7 +219,7 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         item_name = item.text(column)
         if item_name == '老师管理':
             self.stacked_widget.setCurrentIndex(0)
-        elif item_name == '班级管理':
+        elif item_name == '课程管理':
             self.stacked_widget.setCurrentIndex(1)
         elif item_name == '学生管理':
             self.stacked_widget.setCurrentIndex(3)
@@ -221,7 +248,7 @@ class ButtonDelegate(QStyledItemDelegate):
 
     def createEditor(self, parent, option, index):
         if self.button == None:
-            self.button = QPushButton('加入班级', parent)
+            self.button = QPushButton('加入课程', parent)
             self.button.setStyleSheet("""
             QPushButton {
                 background-color: lightblue;  /* 背景色 */
@@ -243,29 +270,7 @@ class ButtonDelegate(QStyledItemDelegate):
         return self.button
     
 
-        # editor = QWidget(parent)
-        # layout = QHBoxLayout(editor)
-        # button = QPushButton("加入班级", editor)
-        # button.setStyleSheet("""
-        #     QPushButton {
-        #         background-color: lightblue;  /* 背景色 */
-        #         color: white;  /* 文字颜色 */
-        #         border-radius: 5px;  /* 圆角 */
-        #         border: 1px solid #007BFF;  /* 边框 */
-        #         padding: 5px 10px;  /* 内边距 */
-        #     }
-        #     QPushButton:hover {
-        #         background-color: #007BFF;  /* 悬停时背景色 */
-        #     }
-        #     QPushButton:pressed {
-        #         background-color: #0056b3;  /* 按下时背景色 */
-        #     }
-        # """)
-        # layout.addWidget(button)
-        # layout.setContentsMargins(0, 0, 0, 0)
-        # editor.setLayout(layout)
-        # button.clicked.connect(lambda:self.button_clicked_signal.emit(index.row()))
-        # return editor
+   
     
     def updateEditorGeometry(self, editor, option, index):
         editor.setGeometry(option.rect)
@@ -319,14 +324,14 @@ class TeacherInputDialog(QDialog):
     def get_value(self):
         return self.value
 
-class ClassInputDialog(QDialog):
+class CourseInputDialog(QDialog):
     def __init__(self, teacher_dao: TeacherDAO):
         super().__init__()
         self.value = {}
-        self.setWindowTitle('输入班级信息')
+        self.setWindowTitle('输入课程信息')
         layout = QFormLayout()
 
-        self.class_name = QLineEdit(self)
+        self.course_name = QLineEdit(self)
         self.teacher_username = QComboBox(self)
         res = teacher_dao.get_data()
         for teacher_info in res:
@@ -342,7 +347,7 @@ class ClassInputDialog(QDialog):
         btn_layout.addWidget(self.submit)
         btn_layout.addWidget(self.cancel)
 
-        layout.addRow('班级名:', self.class_name)
+        layout.addRow('课程名:', self.course_name)
         layout.addRow('所属老师', self.teacher_username)
 
         main_layout = QVBoxLayout()
@@ -353,10 +358,10 @@ class ClassInputDialog(QDialog):
 
 
     def accept(self):
-        class_name = self.class_name.text()
+        course_name = self.course_name.text()
         teacher_username = self.teacher_username.currentText()
-        if class_name != '' and teacher_username != '':
-            self.value['class_name'] = class_name
+        if course_name != '' and teacher_username != '':
+            self.value['course_name'] = course_name
             self.value['teacher_username'] = teacher_username
         super().accept()
 
@@ -365,9 +370,3 @@ class ClassInputDialog(QDialog):
 
     def get_value(self):
         return self.value
-
-
-
-
-
-

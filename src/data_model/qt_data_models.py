@@ -9,43 +9,43 @@ import faiss
 import numpy as np
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 import config.my_config as my_config
-from src.db.class_dao import ClassDAO
+from src.db.course_dao import CourseDAO
 from src.db.vec_db import VecDB
 
-class ClassListModel(QAbstractListModel):
+class CourseListModel(QAbstractListModel):
     def __init__(self, db, username):
         super().__init__()
 
-        self.class_dao = ClassDAO(db, username)
-        self.cur_class_name = ""
+        self.course_dao = CourseDAO(db, username)
+        self.cur_course_name = ""
 
     def rowCount(self, index):
-        return self.class_dao.get_class_num()
+        return self.course_dao.get_course_num()
 
     def data(self, index, role):
         if role == Qt.DisplayRole:
-            res = self.class_dao.get_class_names()
+            res = self.course_dao.get_course_names()
             return res[index.row()][0]
             
         
-    def create_new_class(self, class_name):
-        self.class_dao.create_class(class_name)
+    def create_new_course(self, course_name):
+        self.course_dao.create_course(course_name)
         self.layoutChanged.emit()
     
-    def delete_class(self, class_name):
-        self.class_dao.delete_class(class_name)
+    def delete_course(self, course_name):
+        self.course_dao.delete_course(course_name)
         self.layoutChanged.emit()
-        vec_file_path = os.path.join(my_config.VEC_DB_PATH, class_name + '.faiss')
+        vec_file_path = os.path.join(my_config.VEC_DB_PATH, course_name + '.faiss')
         if os.path.exists(vec_file_path):
             os.remove(vec_file_path)
             print('成功删除')
 
 class PersonInfoModel(QAbstractTableModel):
-    def __init__(self, db, teacher_username, class_name):
+    def __init__(self, db, teacher_username, course_name):
         super().__init__()
         self.db = db
         self.teacher_username = teacher_username
-        self.class_name = class_name
+        self.course_name = course_name
 
         #创建向量数据库
         self.vec_db = VecDB(self.teacher_username)
@@ -146,7 +146,3 @@ class AbsentTableModel(QAbstractTableModel):
                 del self.table[i]
         
         self.layoutChanged.emit()
-
-    
-        
-

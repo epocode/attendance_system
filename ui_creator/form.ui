@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1561</width>
-    <height>884</height>
+    <width>1174</width>
+    <height>637</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,5">
+   <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,6">
     <item>
      <widget class="QTreeWidget" name="tree_widget">
       <column>
@@ -45,90 +45,18 @@
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="page_home">
-       <widget class="QPushButton" name="btn_collect_face">
+       <widget class="QTableView" name="class_teacher_table_view">
         <property name="geometry">
          <rect>
-          <x>340</x>
-          <y>490</y>
-          <width>93</width>
-          <height>28</height>
+          <x>20</x>
+          <y>10</y>
+          <width>951</width>
+          <height>501</height>
          </rect>
         </property>
-        <property name="text">
-         <string>录入人脸</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="btn_detect_face">
-        <property name="geometry">
-         <rect>
-          <x>510</x>
-          <y>490</y>
-          <width>93</width>
-          <height>28</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>签到</string>
-        </property>
-       </widget>
-       <widget class="QListView" name="listview_table_select">
-        <property name="geometry">
-         <rect>
-          <x>340</x>
-          <y>250</y>
-          <width>256</width>
-          <height>192</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_6">
-        <property name="geometry">
-         <rect>
-          <x>350</x>
-          <y>230</y>
-          <width>111</width>
-          <height>19</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>选择班级</string>
-        </property>
-       </widget>
-       <widget class="QWidget" name="layoutWidget">
-        <property name="geometry">
-         <rect>
-          <x>330</x>
-          <y>450</y>
-          <width>295</width>
-          <height>30</height>
-         </rect>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QPushButton" name="btn_confirm_table">
-           <property name="text">
-            <string>选择</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="btn_create_table">
-           <property name="text">
-            <string>创建</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="btn_drop_table">
-           <property name="text">
-            <string>删除</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
        </widget>
       </widget>
       <widget class="QWidget" name="page_face_detect">
@@ -136,9 +64,9 @@
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>10</y>
-          <width>621</width>
-          <height>460</height>
+          <y>29</y>
+          <width>381</width>
+          <height>441</height>
          </rect>
         </property>
         <property name="styleSheet">
@@ -154,8 +82,8 @@
        <widget class="QPushButton" name="btn_confirm_face_detect">
         <property name="geometry">
          <rect>
-          <x>190</x>
-          <y>510</y>
+          <x>100</x>
+          <y>500</y>
           <width>93</width>
           <height>28</height>
          </rect>
@@ -167,8 +95,8 @@
        <widget class="QTableView" name="table_view_show_absent">
         <property name="geometry">
          <rect>
-          <x>690</x>
-          <y>270</y>
+          <x>430</x>
+          <y>20</y>
           <width>231</width>
           <height>171</height>
          </rect>
@@ -177,8 +105,8 @@
        <widget class="QPushButton" name="btn_end_face_detect">
         <property name="geometry">
          <rect>
-          <x>400</x>
-          <y>510</y>
+          <x>270</x>
+          <y>500</y>
           <width>75</width>
           <height>23</height>
          </rect>
@@ -186,205 +114,6 @@
         <property name="text">
          <string>停止</string>
         </property>
-       </widget>
-       <widget class="QLabel" name="label_2">
-        <property name="geometry">
-         <rect>
-          <x>710</x>
-          <y>180</y>
-          <width>231</width>
-          <height>16</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>未签到的学生名单</string>
-        </property>
-       </widget>
-      </widget>
-      <widget class="QWidget" name="page_info_display">
-       <widget class="QLabel" name="label_3">
-        <property name="geometry">
-         <rect>
-          <x>300</x>
-          <y>230</y>
-          <width>69</width>
-          <height>19</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>dispaly</string>
-        </property>
-       </widget>
-      </widget>
-      <widget class="QWidget" name="page_face_collect">
-       <widget class="QLabel" name="label_disp_video">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>10</y>
-          <width>700</width>
-          <height>460</height>
-         </rect>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">border: 5px solid red;</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="wordWrap">
-         <bool>false</bool>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="btn_start">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>530</y>
-          <width>93</width>
-          <height>28</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>开始录入</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="btn_end">
-        <property name="geometry">
-         <rect>
-          <x>130</x>
-          <y>530</y>
-          <width>93</width>
-          <height>28</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>停止录入</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_face">
-        <property name="geometry">
-         <rect>
-          <x>810</x>
-          <y>30</y>
-          <width>150</width>
-          <height>150</height>
-         </rect>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>150</horstretch>
-          <verstretch>150</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">border: 5px solid red;</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-       <widget class="QTableView" name="table_view_show_stu">
-        <property name="geometry">
-         <rect>
-          <x>780</x>
-          <y>390</y>
-          <width>271</width>
-          <height>171</height>
-         </rect>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>150</horstretch>
-          <verstretch>150</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-       <widget class="QWidget" name="layoutWidget">
-        <property name="geometry">
-         <rect>
-          <x>780</x>
-          <y>190</y>
-          <width>213</width>
-          <height>91</height>
-         </rect>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>150</horstretch>
-          <verstretch>150</verstretch>
-         </sizepolicy>
-        </property>
-        <layout class="QGridLayout" name="gridLayout">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>姓名</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1" colspan="2">
-          <widget class="QLineEdit" name="line_edit_name"/>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_4">
-           <property name="text">
-            <string>性别</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1" colspan="2">
-          <widget class="QLineEdit" name="line_edit_gender"/>
-         </item>
-         <item row="2" column="0" colspan="2">
-          <widget class="QLabel" name="label_5">
-           <property name="text">
-            <string>年龄</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="2">
-          <widget class="QLineEdit" name="line_edit_age"/>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="layoutWidget">
-        <property name="geometry">
-         <rect>
-          <x>790</x>
-          <y>340</y>
-          <width>195</width>
-          <height>30</height>
-         </rect>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>150</horstretch>
-          <verstretch>150</verstretch>
-         </sizepolicy>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <item>
-          <widget class="QPushButton" name="btn_confirm">
-           <property name="text">
-            <string>确认录入</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="btn_pass">
-           <property name="text">
-            <string>放弃</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
        </widget>
       </widget>
      </widget>
@@ -396,8 +125,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1561</width>
-     <height>21</height>
+     <width>1174</width>
+     <height>25</height>
     </rect>
    </property>
   </widget>

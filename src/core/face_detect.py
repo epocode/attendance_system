@@ -20,6 +20,8 @@ from PIL import Image, ImageDraw, ImageFont
 import time
 from src.outer_lab.facenet_pytorch import InceptionResnetV1
 
+from datetime import datetime
+
 class FaceDetection(QThread):
     #创建对应的信号
     update_frame_signal = Signal(QImage)
@@ -46,6 +48,10 @@ class FaceDetection(QThread):
     def run(self):
         while self.is_running:
             ret, frame = self.cap.read()
+            
+            now = datetime.now()
+            print(now)
+
             if not ret:
                 break
             

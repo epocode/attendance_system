@@ -17,6 +17,12 @@
    <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="1,5">
     <item>
      <widget class="QTreeWidget" name="tree_widget">
+      <property name="styleSheet">
+       <string notr="true">QTreeWidget::item:selected {
+background-color:#2E3B4E;
+color: white;
+}</string>
+      </property>
       <column>
        <property name="text">
         <string>功能选项</string>
@@ -34,7 +40,7 @@
       </item>
       <item>
        <property name="text">
-        <string>班级管理</string>
+        <string>课程管理</string>
        </property>
       </item>
       <item>
@@ -47,7 +53,7 @@
     <item>
      <widget class="QStackedWidget" name="stacked_widget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="page">
        <layout class="QVBoxLayout" name="verticalLayout">
@@ -77,19 +83,19 @@
       <widget class="QWidget" name="page_2">
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QTableView" name="table_view_classes"/>
+         <widget class="QTableView" name="table_view_course"/>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
-           <widget class="QPushButton" name="btn_add_class">
+           <widget class="QPushButton" name="btn_add_course">
             <property name="text">
              <string>新增</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="btn_delete_class">
+           <widget class="QPushButton" name="btn_delete_course">
             <property name="text">
              <string>删除</string>
             </property>
@@ -135,7 +141,7 @@
          </widget>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_4" stretch="1,4,1,1">
+         <layout class="QVBoxLayout" name="verticalLayout_4" stretch="1,0,4,1,1">
           <item>
            <widget class="QLabel" name="label_face">
             <property name="enabled">
@@ -174,6 +180,9 @@
              <string>捕获的人脸</string>
             </property>
            </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="combo_box_video_source"/>
           </item>
           <item>
            <widget class="QGroupBox" name="groupBox">

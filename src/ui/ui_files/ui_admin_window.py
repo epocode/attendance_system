@@ -329,7 +329,7 @@ class Ui_AdminWindow(object):
 
         self.retranslateUi(AdminWindow)
 
-        self.stacked_widget.setCurrentIndex(2)
+        self.stacked_widget.setCurrentIndex(3)
 
 
         QMetaObject.connectSlotsByName(AdminWindow)

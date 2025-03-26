@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,6">
+   <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,6">
     <item>
      <widget class="QTreeWidget" name="tree_widget">
       <column>
@@ -34,7 +34,7 @@
       </item>
       <item>
        <property name="text">
-        <string>开始签到</string>
+        <string>返回上一级</string>
        </property>
       </item>
      </widget>
@@ -45,7 +45,7 @@
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="page_home">
        <widget class="QTableView" name="table_view_course_teacher">
@@ -55,6 +55,42 @@
           <y>10</y>
           <width>951</width>
           <height>501</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="page_course_detail">
+       <widget class="QTableView" name="table_view_course_detail">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>10</y>
+          <width>801</width>
+          <height>501</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="page">
+       <widget class="QTableView" name="table_view_attendance_detail">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>20</y>
+          <width>791</width>
+          <height>541</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="page_2">
+       <widget class="QTableView" name="table_view_stu_attendance_detail">
+        <property name="geometry">
+         <rect>
+          <x>40</x>
+          <y>30</y>
+          <width>681</width>
+          <height>471</height>
          </rect>
         </property>
        </widget>

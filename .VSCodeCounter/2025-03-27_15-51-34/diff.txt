@@ -1,0 +1,87 @@
+Date : 2025-03-27 15:51:34
+Directory : c:\Users\shann\Desktop\SE\attendance_system\src
+Total : 37 files,  -70264 codes, 9 comments, -148 blanks, all -70403 lines
+
+Languages
++------------------+------------+------------+------------+------------+------------+
+| language         | files      | code       | comment    | blank      | total      |
++------------------+------------+------------+------------+------------+------------+
+| Python           |         24 |        331 |          9 |         81 |        421 |
+| Markdown         |          1 |         -1 |          0 |         -1 |         -2 |
+| pip requirements |          1 |         -3 |          0 |          0 |         -3 |
+| Qrc              |          1 |         -5 |          0 |         -1 |         -6 |
+| Batch            |          1 |         -6 |          0 |          0 |         -6 |
+| YAML             |          1 |       -106 |          0 |         -1 |       -107 |
+| JSON             |          3 |       -564 |          0 |         -3 |       -567 |
+| ui               |          3 |       -886 |          0 |         -8 |       -894 |
+| XML              |          2 |    -69,024 |          0 |       -215 |    -69,239 |
++------------------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                     | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                        |         37 |    -70,264 |          9 |       -148 |    -70,403 |
+| ..                                                                                       |         15 |    -70,671 |        -11 |       -251 |    -70,933 |
+| .. (Files)                                                                               |          2 |         -4 |          0 |         -1 |         -5 |
+| ..\config                                                                                |          1 |        -13 |         -2 |         -4 |        -19 |
+| ..\scripts                                                                               |          5 |    -69,244 |          0 |       -217 |    -69,461 |
+| ..\scripts (Files)                                                                       |          1 |         -6 |          0 |          0 |         -6 |
+| ..\scripts\train_model                                                                   |          4 |    -69,238 |          0 |       -217 |    -69,455 |
+| ..\scripts\train_model (Files)                                                           |          1 |       -108 |          0 |         -1 |       -109 |
+| ..\scripts\train_model\train2                                                            |          3 |    -69,130 |          0 |       -216 |    -69,346 |
+| ..\scripts\train_model\train2 (Files)                                                    |          1 |       -106 |          0 |         -1 |       -107 |
+| ..\scripts\train_model\train2\weights                                                    |          2 |    -69,024 |          0 |       -215 |    -69,239 |
+| ..\test                                                                                  |          3 |       -519 |         -9 |        -20 |       -548 |
+| ..\ui_creator                                                                            |          4 |       -891 |          0 |         -9 |       -900 |
+| core                                                                                     |          1 |          3 |          0 |          3 |          6 |
+| data_model                                                                               |          8 |        135 |          0 |         37 |        172 |
+| db                                                                                       |          8 |        180 |          3 |         50 |        233 |
+| ui                                                                                       |          5 |         89 |         17 |         13 |        119 |
+| ui (Files)                                                                               |          3 |        197 |         17 |         33 |        247 |
+| ui\ui_files                                                                              |          2 |       -108 |          0 |        -20 |       -128 |
++------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
+| filename                                                                                 | language         | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
+| c:\Users\shann\Desktop\SE\attendance_system\README.md                                    | Markdown         |         -1 |          0 |         -1 |         -2 |
+| c:\Users\shann\Desktop\SE\attendance_system\config\my_config.py                          | Python           |        -13 |         -2 |         -4 |        -19 |
+| c:\Users\shann\Desktop\SE\attendance_system\requirements.txt                             | pip requirements |         -3 |          0 |          0 |         -3 |
+| c:\Users\shann\Desktop\SE\attendance_system\scripts\convert_ui_to_py.bat                 | Batch            |         -6 |          0 |          0 |         -6 |
+| c:\Users\shann\Desktop\SE\attendance_system\scripts\train_model\train.ipynb              | JSON             |       -108 |          0 |         -1 |       -109 |
+| c:\Users\shann\Desktop\SE\attendance_system\scripts\train_model\train2\args.yaml         | YAML             |       -106 |          0 |         -1 |       -107 |
+| c:\Users\shann\Desktop\SE\attendance_system\scripts\train_model\train2\weights\best.pt   | XML              |    -34,629 |          0 |       -115 |    -34,744 |
+| c:\Users\shann\Desktop\SE\attendance_system\scripts\train_model\train2\weights\last.pt   | XML              |    -34,395 |          0 |       -100 |    -34,495 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\core\face_detect.py                      | Python           |          3 |          0 |          3 |          6 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\data_model\attendance_detail_model.py    | Python           |         36 |          0 |         10 |         46 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\data_model\class_table_model.py          | Python           |        -19 |          0 |         -6 |        -25 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\data_model\course_detail_model.py        | Python           |         33 |          0 |         10 |         43 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\data_model\course_table_model.py         | Python           |         24 |          0 |          8 |         32 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\data_model\course_teacher_table_model.py | Python           |         28 |          0 |          8 |         36 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\data_model\qt_data_models.py             | Python           |          0 |          0 |         -4 |         -4 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\data_model\student_table_model.py        | Python           |         31 |          0 |          9 |         40 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\data_model\teacher_table_model.py        | Python           |          2 |          0 |          2 |          4 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\db\attendance_info_dao.py                | Python           |         60 |          0 |         16 |         76 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\db\class_dao.py                          | Python           |        -50 |         -2 |        -10 |        -62 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\db\course_dao.py                         | Python           |         50 |          4 |         14 |         68 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\db\database.py                           | Python           |          9 |          0 |          1 |         10 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\db\person_dao.py                         | Python           |         -4 |          0 |         -1 |         -5 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\db\qt_data_models.py                     | Python           |         73 |          1 |         20 |         94 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\db\student_dao.py                        | Python           |         34 |          0 |          6 |         40 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\db\vec_db.py                             | Python           |          8 |          0 |          4 |         12 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\ui\admin_window.py                       | Python           |        135 |         15 |         29 |        179 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\ui\main_window.py                        | Python           |         50 |          2 |         -1 |         51 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\ui\my_delegates.py                       | Python           |         12 |          0 |          5 |         17 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\ui\ui_files\ui_admin_window.py           | Python           |          5 |          0 |          2 |          7 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\ui\ui_files\ui_main_window.py            | Python           |       -113 |          0 |        -22 |       -135 |
+| c:\Users\shann\Desktop\SE\attendance_system\test\face_relate.ipynb                       | JSON             |       -249 |          0 |         -1 |       -250 |
+| c:\Users\shann\Desktop\SE\attendance_system\test\sql_execute.ipynb                       | JSON             |       -207 |          0 |         -1 |       -208 |
+| c:\Users\shann\Desktop\SE\attendance_system\test\test.py                                 | Python           |        -63 |         -9 |        -18 |        -90 |
+| c:\Users\shann\Desktop\SE\attendance_system\ui_creator\admin_window.ui                   | ui               |       -387 |          0 |         -6 |       -393 |
+| c:\Users\shann\Desktop\SE\attendance_system\ui_creator\form.ui                           | ui               |       -408 |          0 |         -1 |       -409 |
+| c:\Users\shann\Desktop\SE\attendance_system\ui_creator\login.ui                          | ui               |        -91 |          0 |         -1 |        -92 |
+| c:\Users\shann\Desktop\SE\attendance_system\ui_creator\resources.qrc                     | Qrc              |         -5 |          0 |         -1 |         -6 |
+| Total                                                                                    |                  |    -70,264 |          9 |       -148 |    -70,403 |
++------------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+

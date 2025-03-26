@@ -6,6 +6,10 @@ class CourseTableModel(QAbstractTableModel):
     def __init__(self, course_dao):
         super().__init__()
         self.course_dao = course_dao
+        self.data_cache = self.load_data()
+
+    def load_data(self):
+        return self.course_dao.get_course_names()
     
     def headerData(self, section, orientation, role = ...):
         headers = ['课程名', '老师']
@@ -14,12 +18,15 @@ class CourseTableModel(QAbstractTableModel):
                 return headers[section]
     
     def rowCount(self, parent = ...):
-        return self.course_dao.get_course_num()
+        return len(self.data_cache)
     
     def columnCount(self, parent = ...):
         return 2
     
     def data(self, index, role= ...):
         if role == Qt.DisplayRole:
-            res = self.course_dao.get_course_names()
-            return res[index.row()][index.column()]
+            return self.data_cache[index.row()][index.column()]
+        
+    def refresh(self):
+        self.data_cache = self.load_data()
+        self.layoutChanged.emit()   

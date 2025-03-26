@@ -29,6 +29,7 @@ from PySide6.QtGui import (
 import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+from src.data_model.course_detail_model import CourseDetailModel
 from src.ui.ui_files.ui_main_window import Ui_MainWindow
 import src.ui.ui_files.resources as resources
 import cv2
@@ -38,11 +39,18 @@ import config.my_config as my_config
 from src.core.face_take import FaceTaker
 from src.data_model.qt_data_models import CourseListModel, PersonInfoModel, AbsentTableModel
 from src.core.face_detect import FaceDetection   
-from src.ui.my_delegates import attendance_btn_delegate 
+from src.ui.my_delegates import BtnDelegate 
 from src.data_model.course_teacher_table_model import CoursecherTableModel
 from src.db.course_dao import CourseDAO
+from src.db.attendance_info_dao import AttendanceInfoDAO
 
 class MainWindow(Ui_MainWindow, QMainWindow):
+    """
+    进入这个窗口，即表明这是属于某个老师的。因此关于老师的信息保存在该窗口对象中。
+    对于学生，因为选择不同的课程会有不同的学生列表，因此学生信息应该临时创建，
+    使用table widget的时候，到了对应的table才将model放到view中，切换的时候就要
+    从view删除对应的model，因为切换班级的时候，对应的model内容也会改变。
+    """
     def __init__(self, teacher_name, teacher_username, db, *args, **kwargs):
         super().__init__(*args, **kwargs)   
 
@@ -59,14 +67,20 @@ class MainWindow(Ui_MainWindow, QMainWindow):
 
         #statusbar 
         self.status_bar = self.statusBar()
+        # 导航栏信息
+        self.navaigate_map = {0: f"{self.teacher_name}:课程列表",
+                              1: f"{self.teacher_name}:课程列表>考勤详情",
+                              2: f"{self.teacher_name}:课程列表>考勤详情>学生考勤信息"}
+        self.update_navigation_path(0)
+        self.stackedWidget.currentChanged.connect(self.update_navigation_path)
 
         # 显示当前老师下的课程信息
         self.course_dao = CourseDAO(self.db, self.teacher_username)
         self.course_teacher_model = CoursecherTableModel(self.course_dao, self.teacher_username)
         self.table_view_course_teacher.setModel(self.course_teacher_model)
-        self.attendance_btn_delegate = attendance_btn_delegate(self.table_view_course_teacher)
-        self.attendance_btn_delegate.attendance_clicked_signal.connect(self.attendance_btn_clicked)
-        self.table_view_course_teacher.setItemDelegateForColumn(1, self.attendance_btn_delegate)    
+        self.course_detail_btn_delegate = BtnDelegate('详情', self.table_view_course_teacher)
+        self.course_detail_btn_delegate.btn_clicked_signal.connect(self.show_course_detail)
+        self.table_view_course_teacher.setItemDelegateForColumn(1, self.course_detail_btn_delegate)    
         for row in range(self.course_teacher_model.rowCount()):
             self.table_view_course_teacher.openPersistentEditor(
                 self.course_teacher_model.index(row, 1)
@@ -80,19 +94,32 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.face_detector = None
         self.btn_end_face_detect.clicked.connect(self.end_label_face_detection)
 
-        # #连接槽函数
-        # self.btn_collect_face.clicked.connect(self.enter_face_collection)
-        # self.btn_detect_face.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(1))
-        # self.btn_start.clicked.connect(self.start_show_video)
-        # self.btn_end.clicked.connect(self.end_show_video)
-        
-        # self.btn_confirm_face_detect.clicked.connect(self.detect_face)
+
 
         #左侧功能选项
         self.tree_widget.itemClicked.connect(self.on_tree_widget_clicked)
         
+    def update_navigation_path(self, idx):
+        self.status_bar.showMessage(self.navaigate_map[idx])
 
-    def attendance_btn_clicked(self, row):
+
+    def show_course_detail(self, row):
+        # 进入该课程的详细信息，即时间，出勤率，具体那天的出勤信息
+        self.attendance_info_dao = AttendanceInfoDAO(self.db)
+        course_name = self.course_teacher_model.data(self.course_teacher_model.index(row, 0), Qt.DisplayRole)
+        self.course_detail_model = CourseDetailModel(self.attendance_info_dao, course_name)
+        self.table_view_course_detail.setModel(self.course_detail_model)
+        self.stackedWidget.setCurrentIndex(1)
+        self.show_attendance_detail_delegate = BtnDelegate('查看', self.table_view_course_detail)
+        self.show_attendance_detail_delegate.btn_clicked_signal.connect(self.show_attendance_detail)
+        self.table_view_course_detail.setItemDelegateForColumn(4, self.show_attendance_detail_delegate) 
+        for row in range(self.course_detail_model.rowCount()):
+            self.table_view_course_detail.openPersistentEditor(
+                self.course_detail_model.index(row, 4)
+            )   
+
+
+    def show_attendance_detail(self, row):
         pass
 
     def on_tree_widget_clicked(self, item, column):
@@ -104,6 +131,13 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         
         elif item_name == '课程信息':
             self.stackedWidget.setCurrentIndex(0)
+        
+        elif item_name == '返回上一级':
+            cur_idx = self.stackedWidget.currentIndex()
+            if cur_idx == 0:
+                pass
+            else:
+                self.stackedWidget.setCurrentIndex(cur_idx - 1)
 
 
     #更改用户

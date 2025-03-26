@@ -13,8 +13,8 @@ from PySide6.QtWidgets import (
     QFileDialog
 
 )
-from PySide6.QtCore import Signal, QTimer  
-from PySide6.QtGui import QPixmap
+from PySide6.QtCore import Signal, QTimer, Qt
+from PySide6.QtGui import QPixmap, QPainter
 from src.ui.ui_files.ui_admin_window import Ui_AdminWindow
 from src.db.database import DataBase
 from src.db.teacher_dao import TeacherDAO
@@ -147,7 +147,30 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         self.cur_face = None
 
     def update_frame(self, qimage):
-        pixmap = QPixmap.fromImage(qimage)
+        label_size = self.label_camp_frame.size()
+        pixmap = QPixmap(label_size)
+        pixmap.fill(Qt.black)  # 设置背景色
+        
+        # 将QImage转换为QPixmap
+        img_pixmap = QPixmap.fromImage(qimage)
+        
+        # 等比例缩放图像，保持宽高比
+        scaled_pixmap = img_pixmap.scaled(
+            label_size, 
+            Qt.KeepAspectRatio,  # 保持宽高比
+            Qt.SmoothTransformation  # 使用平滑的缩放算法
+        )
+        painter = QPainter(pixmap)
+    
+        # 计算在标签中的居中位置
+        x = (label_size.width() - scaled_pixmap.width()) // 2
+        y = (label_size.height() - scaled_pixmap.height()) // 2
+        
+        # 在指定位置绘制缩放后的图像
+        painter.drawPixmap(x, y, scaled_pixmap)
+        painter.end()
+        
+        # 设置标签的pixmap
         self.label_camp_frame.setPixmap(pixmap)
 
     def get_face(self, qimage):

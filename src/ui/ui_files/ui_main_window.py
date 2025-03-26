@@ -46,6 +46,12 @@ class Ui_MainWindow(object):
         self.table_view_course_teacher.setObjectName(u"table_view_course_teacher")
         self.table_view_course_teacher.setGeometry(QRect(20, 10, 951, 501))
         self.stackedWidget.addWidget(self.page_home)
+        self.page_course_detail = QWidget()
+        self.page_course_detail.setObjectName(u"page_course_detail")
+        self.table_view_course_detail = QTableView(self.page_course_detail)
+        self.table_view_course_detail.setObjectName(u"table_view_course_detail")
+        self.table_view_course_detail.setGeometry(QRect(30, 10, 801, 501))
+        self.stackedWidget.addWidget(self.page_course_detail)
         self.page_face_detect = QWidget()
         self.page_face_detect.setObjectName(u"page_face_detect")
         self.label_disp_video_2 = QLabel(self.page_face_detect)
@@ -66,7 +72,6 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout.addWidget(self.stackedWidget)
 
-        self.horizontalLayout.setStretch(0, 1)
         self.horizontalLayout.setStretch(1, 6)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
@@ -79,7 +84,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -97,7 +102,7 @@ class Ui_MainWindow(object):
         ___qtreewidgetitem2 = self.tree_widget.topLevelItem(1)
         ___qtreewidgetitem2.setText(0, QCoreApplication.translate("MainWindow", u"\u73ed\u7ea7\u4fe1\u606f", None));
         ___qtreewidgetitem3 = self.tree_widget.topLevelItem(2)
-        ___qtreewidgetitem3.setText(0, QCoreApplication.translate("MainWindow", u"\u5f00\u59cb\u7b7e\u5230", None));
+        ___qtreewidgetitem3.setText(0, QCoreApplication.translate("MainWindow", u"\u8fd4\u56de\u4e0a\u4e00\u7ea7", None));
         self.tree_widget.setSortingEnabled(__sortingEnabled)
 
         self.label_disp_video_2.setText("")

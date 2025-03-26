@@ -37,19 +37,20 @@ import torch
 import config.my_config as my_config
 from src.core.face_take import FaceTaker
 from src.data_model.qt_data_models import CourseListModel, PersonInfoModel, AbsentTableModel
-from src.core.face_detect import FaceDetection    
-
+from src.core.face_detect import FaceDetection   
+from src.ui.my_delegates import attendance_btn_delegate 
+from src.data_model.course_teacher_table_model import CoursecherTableModel
+from src.db.course_dao import CourseDAO
 
 class MainWindow(Ui_MainWindow, QMainWindow):
-    def __init__(self, teacher_name, username, db, *args, **kwargs):
+    def __init__(self, teacher_name, teacher_username, db, *args, **kwargs):
         super().__init__(*args, **kwargs)   
 
         self.setupUi(self)
 
         #主界面要维护的信息
         self.teacher_name = teacher_name
-        self.username = username
-        self.course_name = ''
+        self.teacher_username = teacher_username
         self.db = db
 
         self.person_info_model = None
@@ -59,21 +60,17 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         #statusbar 
         self.status_bar = self.statusBar()
 
-
-
-        #数据库的创建
-        self.course_list_model = CourseListModel(self.db, self.username)
-        self.listview_table_select.setModel(self.course_list_model)
-        
-        self.label_curtable = QLabel("未选择表格")
-        self.status_bar.addWidget(self.label_curtable)
-        self.btn_confirm_table.clicked.connect(self.confirm_cur_course)
-
-        self.person_info_model = None
-
-        self.btn_create_table.clicked.connect(self.create_new_course)
-        self.btn_drop_table.clicked.connect(self.delete_course)
-        
+        # 显示当前老师下的课程信息
+        self.course_dao = CourseDAO(self.db, self.teacher_username)
+        self.course_teacher_model = CoursecherTableModel(self.course_dao, self.teacher_username)
+        self.table_view_course_teacher.setModel(self.course_teacher_model)
+        self.attendance_btn_delegate = attendance_btn_delegate(self.table_view_course_teacher)
+        self.attendance_btn_delegate.attendance_clicked_signal.connect(self.attendance_btn_clicked)
+        self.table_view_course_teacher.setItemDelegateForColumn(1, self.attendance_btn_delegate)    
+        for row in range(self.course_teacher_model.rowCount()):
+            self.table_view_course_teacher.openPersistentEditor(
+                self.course_teacher_model.index(row, 1)
+            )
 
         # 人脸的录入
         self.face_taker = None
@@ -83,17 +80,20 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.face_detector = None
         self.btn_end_face_detect.clicked.connect(self.end_label_face_detection)
 
-        #连接槽函数
-        self.btn_collect_face.clicked.connect(self.enter_face_collection)
-        self.btn_detect_face.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(1))
-        self.btn_start.clicked.connect(self.start_show_video)
-        self.btn_end.clicked.connect(self.end_show_video)
+        # #连接槽函数
+        # self.btn_collect_face.clicked.connect(self.enter_face_collection)
+        # self.btn_detect_face.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(1))
+        # self.btn_start.clicked.connect(self.start_show_video)
+        # self.btn_end.clicked.connect(self.end_show_video)
         
-        self.btn_confirm_face_detect.clicked.connect(self.detect_face)
+        # self.btn_confirm_face_detect.clicked.connect(self.detect_face)
 
         #左侧功能选项
         self.tree_widget.itemClicked.connect(self.on_tree_widget_clicked)
         
+
+    def attendance_btn_clicked(self, row):
+        pass
 
     def on_tree_widget_clicked(self, item, column):
         item_name = item.text(column)

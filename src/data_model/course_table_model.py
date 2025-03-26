@@ -8,7 +8,7 @@ class CourseTableModel(QAbstractTableModel):
         self.course_dao = course_dao
     
     def headerData(self, section, orientation, role = ...):
-        headers = ['班级名', '老师']
+        headers = ['课程名', '老师']
         if role == Qt.DisplayRole:
             if orientation == Qt.Horizontal:
                 return headers[section]

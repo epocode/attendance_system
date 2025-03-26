@@ -13,13 +13,8 @@ class CourseDAO:
         return res[0][0]
     
     def get_course_names(self):
-        if self.username is None:
-            query = 'SELECT * FROM course;'
-            res = self.db.fetchall(query)
-        else:
-            query = 'SELECT course_name FROM course WHERE teacher_username = %s;'
-            params = [self.username]
-            res = self.db.fetchall(query, params)
+        query = 'SELECT * FROM course;'
+        res = self.db.fetchall(query)
         return res
     
     def create_course(self, course_name):
@@ -55,9 +50,18 @@ class CourseDAO:
         self.db.execute(query, params)
 
     # 下面是关于根据老师查询课程信息
-    def get_course_count_by_teacher(self, username):
+    def get_course_count_by_teacher(self, teacher_username):
         #得到对应老师的课程数量
         query = 'SELECT COUNT(*) FROM course WHERE teacher_username = %s;'
-        params = [username]
+        params = [teacher_username]
         res = self.db.fetchall(query, params)[0][0]
         return res
+    
+    def get_courses_by_teacher(self, teacher_username):
+        # 查询该老师的课程
+        query = 'SELECT course_name FROM course WHERE teacher_username = %s;'
+        params = [teacher_username]
+        res = self.db.fetchall(query, params)
+        return res 
+        
+

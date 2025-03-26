@@ -48,7 +48,7 @@
        <number>0</number>
       </property>
       <widget class="QWidget" name="page_home">
-       <widget class="QTableView" name="class_teacher_table_view">
+       <widget class="QTableView" name="table_view_course_teacher">
         <property name="geometry">
          <rect>
           <x>20</x>

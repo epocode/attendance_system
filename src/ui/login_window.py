@@ -55,8 +55,8 @@ class LoginWindow(Ui_Form, QWidget):
         teacher_name, username = res
 
         from src.ui.main_window import MainWindow
-        main_window = MainWindow(teacher_name, username, self.db)
-        main_window.show()
+        self.main_window = MainWindow(teacher_name, username, self.db)
+        self.main_window.show()
         self.close()
 
     def register(self):

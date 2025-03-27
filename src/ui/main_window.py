@@ -31,7 +31,10 @@ import sys
 
 from src.data_model.stu_attendance_detail_model import StuAttendanceDetailModel
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+<<<<<<< HEAD
 from src.data_model.attendance_detail_model import AttendanceDetailModel
+=======
+>>>>>>> 414d9db09c1ed6c339657fb7b26933b73b2fe16e
 from src.data_model.course_detail_model import CourseDetailModel
 from src.ui.ui_files.ui_main_window import Ui_MainWindow
 import src.ui.ui_files.resources as resources
@@ -46,8 +49,11 @@ from src.ui.my_delegates import BtnDelegate
 from src.data_model.course_teacher_table_model import CoursecherTableModel
 from src.db.course_dao import CourseDAO
 from src.db.attendance_info_dao import AttendanceInfoDAO
+<<<<<<< HEAD
 import matplotlib
 matplotlib.use('QtAgg') 
+=======
+>>>>>>> 414d9db09c1ed6c339657fb7b26933b73b2fe16e
 
 class MainWindow(Ui_MainWindow, QMainWindow):
     """
@@ -75,8 +81,12 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         # 导航栏信息
         self.navaigate_map = {0: f"{self.teacher_name}:课程列表",
                               1: f"{self.teacher_name}:课程列表>考勤详情",
+<<<<<<< HEAD
                               2: f"{self.teacher_name}:课程列表>考勤详情>学生考勤信息",
                               3: f"{self.teacher_name}:课程列表>考勤详情>学生考勤信息>学生个人缺勤记录"}
+=======
+                              2: f"{self.teacher_name}:课程列表>考勤详情>学生考勤信息"}
+>>>>>>> 414d9db09c1ed6c339657fb7b26933b73b2fe16e
         self.update_navigation_path(0)
         self.stackedWidget.currentChanged.connect(self.update_navigation_path)
 
@@ -107,6 +117,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         
     def update_navigation_path(self, idx):
         self.status_bar.showMessage(self.navaigate_map[idx])
+<<<<<<< HEAD
 
 
     def show_course_detail(self, row):
@@ -146,6 +157,28 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.table_view_stu_attendance_detail.setModel(self.stu_attendance_detail_model)
         self.stackedWidget.setCurrentIndex(3)
 
+=======
+
+
+    def show_course_detail(self, row):
+        # 进入该课程的详细信息，即时间，出勤率，具体那天的出勤信息
+        self.attendance_info_dao = AttendanceInfoDAO(self.db)
+        course_name = self.course_teacher_model.data(self.course_teacher_model.index(row, 0), Qt.DisplayRole)
+        self.course_detail_model = CourseDetailModel(self.attendance_info_dao, course_name)
+        self.table_view_course_detail.setModel(self.course_detail_model)
+        self.stackedWidget.setCurrentIndex(1)
+        self.show_attendance_detail_delegate = BtnDelegate('查看', self.table_view_course_detail)
+        self.show_attendance_detail_delegate.btn_clicked_signal.connect(self.show_attendance_detail)
+        self.table_view_course_detail.setItemDelegateForColumn(4, self.show_attendance_detail_delegate) 
+        for row in range(self.course_detail_model.rowCount()):
+            self.table_view_course_detail.openPersistentEditor(
+                self.course_detail_model.index(row, 4)
+            )   
+
+
+    def show_attendance_detail(self, row):
+        pass
+>>>>>>> 414d9db09c1ed6c339657fb7b26933b73b2fe16e
 
     def on_tree_widget_clicked(self, item, column):
         item_name = item.text(column)

@@ -52,6 +52,7 @@ class Ui_MainWindow(object):
         self.table_view_course_detail.setObjectName(u"table_view_course_detail")
         self.table_view_course_detail.setGeometry(QRect(30, 10, 801, 501))
         self.stackedWidget.addWidget(self.page_course_detail)
+<<<<<<< HEAD
         self.page = QWidget()
         self.page.setObjectName(u"page")
         self.table_view_attendance_detail = QTableView(self.page)
@@ -64,6 +65,8 @@ class Ui_MainWindow(object):
         self.table_view_stu_attendance_detail.setObjectName(u"table_view_stu_attendance_detail")
         self.table_view_stu_attendance_detail.setGeometry(QRect(40, 30, 681, 471))
         self.stackedWidget.addWidget(self.page_2)
+=======
+>>>>>>> 414d9db09c1ed6c339657fb7b26933b73b2fe16e
         self.page_face_detect = QWidget()
         self.page_face_detect.setObjectName(u"page_face_detect")
         self.label_disp_video_2 = QLabel(self.page_face_detect)
@@ -96,7 +99,11 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
+<<<<<<< HEAD
         self.stackedWidget.setCurrentIndex(3)
+=======
+        self.stackedWidget.setCurrentIndex(1)
+>>>>>>> 414d9db09c1ed6c339657fb7b26933b73b2fe16e
 
 
         QMetaObject.connectSlotsByName(MainWindow)

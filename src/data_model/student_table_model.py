@@ -25,10 +25,14 @@ class StudentTableModel(QAbstractTableModel):
     
     def data(self, index, role= ...):
         if role == Qt.DisplayRole:
-            if index.column() <4:
-                return self.data_cache[index.row()][index.column()]
-            elif index.column() == 4:
-                return "是"
+            if index.column() <5:
+                if index.column() == 4:
+                    if self.data_cache[index.row()][4] == 1:
+                        return "是"
+                    else:
+                        return "否"
+                else:
+                    return self.data_cache[index.row()][index.column()]
             elif index.column() == 5:
                 return "所选课程"
             elif index.column() == 6:
@@ -36,5 +40,5 @@ class StudentTableModel(QAbstractTableModel):
     
     def refresh(self):
         self.data_cache = self.load_data()
-        
+
         self.layoutChanged.emit()  

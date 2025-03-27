@@ -13,7 +13,7 @@ class StudentDAO:
         return res[0][0]
     
     def get_student_info(self):
-        query = 'SELECT id, name, gender, age FROM student;'
+        query = 'SELECT id, name, gender, age, is_face_collected FROM student;'
         res = self.db.fetchall(query)
         return res
      

@@ -25,6 +25,7 @@ from src.db.student_dao import StudentDAO
 from src.data_model.student_table_model import StudentTableModel
 from src.core.face_take import FaceTaker
 import config.my_config as my_config
+from src.core.model_preload_thread import ModelPreloadThread
 
 class AdminWindow(Ui_AdminWindow, QMainWindow):
     def __init__(self):
@@ -34,7 +35,20 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         self.tree_widget.setCurrentItem(self.tree_widget.topLevelItem(1))
         #当前窗口要维护的信息
         self.db = DataBase()
+
+        # 创建预加载模型
+        self.preload_thread = ModelPreloadThread()
+        self.preload_thread.preload_finished.connect(self.on_model_preloaded)
+        self.preload_thread.start()
         
+        #状态栏
+        self.status_bar = self.statusBar()
+        self.status_bar.showMessage('正在加载模型...')
+
+        #暂时禁用按钮
+        self.btn_start_enter.setEnabled(False)
+        self.btn_start_enter.setText('正在加载模型...')
+
         #老师界面
         self.teacher_dao = TeacherDAO(self.db)
         self.teacher_table_model = TeacherTableModel(self.teacher_dao)
@@ -79,6 +93,14 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         # 初始化下拉框的内容。
         self.setup_source_combo_box()
 
+    def on_model_preloaded(self, models):
+        """模型预加载完成的回调"""
+        self.preloaded_models = models
+        self.status_bar.showMessage('模型加载完成')
+        self.btn_start_enter.setEnabled(True)
+        self.btn_start_enter.setText('开始录入')
+
+
     #选择视频来源
     def setup_source_combo_box(self):
         self.combo_box_video_source.addItem("摄像头", 0)
@@ -114,13 +136,30 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
     def start_enter_face(self):
         if self.face_taker is not None:
             return
-        self.face_taker = FaceTaker(my_config.VIDEO_PATH)
+        
+        #显示加载进度指示
+        self.setCursor(Qt.WaitCursor)
+
+        # face_taker创建
+        self.face_taker = FaceTaker(my_config.VIDEO_PATH, self.preloaded_models)
         self.face_taker.update_frame_signal.connect(self.update_frame)
         self.face_taker.select_face_signal.connect(self.get_face)
 
         self.btn_confirm_collect.clicked.connect(self.confirm_face_take)
         self.btn_pass_collect.clicked.connect(self.face_taker.resume)
+
+        # 添加状态指示
+        self.status_bar.showMessage('正在启动摄像头...')
+
+        # 使用非阻塞方式启动
+        QTimer.singleShot(100, self.delayed_start_face_taker)
+        # self.face_taker.start()
+
+    def delayed_start_face_taker(self):
+        """延迟启动线程，避免UI阻塞"""
         self.face_taker.start()
+        self.status_bar.showMessage('正在录入人脸...')
+        self.setCursor(Qt.ArrowCursor)
 
     def confirm_face_take(self):
         if self.cur_face is None:

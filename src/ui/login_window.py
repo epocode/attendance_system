@@ -10,6 +10,8 @@ class LoginWindow(Ui_Form, QWidget):
     def __init__(self, db=None, main_window=None):
         super().__init__()
         self.setupUi(self)
+
+        self.setWindowTitle('登陆')
         
         if db is None:
             self.db = DataBase()

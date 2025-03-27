@@ -38,3 +38,4 @@ class StudentDAO:
 
     def save_vec_db(self):
         self.vec_db.save()
+

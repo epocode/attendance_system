@@ -29,20 +29,25 @@ class FaceTaker(QThread):
     update_frame_signal = Signal(QImage)
     select_face_signal = Signal(QImage)
 
-    def __init__(self, video_source):
+    def __init__(self, video_source, preloaded_models=None):
         super().__init__()
 
         self.is_running = True
         self.video_source = video_source
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
-        self.model = YOLO(my_config.MODEL_PATH).to(self.device)
+
+        # 使用预加载模型或者重新加载
+        if preloaded_models:
+            self.model = preloaded_models['yolo']
+            self.landmarks_extractor = preloaded_models['landmarks_extractor']
+            self.face_feature_extractor = preloaded_models['face_feature_extractor']
+        else:
+            self.model = YOLO(my_config.MODEL_PATH).to(self.device)
+            self.landmarks_extractor = dlib.shape_predictor(my_config.LANDMARK_PATH)
+            self.face_feature_extractor = InceptionResnetV1(pretrained='vggface2').eval().to(self.device)
 
         self.check_flag = True
         self.quality_checker = FaceQualityCheck()
-
-        self.landmarks_extractor = dlib.shape_predictor(my_config.LANDMARK_PATH)
-        # self.face_feature_extractor = dlib.face_recognition_model_v1(my_config.FACE_FEATURE_MODEL_PATH)
-        self.face_feature_extractor = InceptionResnetV1(pretrained='vggface2').eval().to(self.device)
         self.stored_face_rgb = None
 
         self.blank_img = cv2.cvtColor(cv2.imread(os.path.join(my_config.PHOTO_PATH, 'blank.jpg')), cv2.COLOR_BGR2RGB)
@@ -52,10 +57,10 @@ class FaceTaker(QThread):
 
     def run(self):
         self.cap = cv2.VideoCapture(self.video_source)
-        enter_tips = ""
+        for _ in range(5):
+            self.cap.read()
 
-        #每次运行人脸录入模块的时候，都要重新构建对应的向量数据库
-        
+        enter_tips = ""
 
         while self.is_running:
             start_time = time.time()

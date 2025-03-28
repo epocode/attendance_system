@@ -30,6 +30,7 @@ from src.core.model_preload_thread import ModelPreloadThread
 from src.ui.my_delegates import BtnDelegate
 from src.db.stu_course_dao import StuCourseDao
 from src.data_model.course_stu_model import CourseStuModel
+from src.data_model.course_stu_available_model import CourseStuAvailableModel
 
 class AdminWindow(Ui_AdminWindow, QMainWindow):
     def __init__(self):
@@ -123,7 +124,41 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         self.stu_course_model = CourseStuModel(self.stu_course_dao, self.student_table_model.data_cache[row][0])    
         self.table_view_stu_course.setModel(self.stu_course_model)
         self.table_view_stu_course.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.table_view_stu_course.setSelectionMode(QAbstractItemView.ExtendedSelection)     
+                
+        self.stu_course_available_model = CourseStuAvailableModel(self.stu_course_dao, self.student_table_model.data_cache[row][0])
+        self.table_view_stu_course_availabel.setModel(self.stu_course_available_model)
+        self.table_view_stu_course_availabel.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.table_view_stu_course_availabel.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.stacked_widget.setCurrentIndex(3)
+
+        # 给添加和移除按钮连接槽函数
+        self.btn_add_course_for_stu.clicked.connect(lambda: self.on_add_stu_to_course(row))
+        self.btn_del_course_for_stu.clicked.connect(lambda: self.on_del_course_for_stu(row))
+
+
+    def on_add_stu_to_course(self, row):
+        """选择还能选的课程，一次性添加到学生的选课表中"""
+        selected_indexes = self.table_view_stu_course_availabel.selectionModel().selectedRows()
+        if selected_indexes:
+            course_names = [self.stu_course_available_model.data(index, Qt.DisplayRole) for index in selected_indexes]
+            stu_id = self.student_table_model.data_cache[row][0]
+            self.stu_course_dao.add_stu_to_courses(stu_id, course_names)
+            self.stu_course_model.refresh()
+            self.stu_course_available_model.refresh()
+
+    def on_del_course_for_stu(self, row):
+        """删除学生的课程"""
+        selected_indexes = self.table_view_stu_course.selectionModel().selectedRows()
+        if selected_indexes:
+            course_names = [self.stu_course_model.data(index, Qt.DisplayRole) for index in selected_indexes]
+            stu_id = self.student_table_model.data_cache[row][0]
+            self.stu_course_dao.del_course_from_stu(stu_id, course_names)
+            self.stu_course_model.refresh()
+            self.stu_course_available_model.refresh()
+
+    def on_delete_stu_from_course(self, row):
+        pass
 
     def delayed_model_init(self):
         """在qt界面完全创建后再进行模型的初始化，避免系统崩溃"""
@@ -166,9 +201,8 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
              
 
 
-    def on_add_stu_to_course(self, row):
-        print('加入课程')
-    
+
+
     def on_delete_stu_clicked(self):
         selected_indexes = self.table_view_students.selectionModel().selectedRows()
         if selected_indexes:

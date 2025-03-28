@@ -33,8 +33,6 @@ class DataBase:
         return False
     
     
-
-    
     def execute(self, query, params):
         with self.conn.cursor() as cursor:
             try: 
@@ -57,3 +55,14 @@ class DataBase:
                 print(e)
         
         return False
+    
+    def execute_many(self, query, params):
+        with self.conn.cursor() as cursor:
+            try:
+                cursor.executemany(query, params)
+                self.conn.commit()
+                return True
+            except Exception as e:
+                print(e)
+        
+        return False   

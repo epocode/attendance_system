@@ -45,11 +45,9 @@
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-<<<<<<< HEAD
        <number>3</number>
-=======
+
        <number>1</number>
->>>>>>> 414d9db09c1ed6c339657fb7b26933b73b2fe16e
       </property>
       <widget class="QWidget" name="page_home">
        <widget class="QTableView" name="table_view_course_teacher">
@@ -75,7 +73,6 @@
         </property>
        </widget>
       </widget>
-<<<<<<< HEAD
       <widget class="QWidget" name="page">
        <widget class="QTableView" name="table_view_attendance_detail">
         <property name="geometry">
@@ -100,8 +97,6 @@
         </property>
        </widget>
       </widget>
-=======
->>>>>>> 414d9db09c1ed6c339657fb7b26933b73b2fe16e
       <widget class="QWidget" name="page_face_detect">
        <widget class="QLabel" name="label_disp_video_2">
         <property name="geometry">

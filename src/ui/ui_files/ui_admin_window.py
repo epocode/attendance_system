@@ -21,6 +21,7 @@ from PySide6.QtWidgets import (QApplication, QComboBox, QFormLayout, QGroupBox,
     QSizePolicy, QSpacerItem, QStackedWidget, QStatusBar,
     QTableView, QTreeWidget, QTreeWidgetItem, QVBoxLayout,
     QWidget)
+from src.ui.ui_files import resources_rc
 
 class Ui_AdminWindow(object):
     def setupUi(self, AdminWindow):
@@ -32,6 +33,7 @@ class Ui_AdminWindow(object):
         self.horizontalLayout_9 = QHBoxLayout(self.centralwidget)
         self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
         self.tree_widget = QTreeWidget(self.centralwidget)
+        QTreeWidgetItem(self.tree_widget)
         QTreeWidgetItem(self.tree_widget)
         QTreeWidgetItem(self.tree_widget)
         QTreeWidgetItem(self.tree_widget)
@@ -125,33 +127,44 @@ class Ui_AdminWindow(object):
         self.page.setObjectName(u"page")
         self.widget = QWidget(self.page)
         self.widget.setObjectName(u"widget")
-        self.widget.setGeometry(QRect(20, 10, 941, 491))
-        self.verticalLayout_5 = QVBoxLayout(self.widget)
-        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
-        self.verticalLayout_5.setContentsMargins(0, 0, 0, 0)
+        self.widget.setGeometry(QRect(23, 12, 901, 481))
+        self.horizontalLayout_5 = QHBoxLayout(self.widget)
+        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+        self.horizontalLayout_5.setContentsMargins(0, 0, 0, 0)
         self.table_view_stu_course = QTableView(self.widget)
         self.table_view_stu_course.setObjectName(u"table_view_stu_course")
 
-        self.verticalLayout_5.addWidget(self.table_view_stu_course)
+        self.horizontalLayout_5.addWidget(self.table_view_stu_course)
 
-        self.horizontalLayout_5 = QHBoxLayout()
-        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-        self.btn_add_course_for_stu = QPushButton(self.widget)
-        self.btn_add_course_for_stu.setObjectName(u"btn_add_course_for_stu")
-
-        self.horizontalLayout_5.addWidget(self.btn_add_course_for_stu)
-
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_5.addItem(self.horizontalSpacer)
-
+        self.verticalLayout_5 = QVBoxLayout()
+        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.btn_del_course_for_stu = QPushButton(self.widget)
         self.btn_del_course_for_stu.setObjectName(u"btn_del_course_for_stu")
+        icon = QIcon()
+        icon.addFile(u":/icons/assets/icons/arrow_right.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.btn_del_course_for_stu.setIcon(icon)
 
-        self.horizontalLayout_5.addWidget(self.btn_del_course_for_stu)
+        self.verticalLayout_5.addWidget(self.btn_del_course_for_stu)
+
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_5.addItem(self.verticalSpacer)
+
+        self.btn_add_course_for_stu = QPushButton(self.widget)
+        self.btn_add_course_for_stu.setObjectName(u"btn_add_course_for_stu")
+        icon1 = QIcon()
+        icon1.addFile(u":/icons/arrow_right", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.btn_add_course_for_stu.setIcon(icon1)
+
+        self.verticalLayout_5.addWidget(self.btn_add_course_for_stu)
 
 
-        self.verticalLayout_5.addLayout(self.horizontalLayout_5)
+        self.horizontalLayout_5.addLayout(self.verticalLayout_5)
+
+        self.table_view_stu_course_availabel = QTableView(self.widget)
+        self.table_view_stu_course_availabel.setObjectName(u"table_view_stu_course_availabel")
+
+        self.horizontalLayout_5.addWidget(self.table_view_stu_course_availabel)
 
         self.stacked_widget.addWidget(self.page)
         self.page_4 = QWidget()
@@ -384,6 +397,8 @@ class Ui_AdminWindow(object):
         ___qtreewidgetitem3.setText(0, QCoreApplication.translate("AdminWindow", u"\u8bfe\u7a0b\u7ba1\u7406", None));
         ___qtreewidgetitem4 = self.tree_widget.topLevelItem(3)
         ___qtreewidgetitem4.setText(0, QCoreApplication.translate("AdminWindow", u"\u5b66\u751f\u7ba1\u7406", None));
+        ___qtreewidgetitem5 = self.tree_widget.topLevelItem(4)
+        ___qtreewidgetitem5.setText(0, QCoreApplication.translate("AdminWindow", u"\u8fd4\u56de", None));
         self.tree_widget.setSortingEnabled(__sortingEnabled)
 
         self.btn_add_teacher.setText(QCoreApplication.translate("AdminWindow", u"\u65b0\u589e", None))
@@ -392,8 +407,14 @@ class Ui_AdminWindow(object):
         self.btn_delete_course.setText(QCoreApplication.translate("AdminWindow", u"\u5220\u9664", None))
         self.btn_add_stu.setText(QCoreApplication.translate("AdminWindow", u"\u5f55\u5165", None))
         self.btn_delete_stu.setText(QCoreApplication.translate("AdminWindow", u"\u5220\u9664", None))
-        self.btn_add_course_for_stu.setText(QCoreApplication.translate("AdminWindow", u"\u65b0\u589e", None))
-        self.btn_del_course_for_stu.setText(QCoreApplication.translate("AdminWindow", u"\u5220\u9664", None))
+#if QT_CONFIG(tooltip)
+        self.btn_del_course_for_stu.setToolTip(QCoreApplication.translate("AdminWindow", u"<html><head/><body><p>\u4ece\u5f53\u524d\u6240\u9009\u8bfe\u7a0b\u4e2d\u79fb\u9664</p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
+        self.btn_del_course_for_stu.setText("")
+#if QT_CONFIG(tooltip)
+        self.btn_add_course_for_stu.setToolTip(QCoreApplication.translate("AdminWindow", u"<html><head/><body><p>\u6dfb\u52a0\u6240\u9009\u8bfe\u7a0b</p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
+        self.btn_add_course_for_stu.setText("")
         self.label_camp_frame.setText(QCoreApplication.translate("AdminWindow", u"\u6444\u50cf\u5934\u6355\u83b7\u753b\u9762", None))
         self.label_face.setText(QCoreApplication.translate("AdminWindow", u"\u6355\u83b7\u7684\u4eba\u8138", None))
         self.groupBox.setTitle(QCoreApplication.translate("AdminWindow", u"\u5b66\u751f\u4fe1\u606f ", None))

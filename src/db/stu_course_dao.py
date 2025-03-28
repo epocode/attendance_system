@@ -2,14 +2,6 @@ class StuCourseDao():
     def __init__(self, db):
         self.db = db
 
-    def add_course(self, student_id, course_id):
-        sql = "INSERT INTO stu_course (student_id, course_id) VALUES (?, ?)"
-        
-
-    def remove_course(self, student_id, course_id):
-        sql = "DELETE FROM stu_course WHERE student_id = %s AND course_id = %s"
-        
-
     def get_courses_by_student(self, student_id):
         sql = """SELECT course_name
 FROM course_student
@@ -19,3 +11,32 @@ WHERE student_id = %s;"""
         # 将[(),()]转化为[,]
         res = [row[0] for row in res]
         return res
+    
+    def get_courses_not_selected_by_student(self, stu_id):
+        sql = """
+SELECT course_name
+FROM course
+WHERE course_name not in (
+		select course_name
+        FROM course_student
+        WHERE student_id =%s
+);"""
+        params = [stu_id]
+        res = self.db.fetchall(sql, params)
+        # 将[(),()]转化为[,]
+        res = [row[0] for row in res]
+        return res
+
+    def add_stu_to_courses(self, stu_id, course_list):
+        wait_for_insert_data = []
+        for course_name in course_list:
+            wait_for_insert_data.append((course_name, stu_id))
+        sql = "INSERT INTO course_student (course_name, student_id) VALUES(%s, %s);"
+        self.db.execute_many(sql, wait_for_insert_data)
+
+    def del_course_from_stu(self, stu_id, course_list):
+        sql = """DELETE FROM course_student WHERE student_id = %s AND course_name = %s;"""
+        data_for_del = []
+        for course_name in course_list:
+            data_for_del.append((stu_id, course_name))
+        self.db.execute_many(sql, data_for_del)

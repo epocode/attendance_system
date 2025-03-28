@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/icons">
         <file alias="home">assets/icons/HOME.png</file>
+        <file alias="arrow_right">assets/icons/arrow_left.png</file>
+        <file>assets/icons/arrow_right.png</file>
     </qresource>
 </RCC>

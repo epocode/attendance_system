@@ -28,3 +28,6 @@ class TeacherTableModel(QAbstractTableModel):
     def data(self, index, role = ...):
         if role == Qt.DisplayRole:
             return self.data_cache[index.row()][index.column()]
+    def refresh(self):
+        self.data_cache = self.load_data()
+        self.layoutChanged.emit()

@@ -33,4 +33,4 @@ class CoursecherTableModel(QAbstractTableModel):
             
     def refresh(self):
         self.data_cache = self.load_data()
-        self.layoutChanged.emit 
+        self.layoutChanged.emit()

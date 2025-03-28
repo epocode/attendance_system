@@ -48,6 +48,11 @@ color: white;
         <string>学生管理</string>
        </property>
       </item>
+      <item>
+       <property name="text">
+        <string>返回</string>
+       </property>
+      </item>
      </widget>
     </item>
     <item>
@@ -55,7 +60,7 @@ color: white;
       <property name="currentIndex">
        <number>3</number>
       </property>
-      <widget class="QWidget" name="page">
+      <widget class="QWidget" name="page_teacher">
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <widget class="QTableView" name="table_view_teachers"/>
@@ -80,7 +85,7 @@ color: white;
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="page_2">
+      <widget class="QWidget" name="page_course">
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <widget class="QTableView" name="table_view_course"/>
@@ -104,6 +109,79 @@ color: white;
          </layout>
         </item>
        </layout>
+      </widget>
+      <widget class="QWidget" name="page_stu">
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QTableView" name="table_view_students"/>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QPushButton" name="btn_add_stu">
+            <property name="text">
+             <string>录入</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btn_delete_stu">
+            <property name="text">
+             <string>删除</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page">
+       <widget class="QWidget" name="">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>10</y>
+          <width>941</width>
+          <height>491</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_5">
+         <item>
+          <widget class="QTableView" name="table_view_stu_course"/>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_5">
+           <item>
+            <widget class="QPushButton" name="btn_add_course_for_stu">
+             <property name="text">
+              <string>新增</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Orientation::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="btn_del_course_for_stu">
+             <property name="text">
+              <string>删除</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
       </widget>
       <widget class="QWidget" name="page_4">
        <layout class="QHBoxLayout" name="horizontalLayout_7">
@@ -344,31 +422,6 @@ QPushButton:pressed {
              </widget>
             </item>
            </layout>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="page_3">
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <item>
-         <widget class="QTableView" name="table_view_students"/>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_4">
-          <item>
-           <widget class="QPushButton" name="btn_add_stu">
-            <property name="text">
-             <string>录入</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="btn_delete_stu">
-            <property name="text">
-             <string>删除</string>
-            </property>
-           </widget>
           </item>
          </layout>
         </item>

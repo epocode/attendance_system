@@ -16,6 +16,20 @@ class StudentDAO:
         query = 'SELECT id, name, gender, age, is_face_collected FROM student;'
         res = self.db.fetchall(query)
         return res
+    
+    def get_all_stu_selected_course(self):
+        query = """SELECT id, course_name
+FROM student JOIN course_student
+ON student.id = course_student.student_id;"""
+        all_stu_course_map = {}
+        res = self.db.fetchall(query)
+        for row in res:
+            stu_id = row[0]
+            course_name = row[1]
+            if stu_id not in all_stu_course_map:
+                all_stu_course_map[stu_id] = []
+            all_stu_course_map[stu_id].append(course_name)
+        return all_stu_course_map
      
     def add_student(self, face_feature, name, gender, age):
         dis, ids = self.vec_db.search(face_feature, 1)

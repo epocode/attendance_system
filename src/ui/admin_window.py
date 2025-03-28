@@ -15,6 +15,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Signal, QTimer, Qt
 from PySide6.QtGui import QPixmap, QPainter
+from src.ui.my_combo_delegate import MyComboDelegate
 from src.ui.ui_files.ui_admin_window import Ui_AdminWindow
 from src.db.database import DataBase
 from src.db.teacher_dao import TeacherDAO
@@ -26,6 +27,9 @@ from src.data_model.student_table_model import StudentTableModel
 from src.core.face_take import FaceTaker
 import config.my_config as my_config
 from src.core.model_preload_thread import ModelPreloadThread
+from src.ui.my_delegates import BtnDelegate
+from src.db.stu_course_dao import StuCourseDao
+from src.data_model.course_stu_model import CourseStuModel
 
 class AdminWindow(Ui_AdminWindow, QMainWindow):
     def __init__(self):
@@ -35,19 +39,28 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         self.tree_widget.setCurrentItem(self.tree_widget.topLevelItem(1))
         #当前窗口要维护的信息
         self.db = DataBase()
-
-        # 创建预加载模型
-        self.preload_thread = ModelPreloadThread()
-        self.preload_thread.preload_finished.connect(self.on_model_preloaded)
-        self.preload_thread.start()
         
+        # 初始化界面
+        self.setup_ui_components()
+
+        #人脸录入相关
+        self.face_taker = None
+        self.cur_face = None
+
+        self.btn_start_enter.clicked.connect(self.start_enter_face)
+        self.btn_end_enter.clicked.connect(self.end_enter_face)
+        
+        #绑定功能切换
+        self.stacked_widget.setCurrentIndex(0)
+        self.tree_widget.itemClicked.connect(self.on_tree_widget_clicked)
+
+        QTimer.singleShot(100, self.delayed_model_init)  # 延迟1秒后初始化模型
+
+
+    def setup_ui_components(self):
+        """设置UI组件的初始状态和属性"""
         #状态栏
         self.status_bar = self.statusBar()
-        self.status_bar.showMessage('正在加载模型...')
-
-        #暂时禁用按钮
-        self.btn_start_enter.setEnabled(False)
-        self.btn_start_enter.setText('正在加载模型...')
 
         #老师界面
         self.teacher_dao = TeacherDAO(self.db)
@@ -72,26 +85,56 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         self.table_view_students.setSelectionBehavior(QAbstractItemView.SelectRows) 
         self.btn_add_stu.clicked.connect(self.on_add_student_clicked)
         self.btn_delete_stu.clicked.connect(self.on_delete_stu_clicked)
-        # QTimer.singleShot(0, self.set_btn_delegate)
+        # 设置下拉框代理
+        self.course_combo_delegate = MyComboDelegate(self.table_view_students)
+        self.table_view_students.setItemDelegateForColumn(5, self.course_combo_delegate)
+        for row in range(self.student_table_model.rowCount()):
+            self.table_view_students.openPersistentEditor(
+                self.student_table_model.index(row, 5)
+            )
+        # 设置管理课程代理
+        self.manage_course_delegate = BtnDelegate('管理课程', self.table_view_students)
+        self.manage_course_delegate.btn_clicked_signal.connect(self.on_manage_course_clicked)
+        self.table_view_students.setItemDelegateForColumn(6, self.manage_course_delegate)
+        for row in range(self.student_table_model.rowCount()):
+            self.table_view_students.openPersistentEditor(
+                self.student_table_model.index(row, 6)
+            )
 
-        #人脸录入相关
-        self.face_taker = None
-        self.cur_face = None
-
-        self.btn_start_enter.clicked.connect(self.start_enter_face)
-        self.btn_end_enter.clicked.connect(self.end_enter_face)
+        # 设置管理人脸录入代理
+        self.manage_face_delegate = BtnDelegate('(重新)录入人脸',self.table_view_students)
+        self.manage_face_delegate.btn_clicked_signal.connect(self.on_manage_face_clicked)   
+        self.table_view_students.setItemDelegateForColumn(7, self.manage_face_delegate)
+        for row in range(self.student_table_model.rowCount()):
+            self.table_view_students.openPersistentEditor(
+                self.student_table_model.index(row, 7)
+            )
         
-        #绑定功能切换
-        self.stacked_widget.setCurrentIndex(0)
-        self.tree_widget.itemClicked.connect(self.on_tree_widget_clicked)
-        
-    # def set_btn_delegate(self):
-    #     delegate = ButtonDelegate(self.table_view_students)
-    #     delegate.button_clicked_signal.connect(self.on_add_stu_to_course)
-    #     self.table_view_students.setItemDelegateForColumn(4, delegate)
-
-        # 初始化下拉框的内容。
+        # 初始化视频来源下拉框的内容。
         self.setup_source_combo_box()
+
+    def on_manage_face_clicked(self, row):
+        """对学生的人脸进行管理， 进入人脸管理页面，并且重新录入人脸"""
+        pass
+
+    def on_manage_course_clicked(self, row):
+        """管理学生的课程，包括课程的增删"""
+        self.stu_course_dao = StuCourseDao(self.db)
+        self.stu_course_model = CourseStuModel(self.stu_course_dao, self.student_table_model.data_cache[row][0])    
+        self.table_view_stu_course.setModel(self.stu_course_model)
+        self.table_view_stu_course.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.stacked_widget.setCurrentIndex(3)
+
+    def delayed_model_init(self):
+        """在qt界面完全创建后再进行模型的初始化，避免系统崩溃"""
+        self.preload_thread = ModelPreloadThread()
+        self.preload_thread.preload_finished.connect(self.on_model_preloaded)
+        self.preload_thread.start()
+        self.status_bar.showMessage('正在加载模型...')
+
+        #暂时禁用按钮
+        self.btn_start_enter.setEnabled(False)
+        self.btn_start_enter.setText('正在加载模型...')
 
     def on_model_preloaded(self, models):
         """模型预加载完成的回调"""
@@ -284,12 +327,18 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         elif item_name == '课程管理':
             self.stacked_widget.setCurrentIndex(1)
         elif item_name == '学生管理':
-            self.stacked_widget.setCurrentIndex(3)
+            self.stacked_widget.setCurrentIndex(2)
         elif item_name == '退出':
             from src.ui.login_window import LoginWindow
             self.login_window = LoginWindow(self.db)
             self.login_window.show()
             self.close()
+        elif item_name == '返回':
+            if self.stacked_widget.currentIndex() == 0:
+                pass
+            else:
+                cur_index = self.stacked_widget.currentIndex()
+                self.stacked_widget.setCurrentIndex(cur_index - 1)
         else: 
             pass
 

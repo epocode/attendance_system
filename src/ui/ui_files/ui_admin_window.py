@@ -18,8 +18,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QComboBox, QFormLayout, QGroupBox,
     QHBoxLayout, QHeaderView, QLabel, QLineEdit,
     QMainWindow, QMenuBar, QPushButton, QRadioButton,
-    QSizePolicy, QStackedWidget, QStatusBar, QTableView,
-    QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget)
+    QSizePolicy, QSpacerItem, QStackedWidget, QStatusBar,
+    QTableView, QTreeWidget, QTreeWidgetItem, QVBoxLayout,
+    QWidget)
 
 class Ui_AdminWindow(object):
     def setupUi(self, AdminWindow):
@@ -45,23 +46,23 @@ class Ui_AdminWindow(object):
 
         self.stacked_widget = QStackedWidget(self.centralwidget)
         self.stacked_widget.setObjectName(u"stacked_widget")
-        self.page = QWidget()
-        self.page.setObjectName(u"page")
-        self.verticalLayout = QVBoxLayout(self.page)
+        self.page_teacher = QWidget()
+        self.page_teacher.setObjectName(u"page_teacher")
+        self.verticalLayout = QVBoxLayout(self.page_teacher)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.table_view_teachers = QTableView(self.page)
+        self.table_view_teachers = QTableView(self.page_teacher)
         self.table_view_teachers.setObjectName(u"table_view_teachers")
 
         self.verticalLayout.addWidget(self.table_view_teachers)
 
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.btn_add_teacher = QPushButton(self.page)
+        self.btn_add_teacher = QPushButton(self.page_teacher)
         self.btn_add_teacher.setObjectName(u"btn_add_teacher")
 
         self.horizontalLayout_2.addWidget(self.btn_add_teacher)
 
-        self.btn_delete_teacher = QPushButton(self.page)
+        self.btn_delete_teacher = QPushButton(self.page_teacher)
         self.btn_delete_teacher.setObjectName(u"btn_delete_teacher")
 
         self.horizontalLayout_2.addWidget(self.btn_delete_teacher)
@@ -69,24 +70,24 @@ class Ui_AdminWindow(object):
 
         self.verticalLayout.addLayout(self.horizontalLayout_2)
 
-        self.stacked_widget.addWidget(self.page)
-        self.page_2 = QWidget()
-        self.page_2.setObjectName(u"page_2")
-        self.verticalLayout_2 = QVBoxLayout(self.page_2)
+        self.stacked_widget.addWidget(self.page_teacher)
+        self.page_course = QWidget()
+        self.page_course.setObjectName(u"page_course")
+        self.verticalLayout_2 = QVBoxLayout(self.page_course)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.table_view_course = QTableView(self.page_2)
+        self.table_view_course = QTableView(self.page_course)
         self.table_view_course.setObjectName(u"table_view_course")
 
         self.verticalLayout_2.addWidget(self.table_view_course)
 
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.btn_add_course = QPushButton(self.page_2)
+        self.btn_add_course = QPushButton(self.page_course)
         self.btn_add_course.setObjectName(u"btn_add_course")
 
         self.horizontalLayout_3.addWidget(self.btn_add_course)
 
-        self.btn_delete_course = QPushButton(self.page_2)
+        self.btn_delete_course = QPushButton(self.page_course)
         self.btn_delete_course.setObjectName(u"btn_delete_course")
 
         self.horizontalLayout_3.addWidget(self.btn_delete_course)
@@ -94,7 +95,65 @@ class Ui_AdminWindow(object):
 
         self.verticalLayout_2.addLayout(self.horizontalLayout_3)
 
-        self.stacked_widget.addWidget(self.page_2)
+        self.stacked_widget.addWidget(self.page_course)
+        self.page_stu = QWidget()
+        self.page_stu.setObjectName(u"page_stu")
+        self.verticalLayout_3 = QVBoxLayout(self.page_stu)
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.table_view_students = QTableView(self.page_stu)
+        self.table_view_students.setObjectName(u"table_view_students")
+
+        self.verticalLayout_3.addWidget(self.table_view_students)
+
+        self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.btn_add_stu = QPushButton(self.page_stu)
+        self.btn_add_stu.setObjectName(u"btn_add_stu")
+
+        self.horizontalLayout_4.addWidget(self.btn_add_stu)
+
+        self.btn_delete_stu = QPushButton(self.page_stu)
+        self.btn_delete_stu.setObjectName(u"btn_delete_stu")
+
+        self.horizontalLayout_4.addWidget(self.btn_delete_stu)
+
+
+        self.verticalLayout_3.addLayout(self.horizontalLayout_4)
+
+        self.stacked_widget.addWidget(self.page_stu)
+        self.page = QWidget()
+        self.page.setObjectName(u"page")
+        self.widget = QWidget(self.page)
+        self.widget.setObjectName(u"widget")
+        self.widget.setGeometry(QRect(20, 10, 941, 491))
+        self.verticalLayout_5 = QVBoxLayout(self.widget)
+        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
+        self.verticalLayout_5.setContentsMargins(0, 0, 0, 0)
+        self.table_view_stu_course = QTableView(self.widget)
+        self.table_view_stu_course.setObjectName(u"table_view_stu_course")
+
+        self.verticalLayout_5.addWidget(self.table_view_stu_course)
+
+        self.horizontalLayout_5 = QHBoxLayout()
+        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+        self.btn_add_course_for_stu = QPushButton(self.widget)
+        self.btn_add_course_for_stu.setObjectName(u"btn_add_course_for_stu")
+
+        self.horizontalLayout_5.addWidget(self.btn_add_course_for_stu)
+
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_5.addItem(self.horizontalSpacer)
+
+        self.btn_del_course_for_stu = QPushButton(self.widget)
+        self.btn_del_course_for_stu.setObjectName(u"btn_del_course_for_stu")
+
+        self.horizontalLayout_5.addWidget(self.btn_del_course_for_stu)
+
+
+        self.verticalLayout_5.addLayout(self.horizontalLayout_5)
+
+        self.stacked_widget.addWidget(self.page)
         self.page_4 = QWidget()
         self.page_4.setObjectName(u"page_4")
         self.horizontalLayout_7 = QHBoxLayout(self.page_4)
@@ -288,31 +347,6 @@ class Ui_AdminWindow(object):
         self.horizontalLayout_7.addLayout(self.verticalLayout_4)
 
         self.stacked_widget.addWidget(self.page_4)
-        self.page_3 = QWidget()
-        self.page_3.setObjectName(u"page_3")
-        self.verticalLayout_3 = QVBoxLayout(self.page_3)
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.table_view_students = QTableView(self.page_3)
-        self.table_view_students.setObjectName(u"table_view_students")
-
-        self.verticalLayout_3.addWidget(self.table_view_students)
-
-        self.horizontalLayout_4 = QHBoxLayout()
-        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.btn_add_stu = QPushButton(self.page_3)
-        self.btn_add_stu.setObjectName(u"btn_add_stu")
-
-        self.horizontalLayout_4.addWidget(self.btn_add_stu)
-
-        self.btn_delete_stu = QPushButton(self.page_3)
-        self.btn_delete_stu.setObjectName(u"btn_delete_stu")
-
-        self.horizontalLayout_4.addWidget(self.btn_delete_stu)
-
-
-        self.verticalLayout_3.addLayout(self.horizontalLayout_4)
-
-        self.stacked_widget.addWidget(self.page_3)
 
         self.horizontalLayout_9.addWidget(self.stacked_widget)
 
@@ -356,6 +390,10 @@ class Ui_AdminWindow(object):
         self.btn_delete_teacher.setText(QCoreApplication.translate("AdminWindow", u"\u5220\u9664", None))
         self.btn_add_course.setText(QCoreApplication.translate("AdminWindow", u"\u65b0\u589e", None))
         self.btn_delete_course.setText(QCoreApplication.translate("AdminWindow", u"\u5220\u9664", None))
+        self.btn_add_stu.setText(QCoreApplication.translate("AdminWindow", u"\u5f55\u5165", None))
+        self.btn_delete_stu.setText(QCoreApplication.translate("AdminWindow", u"\u5220\u9664", None))
+        self.btn_add_course_for_stu.setText(QCoreApplication.translate("AdminWindow", u"\u65b0\u589e", None))
+        self.btn_del_course_for_stu.setText(QCoreApplication.translate("AdminWindow", u"\u5220\u9664", None))
         self.label_camp_frame.setText(QCoreApplication.translate("AdminWindow", u"\u6444\u50cf\u5934\u6355\u83b7\u753b\u9762", None))
         self.label_face.setText(QCoreApplication.translate("AdminWindow", u"\u6355\u83b7\u7684\u4eba\u8138", None))
         self.groupBox.setTitle(QCoreApplication.translate("AdminWindow", u"\u5b66\u751f\u4fe1\u606f ", None))
@@ -369,7 +407,5 @@ class Ui_AdminWindow(object):
         self.btn_pass_collect.setText(QCoreApplication.translate("AdminWindow", u"\u653e\u5f03", None))
         self.btn_start_enter.setText(QCoreApplication.translate("AdminWindow", u"\u5f00\u59cb\u5f55\u5165", None))
         self.btn_end_enter.setText(QCoreApplication.translate("AdminWindow", u"\u505c\u6b62\u5f55\u5165", None))
-        self.btn_add_stu.setText(QCoreApplication.translate("AdminWindow", u"\u5f55\u5165", None))
-        self.btn_delete_stu.setText(QCoreApplication.translate("AdminWindow", u"\u5220\u9664", None))
     # retranslateUi
 

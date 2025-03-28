@@ -58,7 +58,7 @@ color: white;
     <item>
      <widget class="QStackedWidget" name="stacked_widget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="page_teacher">
        <layout class="QVBoxLayout" name="verticalLayout">
@@ -416,7 +416,7 @@ QPushButton:pressed {
 </string>
               </property>
               <property name="text">
-               <string>放弃</string>
+               <string>跳过</string>
               </property>
              </widget>
             </item>
@@ -427,14 +427,14 @@ QPushButton:pressed {
             <item>
              <widget class="QPushButton" name="btn_start_enter">
               <property name="text">
-               <string>开始录入</string>
+               <string>开始</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QPushButton" name="btn_end_enter">
               <property name="text">
-               <string>停止录入</string>
+               <string>停止</string>
               </property>
              </widget>
             </item>

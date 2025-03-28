@@ -10,7 +10,8 @@ from PySide6.QtWidgets import (
     QComboBox,
     QStyledItemDelegate,
     QWidget,
-    QFileDialog
+    QFileDialog,
+    QApplication
 
 )
 from PySide6.QtCore import Signal, QTimer, Qt
@@ -40,6 +41,9 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         self.tree_widget.setCurrentItem(self.tree_widget.topLevelItem(1))
         #当前窗口要维护的信息
         self.db = DataBase()
+        self.page_map = {"teacher_page":0, "course_page": 1,
+                         "student_page":2, "stu_course_page":3,
+                         "enter_stu_page": 4}
         
         # 初始化界面
         self.setup_ui_components()
@@ -48,7 +52,7 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         self.face_taker = None
         self.cur_face = None
 
-        self.btn_start_enter.clicked.connect(self.start_enter_face)
+        self.btn_start_enter.clicked.connect(self.start_enter_stu_with_face)
         self.btn_end_enter.clicked.connect(self.end_enter_face)
         
         #绑定功能切换
@@ -84,7 +88,7 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         self.student_table_model = StudentTableModel(self.student_dao)
         self.table_view_students.setModel(self.student_table_model) 
         self.table_view_students.setSelectionBehavior(QAbstractItemView.SelectRows) 
-        self.btn_add_stu.clicked.connect(self.on_add_student_clicked)
+        self.btn_add_stu.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(self.page_map['enter_stu_page']))
         self.btn_delete_stu.clicked.connect(self.on_delete_stu_clicked)
         # 设置下拉框代理
         self.course_combo_delegate = MyComboDelegate(self.table_view_students)
@@ -132,6 +136,7 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         self.table_view_stu_course_availabel.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.stacked_widget.setCurrentIndex(3)
 
+
         # 给添加和移除按钮连接槽函数
         self.btn_add_course_for_stu.clicked.connect(lambda: self.on_add_stu_to_course(row))
         self.btn_del_course_for_stu.clicked.connect(lambda: self.on_del_course_for_stu(row))
@@ -146,6 +151,9 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
             self.stu_course_dao.add_stu_to_courses(stu_id, course_names)
             self.stu_course_model.refresh()
             self.stu_course_available_model.refresh()
+            # 刷新页面内容
+            self.student_table_model.refresh()
+            self.reset_delegates()
 
     def on_del_course_for_stu(self, row):
         """删除学生的课程"""
@@ -156,6 +164,7 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
             self.stu_course_dao.del_course_from_stu(stu_id, course_names)
             self.stu_course_model.refresh()
             self.stu_course_available_model.refresh()
+        self.reset_delegates()
 
     def on_delete_stu_from_course(self, row):
         pass
@@ -198,19 +207,42 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
                 my_config.VIDEO_PATH = 0
         else:
             my_config.VIDEO_PATH = 0
-             
-
-
-
+  
 
     def on_delete_stu_clicked(self):
+        """删除学生信息"""
         selected_indexes = self.table_view_students.selectionModel().selectedRows()
         if selected_indexes:
             selected_row = selected_indexes[0].row()
             self.student_dao.delete_student(selected_row)
-            self.student_table_model.layoutChanged.emit()
+            self.student_table_model.refresh()
+            self.reset_delegates()
+
+    def reset_delegates(self):
+        """重置代理，避免内容不刷新"""
+        self.table_view_students.clearSelection()
+
+        for row in range(self.student_table_model.rowCount() + 10):
+            try:
+                self.table_view_students.closePersistentEditor(self.student_table_model.index(row, 5))
+            except:
+                pass
+
+        self.table_view_students.setItemDelegateForColumn(5, None)
+        self.course_combo_delegate.deleteLater()
+
+        QApplication.processEvents()  # 处理事件，确保UI更新
+
+        self.course_combo_delegate = MyComboDelegate(self.table_view_students)
+        self.table_view_students.setItemDelegateForColumn(5, self.course_combo_delegate)
+
+        for row in range(self.student_table_model.rowCount()):
+            self.table_view_students.openPersistentEditor(
+                self.student_table_model.index(row, 5)
+            )
+
     #人脸录入相关函数
-    def start_enter_face(self):
+    def start_enter_stu_with_face(self):
         if self.face_taker is not None:
             return
         
@@ -230,7 +262,6 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
 
         # 使用非阻塞方式启动
         QTimer.singleShot(100, self.delayed_start_face_taker)
-        # self.face_taker.start()
 
     def delayed_start_face_taker(self):
         """延迟启动线程，避免UI阻塞"""
@@ -256,8 +287,9 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
             print('请输入正确的人脸信息')
             return
         
-        self.student_dao.add_student(face_feature, name, gender, age)
-        self.student_table_model.layoutChanged.emit()
+        is_face_collected = 1
+        self.student_dao.add_student(face_feature, name, gender, age, is_face_collected)
+        self.student_table_model.refresh()
         self.face_taker.resume()
 
         self.cur_face = None
@@ -317,17 +349,14 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
                 return
             self.teacher_dao.add_new(name, username, pswd)
             print('成功添加新老师')
-            self.teacher_table_model.layoutChanged.emit()
-            
-    def on_add_student_clicked(self):
-        self.stacked_widget.setCurrentIndex(2)
-
+            self.teacher_table_model.refresh()
+        
     def on_delete_teacher_clicked(self):
         selected_indexes = self.table_view_teachers.selectionModel().selectedRows()
         if selected_indexes:
             selected_row = selected_indexes[0].row()
             self.teacher_dao.delete_row(selected_row)
-            self.teacher_table_model.layoutChanged.emit()
+            self.teacher_table_model.refresh()
 
     def on_add_course_clicked(self):
         #新增课程
@@ -343,14 +372,14 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
                 print('当前课程名已经存在')
                 return
             self.course_dao.add_new(course_name, teacher_username)
-            self.course_table_model.layoutChanged.emit()
+            self.course_table_model.refresh()
         
     def on_delete_course_clicked(self):
         indexes = self.table_view_course.selectionModel().selectedRows()
         if indexes:
             row = indexes[0].row()
             self.course_dao.delete_course_by_row(row)
-            self.course_table_model.layoutChanged.emit()
+            self.course_table_model.refresh()
             
 
 
@@ -383,42 +412,6 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
             self.student_dao.save_vec_db()
 
         return super().closeEvent(event)
-
-class ButtonDelegate(QStyledItemDelegate):
-    button_clicked_signal = Signal(int)
-
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.button = None
-
-    def createEditor(self, parent, option, index):
-        if self.button == None:
-            self.button = QPushButton('加入课程', parent)
-            self.button.setStyleSheet("""
-            QPushButton {
-                background-color: lightblue;  /* 背景色 */
-                color: white;  /* 文字颜色 */
-                border-radius: 5px;  /* 圆角 */
-                border: 1px solid #007BFF;  /* 边框 */
-                padding: 5px 10px;  /* 内边距 */
-            }
-            QPushButton:hover {
-                background-color: #007BFF;  /* 悬停时背景色 */
-            }
-            QPushButton:pressed {
-                background-color: #0056b3;  /* 按下时背景色 */
-            }
-        """)
-            self.button.clicked.connect(lambda:self.button_clicked_signal.emit(index.row()))
-            self.button.setGeometry(option.rect)
-            self.button.show()
-        return self.button
-    
-
-   
-    
-    def updateEditorGeometry(self, editor, option, index):
-        editor.setGeometry(option.rect)
 
 class TeacherInputDialog(QDialog):
     def __init__(self):

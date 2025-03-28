@@ -376,7 +376,7 @@ class Ui_AdminWindow(object):
 
         self.retranslateUi(AdminWindow)
 
-        self.stacked_widget.setCurrentIndex(3)
+        self.stacked_widget.setCurrentIndex(4)
 
 
         QMetaObject.connectSlotsByName(AdminWindow)
@@ -425,8 +425,8 @@ class Ui_AdminWindow(object):
         self.rbtn_female.setText(QCoreApplication.translate("AdminWindow", u"\u5973", None))
         self.label_7.setText(QCoreApplication.translate("AdminWindow", u"\u5e74\u9f84", None))
         self.btn_confirm_collect.setText(QCoreApplication.translate("AdminWindow", u"\u786e\u8ba4\u5f55\u5165", None))
-        self.btn_pass_collect.setText(QCoreApplication.translate("AdminWindow", u"\u653e\u5f03", None))
-        self.btn_start_enter.setText(QCoreApplication.translate("AdminWindow", u"\u5f00\u59cb\u5f55\u5165", None))
-        self.btn_end_enter.setText(QCoreApplication.translate("AdminWindow", u"\u505c\u6b62\u5f55\u5165", None))
+        self.btn_pass_collect.setText(QCoreApplication.translate("AdminWindow", u"\u8df3\u8fc7", None))
+        self.btn_start_enter.setText(QCoreApplication.translate("AdminWindow", u"\u5f00\u59cb", None))
+        self.btn_end_enter.setText(QCoreApplication.translate("AdminWindow", u"\u505c\u6b62", None))
     # retranslateUi
 

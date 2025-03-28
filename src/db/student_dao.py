@@ -31,13 +31,13 @@ ON student.id = course_student.student_id;"""
             all_stu_course_map[stu_id].append(course_name)
         return all_stu_course_map
      
-    def add_student(self, face_feature, name, gender, age):
+    def add_student(self, face_feature, name, gender, age, is_face_collected):
         dis, ids = self.vec_db.search(face_feature, 1)
         if dis[0][0] > 0.9:
             print('当前人脸已经录入')
             return
-        query = 'INSERT INTO student (name, gender, age) VALUES (%s, %s, %s);'
-        params = (name, gender, age)  
+        query = 'INSERT INTO student (name, gender, age, is_face_collected) VALUES (%s, %s, %s, %s);'
+        params = (name, gender, age, is_face_collected)  
         last_id = self.db.execute_with_lastid(query, params)  
         if last_id != 0:
             self.vec_db.add_with_ids(face_feature, np.array([last_id]))

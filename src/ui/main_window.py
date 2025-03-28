@@ -100,8 +100,6 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         self.face_detector = None
         self.btn_end_face_detect.clicked.connect(self.end_label_face_detection)
 
-
-
         #左侧功能选项
         self.tree_widget.itemClicked.connect(self.on_tree_widget_clicked)
         
@@ -148,6 +146,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
 
 
     def on_tree_widget_clicked(self, item, column):
+        """左侧导航栏的具体切换功能"""
         item_name = item.text(column)
         if item_name == '切换登陆':
             from src.ui.login_window import LoginWindow
@@ -163,7 +162,6 @@ class MainWindow(Ui_MainWindow, QMainWindow):
                 pass
             else:
                 self.stackedWidget.setCurrentIndex(cur_idx - 1)
-
 
     #更改用户
     def change_user(self, teacher_name, username):
@@ -217,11 +215,6 @@ class MainWindow(Ui_MainWindow, QMainWindow):
                 course_name = self.course_list_model.data(index, Qt.DisplayRole)
                 self.label_curtable.setText(f"current table:{course_name}")
                 self.course_list_model.cur_course_name = course_name
-                # self.person_info_model = PersonInfoModel(self.list_model_tables.conn, self.list_model_tables.cur_table_name)
-                # self.table_view_show_stu.setModel(self.person_info_model)
-                # #同时创建用于表示缺席的学生列表
-                # self.absent_table_model = AbsentTableModel(self.list_model_tables.conn.cursor(), self.list_model_tables.cur_table_name)
-                # self.table_view_show_absent.setModel(self.absent_table_model)
 
     def confirm_face_taken(self):
         #确认录入人脸，先获取人脸的特征

@@ -14,7 +14,7 @@ from PySide6.QtWidgets import (
     QApplication
 
 )
-from PySide6.QtCore import Signal, QTimer, Qt
+from PySide6.QtCore import Signal, QTimer, Qt, QSize
 from PySide6.QtGui import QPixmap, QPainter
 from src.ui.my_combo_delegate import MyComboDelegate
 from src.ui.ui_files.ui_admin_window import Ui_AdminWindow
@@ -48,9 +48,6 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         #人脸录入相关
         self.face_taker = None
         self.cur_face = None
-
-        self.btn_start_enter.clicked.connect(self.start_enter_stu_with_face)
-        self.btn_end_enter.clicked.connect(self.end_enter_face)
         
         #绑定功能切换
         self.initialized_pages = set()
@@ -85,10 +82,17 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
     
     #选择视频来源
     def setup_source_combo_box(self):
+        # 设置批量录入界面的视频来源下拉框
         self.combo_box_video_source.addItem("摄像头", 0)
         self.combo_box_video_source.addItem("视频文件", 'video_file')
         my_config.VIDEO_PATH = 0
         self.combo_box_video_source.currentIndexChanged.connect(self.on_source_selection_changed)
+
+        # 设置重新录入界面的视频来源下拉框
+        self.combo_box_select_video_source.addItem("摄像头", 0)
+        self.combo_box_select_video_source.addItem("视频文件", 'video_file')
+        my_config.VIDEO_PATH = 0
+        self.combo_box_select_video_source.currentIndexChanged.connect(self.on_source_selection_changed)
 
     def on_source_selection_changed(self, index):
         data = self.combo_box_video_source.itemData(index)
@@ -148,7 +152,7 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
 
             # 刷新数据模型并且设置关联页面为脏
             self.teacher_table_model.refresh()
-            self.set_page_dirty(['course_page', ['student_page']])
+            self.set_page_dirty(['course_page', 'student_page'])
         
     def on_delete_teacher_clicked(self):
         selected_indexes = self.table_view_teachers.selectionModel().selectedRows()
@@ -157,7 +161,7 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
             self.teacher_dao.delete_row(selected_row)
             # 刷新数据模型并且设置关联页面为脏
             self.teacher_table_model.refresh()
-            self.set_page_dirty(['course_page', ['student_page']])
+            self.set_page_dirty(['course_page', 'student_page'])
 
 #---------------------课程管理相关代码------------------------------------------------------------
 
@@ -209,6 +213,7 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
             self.set_page_dirty(['student_page'])
 
 
+
 #---------------------学生管理相关代码------------------------------------------------------------
     def enter_page_student(self):
         """进入学生管理界面，记住，该界面还包括显示学生课程的下拉框代理"""
@@ -221,7 +226,7 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
             self.student_table_model = StudentTableModel(self.student_dao)
             self.table_view_students.setModel(self.student_table_model) 
             self.table_view_students.setSelectionBehavior(QAbstractItemView.SelectRows) 
-            self.btn_add_stu.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(self.page_map['enter_stu_page']))
+            self.btn_add_stu.clicked.connect(self.on_add_multi_stu_clicked)
             self.btn_delete_stu.clicked.connect(self.on_delete_stu_clicked)
             self.btn_add_stu_without_face.clicked.connect(self.on_add_stu_without_face_clicked)
 
@@ -284,10 +289,42 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
             
             self.student_table_model.refresh()
             self.reset_delegates()
+    
+    def on_add_multi_stu_clicked(self):
+        """"批量添加学生信息"""
+        self.btn_start_enter.clicked.connect(self.start_enter_stu_with_face)
+        self.btn_end_enter.clicked.connect(self.end_enter_face)
+        self.btn_confirm_collect.clicked.connect(self.confirm_face_take)
+
+        self.stacked_widget.setCurrentIndex(self.page_map['enter_stu_page'])
         
+
     def on_manage_face_clicked(self, row):
-        """对学生的人脸进行管理， 进入人脸管理页面，并且重新录入人脸"""
-        pass
+        """对学生的人脸进行管理， 进入人脸管理页面，并且重新录入人脸.
+        这里没必要使用懒加载。
+        使用row得到学生的ID，从而得到姓名、性别、年龄等信息"""
+        id_index =  self.student_table_model.index(row, 0)
+        name_index =self.student_table_model.index(row, 1)
+        gender_index = self.student_table_model.index(row, 2)
+        age_index = self.student_table_model.index(row, 3)
+
+        id = self.student_table_model.data(id_index, Qt.DisplayRole)
+        name = self.student_table_model.data(name_index, Qt.DisplayRole)
+        gender = self.student_table_model.data(gender_index, Qt.DisplayRole)
+        age = self.student_table_model.data(age_index, Qt.DisplayRole)
+
+        # 显示学生信息
+        self.label_id_1.setText(str(id))
+        self.label_name_1.setText(name)
+        self.label_gender_1.setText(gender)
+        self.label_age_1.setText(str(age))
+
+
+        self.btn_start_cap_face_1.clicked.connect(self.start_re_enter_face)
+        self.btn_end_cap_face_1.clicked.connect(self.end_face_take_1)
+        self.btn_confirm_this_face_1.clicked.connect(self.confirm_face_take_1)
+
+        self.stacked_widget.setCurrentIndex(5)
 
     def on_manage_course_clicked(self, row):
         """管理学生的课程，包括课程的增删,
@@ -361,6 +398,8 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
             )
 
 
+        
+
 
 #-------------------------------页面切换相关代码------------------------------------------------------------
     def set_page_dirty(self, page_keys):
@@ -433,10 +472,9 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         self.face_taker = FaceTaker(my_config.VIDEO_PATH, self.preloaded_models)
         self.face_taker.update_frame_signal.connect(self.update_frame)
         self.face_taker.select_face_signal.connect(self.get_face)
-
-        self.btn_confirm_collect.clicked.connect(self.confirm_face_take)
+        
+        
         self.btn_pass_collect.clicked.connect(self.face_taker.resume)
-
         # 添加状态指示
         self.status_bar.showMessage('正在启动摄像头...')
 
@@ -448,6 +486,53 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         self.face_taker.start()
         self.status_bar.showMessage('正在录入人脸...')
         self.setCursor(Qt.ArrowCursor)
+
+    
+
+    def update_frame(self, qimage):
+        label_size = self.label_camp_frame.size()
+        pixmap = QPixmap(label_size)
+        pixmap.fill(Qt.black)  # 设置背景色
+        # 将QImage转换为QPixmap
+        img_pixmap = QPixmap.fromImage(qimage)
+        # 等比例缩放图像，保持宽高比
+        scaled_pixmap = img_pixmap.scaled(
+            label_size, 
+            Qt.KeepAspectRatio,  # 保持宽高比
+            Qt.SmoothTransformation  # 使用平滑的缩放算法
+        )
+        painter = QPainter(pixmap)
+    
+        # 计算在标签中的居中位置
+        x = (label_size.width() - scaled_pixmap.width()) // 2
+        y = (label_size.height() - scaled_pixmap.height()) // 2
+        
+        # 在指定位置绘制缩放后的图像
+        painter.drawPixmap(x, y, scaled_pixmap)
+        painter.end()
+        # 设置标签的pixmap
+        self.label_camp_frame.setPixmap(pixmap)
+
+
+    def get_face(self, qimage):
+        self.cur_face = qimage
+        
+        # Get the size of the label
+        label_size = self.label_face.size()
+        
+        # Convert QImage to QPixmap
+        img_pixmap = QPixmap.fromImage(qimage)
+        
+        # Scale the image proportionally to fit within the label
+        scaled_pixmap = img_pixmap.scaled(
+            label_size,
+            Qt.KeepAspectRatio,  # Maintain aspect ratio
+            Qt.SmoothTransformation  # Use smooth scaling algorithm
+        )
+        
+        # Set the scaled pixmap to the label
+        self.label_face.setPixmap(scaled_pixmap)
+
 
     def confirm_face_take(self):
         if self.cur_face is None:
@@ -474,44 +559,16 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
 
         self.cur_face = None
 
-    def update_frame(self, qimage):
-        label_size = self.label_camp_frame.size()
-        pixmap = QPixmap(label_size)
-        pixmap.fill(Qt.black)  # 设置背景色
-        
-        # 将QImage转换为QPixmap
-        img_pixmap = QPixmap.fromImage(qimage)
-        
-        # 等比例缩放图像，保持宽高比
-        scaled_pixmap = img_pixmap.scaled(
-            label_size, 
-            Qt.KeepAspectRatio,  # 保持宽高比
-            Qt.SmoothTransformation  # 使用平滑的缩放算法
-        )
-        painter = QPainter(pixmap)
-    
-        # 计算在标签中的居中位置
-        x = (label_size.width() - scaled_pixmap.width()) // 2
-        y = (label_size.height() - scaled_pixmap.height()) // 2
-        
-        # 在指定位置绘制缩放后的图像
-        painter.drawPixmap(x, y, scaled_pixmap)
-        painter.end()
-        
-        # 设置标签的pixmap
-        self.label_camp_frame.setPixmap(pixmap)
+        self.end_enter_face()
 
-    def get_face(self, qimage):
-        self.cur_face = qimage
-        pixmap = QPixmap.fromImage(qimage)
-        self.label_face.setPixmap(pixmap)
+   
 
     def end_enter_face(self):
         if self.face_taker is not None:
             self.face_taker.stop()
             self.face_taker = None
             self.student_dao.save_vec_db()
-            self.stacked_widget.setCurrentIndex(3)
+            self.stacked_widget.setCurrentIndex(self.page_map['student_page'])
 
 
     def closeEvent(self, event):
@@ -521,6 +578,82 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
             self.student_dao.save_vec_db()
 
         return super().closeEvent(event)
+
+
+#-------------------------------人脸重新录入相关代码------------------------------------------------------------
+    def start_re_enter_face(self):
+        """进入重新录入人脸的界面"""
+        if self.face_taker is not None:
+            return
+        self.face_taker = FaceTaker(my_config.VIDEO_PATH, self.preloaded_models)
+        self.face_taker.update_frame_signal.connect(self.update_frame_1)
+        self.face_taker.select_face_signal.connect(self.get_face_1)
+
+        
+        self.btn_pass_this_face_1.clicked.connect(self.face_taker.resume)
+        # 添加状态指示
+        self.status_bar.showMessage('正在启动摄像头...')
+
+        # 使用非阻塞方式启动
+        QTimer.singleShot(100, self.delayed_start_face_taker)
+
+  
+    def update_frame_1(self, qimage):
+        # 将捕获到的图片显示在label中
+        # label_size = self.lable_display_cap_1.size()
+        label_size = QSize(640, 480)
+        pixmap = QPixmap(label_size)
+        pixmap.fill(Qt.black)  # 设置背景色
+        img_pixmap = QPixmap.fromImage(qimage)
+        scaled_pixmap = img_pixmap.scaled(
+            label_size, 
+            Qt.KeepAspectRatio,  # 保持宽高比
+            Qt.SmoothTransformation  # 使用平滑的缩放算法
+        ) 
+        painter = QPainter(pixmap)
+        x = (label_size.width() - scaled_pixmap.width()) // 2
+        y = (label_size.height() - scaled_pixmap.height()) // 2
+        
+        # 在指定位置绘制缩放后的图像
+        painter.drawPixmap(x, y, scaled_pixmap)
+        painter.end()
+
+        self.lable_display_cap_1.setPixmap(pixmap)
+
+    
+    def get_face_1(self, qimage):
+        """将识别到的人脸放在label上"""
+        self.cur_face = qimage
+        label_size = self.label_display_cap_face_1.size()
+        img_pixmap = QPixmap.fromImage(qimage)
+        scaled_pixmap = img_pixmap.scaled(
+            label_size,
+            Qt.KeepAspectRatio,  # Maintain aspect ratio
+            Qt.SmoothTransformation  # Use smooth scaling algorithm
+        )
+        self.label_display_cap_face_1.setPixmap(scaled_pixmap)
+
+    def confirm_face_take_1(self):
+        """确定将这张人脸录入数据库"""
+        if self.cur_face is None:
+            return
+        
+        face_feature = self.face_taker.get_face_feature()
+        id = int(self.label_id_1.text())
+        self.student_dao.reset_face(id, face_feature)
+        
+        self.student_table_model.refresh()
+        self.face_taker.resume()
+        self.cur_face = None
+
+
+    def end_face_take_1(self):
+        if self.face_taker is not None:
+            self.face_taker.stop()
+            self.face_taker = None
+            self.student_dao.save_vec_db()
+            self.stacked_widget.setCurrentIndex(self.page_map['student_page'])
+
 
 
 #-------------------------------对话框相关代码------------------------------------------------------------

@@ -32,7 +32,7 @@ ON student.id = course_student.student_id;"""
         return all_stu_course_map
      
     def add_student(self,  name, gender, age, is_face_collected, face_feature=None,):
-        if face_feature:
+        if face_feature is not None:
             """如果人脸特征存在"""
             dis, ids = self.vec_db.search(face_feature, 1)
             if dis[0][0] > 0.9:
@@ -48,6 +48,20 @@ ON student.id = course_student.student_id;"""
             params = (name, gender, age, is_face_collected)  
             last_id = self.db.execute_with_lastid(query, params)
 
+
+    def reset_face(self, id, face_feature):
+        try:
+            self.vec_db.delete(np.array([id]))
+            self.vec_db.add_with_ids(face_feature, np.array([id]))
+            query = """UPDATE student
+            SET is_face_collected = %s  
+            WHERE id = %s;"""
+            params = (1, id)
+            self.db.execute(query, params)
+            return True
+        except Exception as e:
+            print(e)
+            return False
 
     def delete_student(self, row):
         res = self.get_student_info()

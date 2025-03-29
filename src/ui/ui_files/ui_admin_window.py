@@ -52,6 +52,11 @@ class Ui_AdminWindow(object):
         self.page_teacher.setObjectName(u"page_teacher")
         self.verticalLayout = QVBoxLayout(self.page_teacher)
         self.verticalLayout.setObjectName(u"verticalLayout")
+        self.label = QLabel(self.page_teacher)
+        self.label.setObjectName(u"label")
+
+        self.verticalLayout.addWidget(self.label)
+
         self.table_view_teachers = QTableView(self.page_teacher)
         self.table_view_teachers.setObjectName(u"table_view_teachers")
 
@@ -77,6 +82,11 @@ class Ui_AdminWindow(object):
         self.page_course.setObjectName(u"page_course")
         self.verticalLayout_2 = QVBoxLayout(self.page_course)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.label_3 = QLabel(self.page_course)
+        self.label_3.setObjectName(u"label_3")
+
+        self.verticalLayout_2.addWidget(self.label_3)
+
         self.table_view_course = QTableView(self.page_course)
         self.table_view_course.setObjectName(u"table_view_course")
 
@@ -102,6 +112,11 @@ class Ui_AdminWindow(object):
         self.page_stu.setObjectName(u"page_stu")
         self.verticalLayout_3 = QVBoxLayout(self.page_stu)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.label_4 = QLabel(self.page_stu)
+        self.label_4.setObjectName(u"label_4")
+
+        self.verticalLayout_3.addWidget(self.label_4)
+
         self.table_view_students = QTableView(self.page_stu)
         self.table_view_students.setObjectName(u"table_view_students")
 
@@ -109,6 +124,11 @@ class Ui_AdminWindow(object):
 
         self.horizontalLayout_4 = QHBoxLayout()
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.btn_add_stu_without_face = QPushButton(self.page_stu)
+        self.btn_add_stu_without_face.setObjectName(u"btn_add_stu_without_face")
+
+        self.horizontalLayout_4.addWidget(self.btn_add_stu_without_face)
+
         self.btn_add_stu = QPushButton(self.page_stu)
         self.btn_add_stu.setObjectName(u"btn_add_stu")
 
@@ -127,10 +147,17 @@ class Ui_AdminWindow(object):
         self.page.setObjectName(u"page")
         self.widget = QWidget(self.page)
         self.widget.setObjectName(u"widget")
-        self.widget.setGeometry(QRect(23, 12, 901, 481))
-        self.horizontalLayout_5 = QHBoxLayout(self.widget)
+        self.widget.setGeometry(QRect(23, 0, 821, 511))
+        self.verticalLayout_6 = QVBoxLayout(self.widget)
+        self.verticalLayout_6.setObjectName(u"verticalLayout_6")
+        self.verticalLayout_6.setContentsMargins(0, 0, 0, 0)
+        self.label_5 = QLabel(self.widget)
+        self.label_5.setObjectName(u"label_5")
+
+        self.verticalLayout_6.addWidget(self.label_5)
+
+        self.horizontalLayout_5 = QHBoxLayout()
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-        self.horizontalLayout_5.setContentsMargins(0, 0, 0, 0)
         self.table_view_stu_course = QTableView(self.widget)
         self.table_view_stu_course.setObjectName(u"table_view_stu_course")
 
@@ -165,6 +192,9 @@ class Ui_AdminWindow(object):
         self.table_view_stu_course_availabel.setObjectName(u"table_view_stu_course_availabel")
 
         self.horizontalLayout_5.addWidget(self.table_view_stu_course_availabel)
+
+
+        self.verticalLayout_6.addLayout(self.horizontalLayout_5)
 
         self.stacked_widget.addWidget(self.page)
         self.page_4 = QWidget()
@@ -364,7 +394,6 @@ class Ui_AdminWindow(object):
         self.horizontalLayout_9.addWidget(self.stacked_widget)
 
         self.horizontalLayout_9.setStretch(0, 1)
-        self.horizontalLayout_9.setStretch(1, 5)
         AdminWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(AdminWindow)
         self.menubar.setObjectName(u"menubar")
@@ -376,7 +405,7 @@ class Ui_AdminWindow(object):
 
         self.retranslateUi(AdminWindow)
 
-        self.stacked_widget.setCurrentIndex(4)
+        self.stacked_widget.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(AdminWindow)
@@ -401,12 +430,17 @@ class Ui_AdminWindow(object):
         ___qtreewidgetitem5.setText(0, QCoreApplication.translate("AdminWindow", u"\u8fd4\u56de", None));
         self.tree_widget.setSortingEnabled(__sortingEnabled)
 
+        self.label.setText(QCoreApplication.translate("AdminWindow", u"\u8001\u5e08\u4fe1\u606f", None))
         self.btn_add_teacher.setText(QCoreApplication.translate("AdminWindow", u"\u65b0\u589e", None))
         self.btn_delete_teacher.setText(QCoreApplication.translate("AdminWindow", u"\u5220\u9664", None))
+        self.label_3.setText(QCoreApplication.translate("AdminWindow", u"\u5168\u90e8\u8bfe\u7a0b\u4fe1\u606f", None))
         self.btn_add_course.setText(QCoreApplication.translate("AdminWindow", u"\u65b0\u589e", None))
         self.btn_delete_course.setText(QCoreApplication.translate("AdminWindow", u"\u5220\u9664", None))
-        self.btn_add_stu.setText(QCoreApplication.translate("AdminWindow", u"\u5f55\u5165", None))
+        self.label_4.setText(QCoreApplication.translate("AdminWindow", u"\u5168\u90e8\u5b66\u751f\u4fe1\u606f", None))
+        self.btn_add_stu_without_face.setText(QCoreApplication.translate("AdminWindow", u"\u5f55\u5165\u5b66\u751f\u4fe1\u606f", None))
+        self.btn_add_stu.setText(QCoreApplication.translate("AdminWindow", u"\u6279\u91cf\u5f55\u5165\u4eba\u8138\u4fe1\u606f", None))
         self.btn_delete_stu.setText(QCoreApplication.translate("AdminWindow", u"\u5220\u9664", None))
+        self.label_5.setText(QCoreApplication.translate("AdminWindow", u"\u5b66\u751f\u8bfe\u7a0b\u7ba1\u7406", None))
 #if QT_CONFIG(tooltip)
         self.btn_del_course_for_stu.setToolTip(QCoreApplication.translate("AdminWindow", u"<html><head/><body><p>\u4ece\u5f53\u524d\u6240\u9009\u8bfe\u7a0b\u4e2d\u79fb\u9664</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)

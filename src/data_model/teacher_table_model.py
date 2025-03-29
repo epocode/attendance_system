@@ -1,6 +1,7 @@
 from PySide6.QtCore import (
-    QAbstractTableModel
-)
+    QAbstractTableModel,
+    Signal,
+    )
 from PySide6.QtGui import Qt
 
 

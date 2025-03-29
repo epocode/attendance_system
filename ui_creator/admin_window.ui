@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="1,5">
+   <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="1,0">
     <item>
      <widget class="QTreeWidget" name="tree_widget">
       <property name="styleSheet">
@@ -58,10 +58,17 @@ color: white;
     <item>
      <widget class="QStackedWidget" name="stacked_widget">
       <property name="currentIndex">
-       <number>4</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="page_teacher">
        <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>老师信息</string>
+          </property>
+         </widget>
+        </item>
         <item>
          <widget class="QTableView" name="table_view_teachers"/>
         </item>
@@ -88,6 +95,13 @@ color: white;
       <widget class="QWidget" name="page_course">
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>全部课程信息</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QTableView" name="table_view_course"/>
         </item>
         <item>
@@ -113,14 +127,28 @@ color: white;
       <widget class="QWidget" name="page_stu">
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>全部学生信息</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QTableView" name="table_view_students"/>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_4">
           <item>
+           <widget class="QPushButton" name="btn_add_stu_without_face">
+            <property name="text">
+             <string>录入学生信息</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QPushButton" name="btn_add_stu">
             <property name="text">
-             <string>录入</string>
+             <string>批量录入人脸信息</string>
             </property>
            </widget>
           </item>
@@ -140,62 +168,73 @@ color: white;
         <property name="geometry">
          <rect>
           <x>23</x>
-          <y>12</y>
-          <width>901</width>
-          <height>481</height>
+          <y>0</y>
+          <width>821</width>
+          <height>511</height>
          </rect>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <layout class="QVBoxLayout" name="verticalLayout_6">
          <item>
-          <widget class="QTableView" name="table_view_stu_course"/>
+          <widget class="QLabel" name="label_5">
+           <property name="text">
+            <string>学生课程管理</string>
+           </property>
+          </widget>
          </item>
          <item>
-          <layout class="QVBoxLayout" name="verticalLayout_5">
+          <layout class="QHBoxLayout" name="horizontalLayout_5">
            <item>
-            <widget class="QPushButton" name="btn_del_course_for_stu">
-             <property name="toolTip">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;从当前所选课程中移除&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset resource="resources.qrc">
-               <normaloff>:/icons/assets/icons/arrow_right.png</normaloff>:/icons/assets/icons/arrow_right.png</iconset>
-             </property>
-            </widget>
+            <widget class="QTableView" name="table_view_stu_course"/>
            </item>
            <item>
-            <spacer name="verticalSpacer">
-             <property name="orientation">
-              <enum>Qt::Orientation::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
+            <layout class="QVBoxLayout" name="verticalLayout_5">
+             <item>
+              <widget class="QPushButton" name="btn_del_course_for_stu">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;从当前所选课程中移除&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="resources.qrc">
+                 <normaloff>:/icons/assets/icons/arrow_right.png</normaloff>:/icons/assets/icons/arrow_right.png</iconset>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer">
+               <property name="orientation">
+                <enum>Qt::Orientation::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btn_add_course_for_stu">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;添加所选课程&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="resources.qrc">
+                 <normaloff>:/icons/arrow_right</normaloff>:/icons/arrow_right</iconset>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
            <item>
-            <widget class="QPushButton" name="btn_add_course_for_stu">
-             <property name="toolTip">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;添加所选课程&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset resource="resources.qrc">
-               <normaloff>:/icons/arrow_right</normaloff>:/icons/arrow_right</iconset>
-             </property>
-            </widget>
+            <widget class="QTableView" name="table_view_stu_course_availabel"/>
            </item>
           </layout>
-         </item>
-         <item>
-          <widget class="QTableView" name="table_view_stu_course_availabel"/>
          </item>
         </layout>
        </widget>

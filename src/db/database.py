@@ -30,7 +30,7 @@ class DataBase:
             except Exception as e:
                 print(e)
             
-        return False
+        
     
     
     def execute(self, query, params):

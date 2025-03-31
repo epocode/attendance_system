@@ -22,12 +22,17 @@ from src.outer_lab.facenet_pytorch import InceptionResnetV1
 
 from datetime import datetime
 
+import logging
+
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
 class FaceDetection(QThread):
     #创建对应的信号
     update_frame_signal = Signal(QImage)
     transform_face_ids = Signal(int)
 
-    def __init__(self, video_source, person_info_model):
+    def __init__(self, video_source, preloaded_model, stu_dao):
         super().__init__()
 
         self.is_running = True
@@ -36,14 +41,19 @@ class FaceDetection(QThread):
         self.model_input_h = 640
 
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
-        # print('device:', self.device)
-        self.model = YOLO(my_config.MODEL_PATH).to(self.device)
-        self.landmarks_extractor = dlib.shape_predictor(my_config.LANDMARK_PATH)
         
-        self.face_feature_extractor = InceptionResnetV1(pretrained='vggface2').eval().to(self.device)
-        #数据库相关对象
-        self.person_info_model = person_info_model
-        cast(PersonInfoModel, self.person_info_model)
+        # 使用预加载模型或者重新加载
+        if preloaded_model:
+            self.model = preloaded_model['yolo']
+            self.landmarks_extractor = preloaded_model['landmarks_extractor']
+            self.face_feature_extractor = preloaded_model['face_feature_extractor']
+            
+        else:
+            self.model = YOLO(my_config.MODEL_PATH).to(self.device)
+            self.landmarks_extractor = dlib.shape_predictor(my_config.LANDMARK_PATH)
+            self.face_feature_extractor = InceptionResnetV1(pretrained='vggface2').eval().to(self.device)
+
+        self.stu_dao = stu_dao
 
     def run(self):
         while self.is_running:
@@ -68,10 +78,7 @@ class FaceDetection(QThread):
             input = input / 255.
             input = input.unsqueeze(0).to(self.device)
 
-            s = time.time()
             res = self.model(input, verbose=False)
-            e = time.time()
-            print('model predict time:', (e - s) * 1000)
 
             boxes = res[0].boxes
 
@@ -90,11 +97,13 @@ class FaceDetection(QThread):
                 face_feature = self.face_feature_extractor(torch.from_numpy(aligned_face_rgb).permute(2, 0, 1).unsqueeze(0).float().to(self.device))
                 face_feature = face_feature.cpu().detach().numpy()
  
-                id = self.person_info_model.search_id_by_feature(face_feature)
+                id = self.stu_dao.search_id_by_feature(face_feature)
                 if id:
+                    id = int(id)
                     self.transform_face_ids.emit(id)
                     #查询人脸的相关信息
-                    name = self.person_info_model.face_info(id)
+                    name = self.stu_dao.get_name_by_id(id)
+
                     #将人名和id显示在对应的人脸框上边
                     frame_rgb = self.put_text_to_img(frame_rgb, f"{name}, {id}", x1, y1)
                 

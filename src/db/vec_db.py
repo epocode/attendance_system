@@ -17,6 +17,9 @@ class VecDB:
 
             except Exception as e:
                 print(e)
+        else:
+            print('数据库不存在，创建新的数据库')
+    
 
 
     def search(self, feature, k):
@@ -28,6 +31,7 @@ class VecDB:
     def save(self):
         try:
             faiss.write_index(self.vec_db, os.path.join(my_config.VEC_DB_PATH, 'vecdb' + '.faiss'))
+            print('保存成功')
         except Exception as e:
             print('保存失败')
 

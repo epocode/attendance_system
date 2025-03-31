@@ -107,10 +107,7 @@ class FaceTaker(QThread):
                             aligned_face_bgr = dlib.get_face_chip(frame, landmarks)
                             aligned_face_rgb = cv2.cvtColor(aligned_face_bgr, cv2.COLOR_BGR2RGB)
 
-                            # end_time_res50 = time.time()
-                            # print(f"""yolo模型检测时间为{(end_time_yolo - start_time) * 1000:.6f}ms,
-                            #        头部姿态检测时间为{(end_time_res50 - start_time) * 1000:.6f}ms""")
-
+                           
                             check_result = self.quality_checker.check(frame, aligned_face_rgb)
                             
                             #check_result 格式(是否满足要求， 不满足要求的原因)
@@ -130,7 +127,6 @@ class FaceTaker(QThread):
             enter_tips = ""
 
             self.send_img(frame_rgb, self.update_frame_signal)
-            # self.mutex.unlock()
             cv2.waitKey(1000 // 30)  # 控制帧率
 
         self.cap.release()

@@ -27,6 +27,17 @@ WHERE course_name not in (
         res = [row[0] for row in res]
         return res
 
+
+    def get_stu_by_course(self, course_name):
+        sql = """
+SELECT id, name 
+FROM course_student JOIN student
+ON course_student.student_id = student.id
+WHERE course_name = %s;"""
+        params = [course_name]
+        res = self.db.fetchall(sql, params)
+        return res
+
     def add_stu_to_courses(self, stu_id, course_list):
         wait_for_insert_data = []
         for course_name in course_list:

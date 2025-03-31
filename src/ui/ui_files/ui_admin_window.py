@@ -215,27 +215,27 @@ class Ui_AdminWindow(object):
         self.stacked_widget.addWidget(self.page_stu)
         self.page = QWidget()
         self.page.setObjectName(u"page")
-        self.widget = QWidget(self.page)
-        self.widget.setObjectName(u"widget")
-        self.widget.setGeometry(QRect(23, 0, 821, 511))
-        self.verticalLayout_6 = QVBoxLayout(self.widget)
+        self.layoutWidget = QWidget(self.page)
+        self.layoutWidget.setObjectName(u"layoutWidget")
+        self.layoutWidget.setGeometry(QRect(23, 0, 821, 511))
+        self.verticalLayout_6 = QVBoxLayout(self.layoutWidget)
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
         self.verticalLayout_6.setContentsMargins(0, 0, 0, 0)
-        self.label_5 = QLabel(self.widget)
+        self.label_5 = QLabel(self.layoutWidget)
         self.label_5.setObjectName(u"label_5")
 
         self.verticalLayout_6.addWidget(self.label_5)
 
         self.horizontalLayout_5 = QHBoxLayout()
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-        self.table_view_stu_course = QTableView(self.widget)
+        self.table_view_stu_course = QTableView(self.layoutWidget)
         self.table_view_stu_course.setObjectName(u"table_view_stu_course")
 
         self.horizontalLayout_5.addWidget(self.table_view_stu_course)
 
         self.verticalLayout_5 = QVBoxLayout()
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
-        self.btn_del_course_for_stu = QPushButton(self.widget)
+        self.btn_del_course_for_stu = QPushButton(self.layoutWidget)
         self.btn_del_course_for_stu.setObjectName(u"btn_del_course_for_stu")
         icon = QIcon()
         icon.addFile(u":/icons/assets/icons/arrow_right.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
@@ -247,7 +247,7 @@ class Ui_AdminWindow(object):
 
         self.verticalLayout_5.addItem(self.verticalSpacer)
 
-        self.btn_add_course_for_stu = QPushButton(self.widget)
+        self.btn_add_course_for_stu = QPushButton(self.layoutWidget)
         self.btn_add_course_for_stu.setObjectName(u"btn_add_course_for_stu")
         icon1 = QIcon()
         icon1.addFile(u":/icons/arrow_right", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
@@ -258,7 +258,7 @@ class Ui_AdminWindow(object):
 
         self.horizontalLayout_5.addLayout(self.verticalLayout_5)
 
-        self.table_view_stu_course_availabel = QTableView(self.widget)
+        self.table_view_stu_course_availabel = QTableView(self.layoutWidget)
         self.table_view_stu_course_availabel.setObjectName(u"table_view_stu_course_availabel")
 
         self.horizontalLayout_5.addWidget(self.table_view_stu_course_availabel)
@@ -269,15 +269,15 @@ class Ui_AdminWindow(object):
         self.stacked_widget.addWidget(self.page)
         self.page_4 = QWidget()
         self.page_4.setObjectName(u"page_4")
-        self.widget1 = QWidget(self.page_4)
-        self.widget1.setObjectName(u"widget1")
-        self.widget1.setGeometry(QRect(30, 12, 901, 551))
-        self.horizontalLayout_7 = QHBoxLayout(self.widget1)
+        self.layoutWidget1 = QWidget(self.page_4)
+        self.layoutWidget1.setObjectName(u"layoutWidget1")
+        self.layoutWidget1.setGeometry(QRect(30, 12, 901, 551))
+        self.horizontalLayout_7 = QHBoxLayout(self.layoutWidget1)
         self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
         self.horizontalLayout_7.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_4 = QVBoxLayout()
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.label_camp_frame = QLabel(self.widget1)
+        self.label_camp_frame = QLabel(self.layoutWidget1)
         self.label_camp_frame.setObjectName(u"label_camp_frame")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -290,17 +290,17 @@ class Ui_AdminWindow(object):
 
         self.horizontalLayout_6 = QHBoxLayout()
         self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
-        self.btn_start_enter = QPushButton(self.widget1)
+        self.btn_start_enter = QPushButton(self.layoutWidget1)
         self.btn_start_enter.setObjectName(u"btn_start_enter")
 
         self.horizontalLayout_6.addWidget(self.btn_start_enter)
 
-        self.combo_box_video_source = QComboBox(self.widget1)
+        self.combo_box_video_source = QComboBox(self.layoutWidget1)
         self.combo_box_video_source.setObjectName(u"combo_box_video_source")
 
         self.horizontalLayout_6.addWidget(self.combo_box_video_source)
 
-        self.btn_end_enter = QPushButton(self.widget1)
+        self.btn_end_enter = QPushButton(self.layoutWidget1)
         self.btn_end_enter.setObjectName(u"btn_end_enter")
 
         self.horizontalLayout_6.addWidget(self.btn_end_enter)
@@ -314,7 +314,7 @@ class Ui_AdminWindow(object):
 
         self.verticalLayout_7 = QVBoxLayout()
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
-        self.label_face = QLabel(self.widget1)
+        self.label_face = QLabel(self.layoutWidget1)
         self.label_face.setObjectName(u"label_face")
         self.label_face.setEnabled(True)
         sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
@@ -327,7 +327,7 @@ class Ui_AdminWindow(object):
 
         self.verticalLayout_7.addWidget(self.label_face)
 
-        self.groupBox = QGroupBox(self.widget1)
+        self.groupBox = QGroupBox(self.layoutWidget1)
         self.groupBox.setObjectName(u"groupBox")
         self.formLayout = QFormLayout(self.groupBox)
         self.formLayout.setObjectName(u"formLayout")
@@ -378,7 +378,7 @@ class Ui_AdminWindow(object):
 
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.btn_confirm_collect = QPushButton(self.widget1)
+        self.btn_confirm_collect = QPushButton(self.layoutWidget1)
         self.btn_confirm_collect.setObjectName(u"btn_confirm_collect")
         self.btn_confirm_collect.setStyleSheet(u"QPushButton {\n"
 "    background-color: #3498db; /* \u6309\u94ae\u80cc\u666f\u989c\u8272\uff08\u84dd\u8272\uff09 */\n"
@@ -402,7 +402,7 @@ class Ui_AdminWindow(object):
 
         self.horizontalLayout.addWidget(self.btn_confirm_collect)
 
-        self.btn_pass_collect = QPushButton(self.widget1)
+        self.btn_pass_collect = QPushButton(self.layoutWidget1)
         self.btn_pass_collect.setObjectName(u"btn_pass_collect")
         self.btn_pass_collect.setStyleSheet(u"QPushButton {\n"
 "    background-color: #3498db; /* \u6309\u94ae\u80cc\u666f\u989c\u8272\uff08\u84dd\u8272\uff09 */\n"

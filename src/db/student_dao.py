@@ -1,6 +1,10 @@
 from src.db.database import DataBase
 from src.db.vec_db import VecDB
 import numpy as np
+import logging
+
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 class StudentDAO:
     def __init__(self, db:DataBase):
@@ -70,6 +74,26 @@ ON student.id = course_student.student_id;"""
         params = (id,)
         self.db.execute(query, params)
         self.vec_db.delete(np.array([id]))
+
+    def get_name_by_id(self, id):
+        """根据id查询姓名"""
+        query = 'SELECT name FROM student WHERE id = %s;'
+        params = [id]
+        res = self.db.fetchall(query, params)
+
+        if res:
+            logger.debug(f"查询到的姓名为{res[0][0]}")
+            return res[0][0]
+        else:
+            return None
+
+    def search_id_by_feature(self, face_feature):
+        """根据人脸特征查询id"""
+        dis, ids = self.vec_db.search(face_feature, 1)
+        if dis[0][0] < 0.9:
+            return ids[0][0]
+        else:
+            return None
 
     def save_vec_db(self):
         self.vec_db.save()

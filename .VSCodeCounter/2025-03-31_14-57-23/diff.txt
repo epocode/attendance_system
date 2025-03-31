@@ -1,0 +1,40 @@
+Date : 2025-03-31 14:57:23
+Directory : c:\Users\shann\Desktop\SE\attendance_system\src
+Total : 10 files,  274 codes, 8 comments, 69 blanks, all 351 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Python   |         10 |        274 |          8 |         69 |        351 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++--------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                           | files      | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                              |         10 |        274 |          8 |         69 |        351 |
+| core                                                                           |          1 |          4 |         -1 |          2 |          5 |
+| data_model                                                                     |          1 |         30 |          0 |         10 |         40 |
+| db                                                                             |          4 |        -49 |         -1 |        -17 |        -67 |
+| ui                                                                             |          4 |        289 |         10 |         74 |        373 |
+| ui (Files)                                                                     |          2 |         79 |         10 |         34 |        123 |
+| ui\ui_files                                                                    |          2 |        210 |          0 |         40 |        250 |
++--------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++--------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                       | language | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| c:\Users\shann\Desktop\SE\attendance_system\src\core\face_detect.py            | Python   |          4 |         -1 |          2 |          5 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\data_model\absent_model.py     | Python   |         30 |          0 |         10 |         40 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\db\attendance_info_dao.py      | Python   |        -14 |          0 |         -2 |        -16 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\db\qt_data_models.py           | Python   |        -73 |         -1 |        -20 |        -94 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\db\stu_course_dao.py           | Python   |          9 |          0 |          2 |         11 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\db\student_dao.py              | Python   |         29 |          0 |          3 |         32 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\ui\admin_window.py             | Python   |         82 |         12 |         37 |        131 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\ui\main_window.py              | Python   |         -3 |         -2 |         -3 |         -8 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\ui\ui_files\ui_admin_window.py | Python   |        131 |          0 |         40 |        171 |
+| c:\Users\shann\Desktop\SE\attendance_system\src\ui\ui_files\ui_main_window.py  | Python   |         79 |          0 |          0 |         79 |
+| Total                                                                          |          |        274 |          8 |         69 |        351 |
++--------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

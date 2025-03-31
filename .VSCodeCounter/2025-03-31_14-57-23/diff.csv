@@ -1,0 +1,12 @@
+"filename", "language", "Python", "comment", "blank", "total"
+"c:\Users\shann\Desktop\SE\attendance_system\src\core\face_detect.py", "Python", 4, -1, 2, 5
+"c:\Users\shann\Desktop\SE\attendance_system\src\data_model\absent_model.py", "Python", 30, 0, 10, 40
+"c:\Users\shann\Desktop\SE\attendance_system\src\db\attendance_info_dao.py", "Python", -14, 0, -2, -16
+"c:\Users\shann\Desktop\SE\attendance_system\src\db\qt_data_models.py", "Python", -73, -1, -20, -94
+"c:\Users\shann\Desktop\SE\attendance_system\src\db\stu_course_dao.py", "Python", 9, 0, 2, 11
+"c:\Users\shann\Desktop\SE\attendance_system\src\db\student_dao.py", "Python", 29, 0, 3, 32
+"c:\Users\shann\Desktop\SE\attendance_system\src\ui\admin_window.py", "Python", 82, 12, 37, 131
+"c:\Users\shann\Desktop\SE\attendance_system\src\ui\main_window.py", "Python", -3, -2, -3, -8
+"c:\Users\shann\Desktop\SE\attendance_system\src\ui\ui_files\ui_admin_window.py", "Python", 131, 0, 40, 171
+"c:\Users\shann\Desktop\SE\attendance_system\src\ui\ui_files\ui_main_window.py", "Python", 79, 0, 0, 79
+"Total", "-", 274, 8, 69, 351

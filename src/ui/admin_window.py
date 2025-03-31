@@ -33,6 +33,11 @@ from src.db.stu_course_dao import StuCourseDao
 from src.data_model.course_stu_model import CourseStuModel
 from src.data_model.course_stu_available_model import CourseStuAvailableModel
 
+import logging
+
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
 class AdminWindow(Ui_AdminWindow, QMainWindow):
     def __init__(self):
         super().__init__()
@@ -45,9 +50,6 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
                          "student_page":2, "stu_course_page":3,
                          "enter_stu_page": 4}
 
-        #人脸录入相关
-        self.face_taker = None
-        self.cur_face = None
         
         #绑定功能切换
         self.initialized_pages = set()
@@ -324,6 +326,10 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         self.btn_end_cap_face_1.clicked.connect(self.end_face_take_1)
         self.btn_confirm_this_face_1.clicked.connect(self.confirm_face_take_1)
 
+        self.face_taker = None
+        self.cur_face = None
+
+
         self.stacked_widget.setCurrentIndex(5)
 
     def on_manage_course_clicked(self, row):
@@ -462,9 +468,7 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         """ 下面是关于人脸录入的相关函数，为了避免与界面管理的代码混在一起，因此单独将其
         放到下边，使用注释进行分割
         """        
-        if self.face_taker is not None:
-            return
-        
+    
         #显示加载进度指示
         self.setCursor(Qt.WaitCursor)
 
@@ -558,9 +562,6 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         self.face_taker.resume()
 
         self.cur_face = None
-
-        self.end_enter_face()
-
    
 
     def end_enter_face(self):
@@ -568,11 +569,12 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
             self.face_taker.stop()
             self.face_taker = None
             self.student_dao.save_vec_db()
+            self.data_dirty['student_page'] = True  # 设置学生页面为脏
             self.stacked_widget.setCurrentIndex(self.page_map['student_page'])
 
 
     def closeEvent(self, event):
-        if self.face_taker is not None:
+        if hasattr(self, 'face_taker') and self.face_taker is not None:
             self.face_taker.stop()
             self.face_taker = None
             self.student_dao.save_vec_db()

@@ -4,6 +4,9 @@ from ultralytics import YOLO
 import config.my_config as my_config
 import dlib
 from src.outer_lab.facenet_pytorch import InceptionResnetV1
+import logging
+
+logging.getLogger("torch").setLevel(logging.ERROR)
 
 class ModelPreloadThread(QThread):
     preload_finished = Signal(dict)

@@ -321,7 +321,13 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         self.label_gender_1.setText(gender)
         self.label_age_1.setText(str(age))
 
-
+        # 先断开所有连接
+        try:
+            self.btn_start_cap_face_1.clicked.disconnect()
+            self.btn_end_cap_face_1.clicked.disconnect()
+            self.btn_confirm_this_face_1.clicked.disconnect()   
+        except TypeError:
+            pass
         self.btn_start_cap_face_1.clicked.connect(self.start_re_enter_face)
         self.btn_end_cap_face_1.clicked.connect(self.end_face_take_1)
         self.btn_confirm_this_face_1.clicked.connect(self.confirm_face_take_1)
@@ -472,6 +478,12 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         #显示加载进度指示
         self.setCursor(Qt.WaitCursor)
 
+        # 断开之前所有的连接
+        try:
+            self.btn_pass_this_face_1.clicked.disconnect()
+        except TypeError:
+            pass
+
         # face_taker创建
         self.face_taker = FaceTaker(my_config.VIDEO_PATH, self.preloaded_models)
         self.face_taker.update_frame_signal.connect(self.update_frame)
@@ -591,8 +603,11 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         self.face_taker.update_frame_signal.connect(self.update_frame_1)
         self.face_taker.select_face_signal.connect(self.get_face_1)
 
-        
-        self.btn_pass_this_face_1.clicked.connect(self.face_taker.resume)
+        try:
+            self.btn_pass_this_face_1.clicked.disconnect()
+        except TypeError:
+            pass
+        self.btn_pass_this_face_1.clicked.connect(self.on_pass_this_face_clicked)
         # 添加状态指示
         self.status_bar.showMessage('正在启动摄像头...')
 
@@ -636,7 +651,7 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         self.label_display_cap_face_1.setPixmap(scaled_pixmap)
 
     def confirm_face_take_1(self):
-        """确定将这张人脸录入数据库"""
+        """确定将这张人脸录入数据库，因为对于重新录入人脸这个过程来说，录上了就可以直接退出了"""
         if self.cur_face is None:
             return
         
@@ -648,13 +663,23 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         self.face_taker.resume()
         self.cur_face = None
 
+        # 结束
+        self.end_face_take_1()
+
+    def on_pass_this_face_clicked(self):
+        """跳过当前人脸录入"""
+        if self.face_taker is not None:
+            self.face_taker.resume()
+        else:
+            print("face_taker 不存在")
+
 
     def end_face_take_1(self):
         if self.face_taker is not None:
             self.face_taker.stop()
             self.face_taker = None
             self.student_dao.save_vec_db()
-            self.stacked_widget.setCurrentIndex(self.page_map['student_page'])
+        self.stacked_widget.setCurrentIndex(self.page_map['student_page'])
 
 
 

@@ -94,18 +94,22 @@ class FaceDetection(QThread):
                 aligned_face_rgb = cv2.cvtColor(aligned_face_bgr, cv2.COLOR_BGR2RGB)
                 
                 #剪裁时间大概为4ms，影响不大,特征提取时间大概为40ms
-                face_feature = self.face_feature_extractor(torch.from_numpy(aligned_face_rgb).permute(2, 0, 1).unsqueeze(0).float().to(self.device))
-                face_feature = face_feature.cpu().detach().numpy()
- 
-                id = self.stu_dao.search_id_by_feature(face_feature)
-                if id:
+                with torch.no_grad():
+                    face_feature = self.face_feature_extractor(torch.from_numpy(aligned_face_rgb).permute(2, 0, 1).unsqueeze(0).float().to(self.device))
+                    face_feature = torch.nn.functional.normalize(face_feature, p=2, dim=1)
+                    face_feature = face_feature.cpu().detach().numpy()
+                   
+                res = self.stu_dao.search_id_by_feature(face_feature)
+                if res:
+                    id = res[0]
+                    dis = res[1]
                     id = int(id)
                     self.transform_face_ids.emit(id)
                     #查询人脸的相关信息
                     name = self.stu_dao.get_name_by_id(id)
 
                     #将人名和id显示在对应的人脸框上边
-                    frame_rgb = self.put_text_to_img(frame_rgb, f"{name}, {id}", x1, y1)
+                    frame_rgb = self.put_text_to_img(frame_rgb, f"{name}, {id}, {dis}", x1, y1)
                 
                 cv2.rectangle(frame_rgb, (x1, y1), (x2, y2), (0, 255, 0), 2)
             

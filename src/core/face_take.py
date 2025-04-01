@@ -161,8 +161,10 @@ class FaceTaker(QThread):
     def get_face_feature(self):
         if self.stored_face_rgb is None:
             return
-        face_feature = self.face_feature_extractor(torch.from_numpy(self.stored_face_rgb).permute(2, 0, 1).unsqueeze(0).float().to(self.device))
-        face_feature = face_feature.cpu().detach().numpy()
+        with torch.no_grad():
+            face_feature = self.face_feature_extractor(torch.from_numpy(self.stored_face_rgb).permute(2, 0, 1).unsqueeze(0).float().to(self.device))
+            face_feature = torch.nn.functional.normalize(face_feature, p=2, dim=1)
+            face_feature = face_feature.cpu().detach().numpy()
         self.stored_face_rgb = None
         return face_feature
 

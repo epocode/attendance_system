@@ -5,7 +5,7 @@ from src.ui.login_window import LoginWindow
 from PySide6.QtWidgets import QApplication
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
+    app = QApplication(sys.argv)    
 
 
     login_window = LoginWindow()

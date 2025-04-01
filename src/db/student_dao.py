@@ -89,9 +89,10 @@ ON student.id = course_student.student_id;"""
 
     def search_id_by_feature(self, face_feature):
         """根据人脸特征查询id"""
-        dis, ids = self.vec_db.search(face_feature, 1)
-        if dis[0][0] < 0.9:
-            return ids[0][0]
+        dis, ids = self.vec_db.search(face_feature, 5)
+        print("dis:", dis, "\nids:", ids)
+        if dis[0][0] > 0.9:
+            return ids[0][0], dis[0][0] 
         else:
             return None
 

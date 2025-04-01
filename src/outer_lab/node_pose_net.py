@@ -52,7 +52,6 @@ class HeadPosePred():
         pitch_predicted = torch.sum(pitch_predicted.data[0] * idx_tensor) * 3 - 99
         roll_predicted = torch.sum(roll_predicted.data[0] * idx_tensor) * 3 - 99
 
-        print(yaw_predicted, pitch_predicted, roll_predicted)
         #随便设定一个阈值，后面再进行调整
         if (yaw_predicted < -30 or yaw_predicted > 30 or pitch_predicted < -20 or pitch_predicted > 20 or
             roll_predicted < -10 or roll_predicted > 10):

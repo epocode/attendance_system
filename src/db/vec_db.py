@@ -42,6 +42,7 @@ class VecDB:
             # 更新JSON对象
             for i, id in enumerate(ids):
                 self.json_data[str(id)] = features[i].tolist()
+            self.save()
         except Exception as e:
             print(f"添加向量失败:{e}")
 
@@ -64,6 +65,7 @@ class VecDB:
             id_str = str(id)
             if id_str in self.json_data:
                 del self.json_data[id_str]
+            self.save()
         except Exception as e:
             print(f"删除向量失败:{e}")
 

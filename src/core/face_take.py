@@ -104,7 +104,7 @@ class FaceTaker(QThread):
                             face_box = dlib.rectangle(x1, y1, x2, y2)
                             
                             landmarks = self.landmarks_extractor(frame_gray, face_box)
-                            aligned_face_bgr = dlib.get_face_chip(frame, landmarks)
+                            aligned_face_bgr = dlib.get_face_chip(frame, landmarks, size=150, padding=0.25)
                             aligned_face_rgb = cv2.cvtColor(aligned_face_bgr, cv2.COLOR_BGR2RGB)
 
                            
@@ -142,8 +142,6 @@ class FaceTaker(QThread):
         return img
 
     def stop(self):
-        self.send_img(self.blank_img, self.update_frame_signal)
-        self.send_img(self.blank_img_s, self.select_face_signal)
         self.is_running = False
         self.quit()
         self.wait()  
@@ -162,9 +160,15 @@ class FaceTaker(QThread):
         if self.stored_face_rgb is None:
             return
         with torch.no_grad():
-            face_feature = self.face_feature_extractor(torch.from_numpy(self.stored_face_rgb).permute(2, 0, 1).unsqueeze(0).float().to(self.device))
+            face_tensor = torch.from_numpy(self.stored_face_rgb).permute(2, 0, 1).unsqueeze(0).float()
+            face_tensor = face_tensor / 127.5 - 1  # 从[0,255]转换到[-1,1]
+            face_tensor = face_tensor.to(self.device)
+            
+            # 特征提取
+            face_feature = self.face_feature_extractor(face_tensor)
             face_feature = torch.nn.functional.normalize(face_feature, p=2, dim=1)
             face_feature = face_feature.cpu().detach().numpy()
+
         self.stored_face_rgb = None
         return face_feature
 

@@ -39,18 +39,24 @@ ON student.id = course_student.student_id;"""
         if face_feature is not None:
             """如果人脸特征存在"""
             dis, ids = self.vec_db.search(face_feature, 1)
-            if dis[0][0] > 0.9:
-                print('当前人脸已经录入')
-                return
+            if dis[0][0] > 0.95:
+                existing_id = int(ids[0][0])
+                existing_name = self.get_name_by_id(existing_id)
+                print(f'警告：当前人脸与ID为{existing_id}的学生"{existing_name}"相似度达到{dis[0][0]:.2f}，可能是重复录入')
+                return False
+        try:
+            self.db.begin_transaction()
             query = 'INSERT INTO student (name, gender, age, is_face_collected) VALUES (%s, %s, %s, %s);'
             params = (name, gender, age, is_face_collected)  
             last_id = self.db.execute_with_lastid(query, params)  
-            if last_id != 0:
+            if face_feature is not None and last_id != 0:
                 self.vec_db.add_with_ids(face_feature, np.array([last_id]))
-        else:
-            query = 'INSERT INTO student (name, gender, age, is_face_collected) VALUES (%s, %s, %s, %s);'
-            params = (name, gender, age, is_face_collected)  
-            last_id = self.db.execute_with_lastid(query, params)
+            self.db.commit()
+            return True
+        except Exception as e:
+            print(e)
+            self.db.rollback()
+            return False
 
 
     def reset_face(self, id, face_feature):

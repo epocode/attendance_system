@@ -285,18 +285,59 @@ class MainWindow(Ui_MainWindow, QMainWindow):
 
 
     def on_end_detect_face_clicked(self):
-        if self.face_detector is not None:
-            # 将还没签到的学生信息添加进去
-            for row in range(self.absent_model.rowCount()):
-                stu_id = self.absent_model.data(self.absent_model.index(row, 0), Qt.DisplayRole)
-                self.attendance_info_dao.add_attendance_info(stu_id, self.course_name, datetime.datetime.now().strftime('%Y-%m-%d'), False)
-            self.face_detector.stop()
-            self.face_detector = None
-
+        """结束人脸检测"""
+        try:
+            if hasattr(self, 'face_detector') and self.face_detector is not None:
+                # 将还没签到的学生信息添加进去
+                if hasattr(self, 'absent_model') and self.absent_model is not None:
+                    for row in range(self.absent_model.rowCount()):
+                        stu_id = self.absent_model.data(self.absent_model.index(row, 0), Qt.DisplayRole)
+                        # 检查attendance_info_dao是否初始化
+                        if hasattr(self, 'attendance_info_dao') and self.attendance_info_dao is not None:
+                            self.attendance_info_dao.add_attendance_info(
+                                stu_id, 
+                                self.course_name, 
+                                datetime.datetime.now().strftime('%Y-%m-%d'), 
+                                False
+                            )
+                
+                # 停止检测线程
+                self.face_detector.stop()
+                self.face_detector = None
+                
+                # 清除显示
+                blank_pixmap = QPixmap(self.label_display_cap.size())
+                blank_pixmap.fill(Qt.black)
+                self.label_display_cap.setPixmap(blank_pixmap)
+                
+                # 提示用户
+                self.status_bar.showMessage("考勤已结束")
+        except Exception as e:
+            print(f"结束人脸检测时发生错误: {e}")
     
     def closeEvent(self, event):
-        self.on_end_detect_face_clicked()
+        """窗口关闭事件处理"""
+        try:
+            # 如果人脸检测正在进行，先停止它
+            if hasattr(self, 'face_detector') and self.face_detector is not None:
+                try:
+                    self.face_detector.stop()
+                    self.face_detector = None
+                except Exception as e:
+                    print(f"关闭人脸检测线程时出错: {e}")
+            
+            # 关闭数据库连接或执行其他清理操作
+            if hasattr(self, 'db') and self.db is not None:
+                try:
+                    # 如果有自定义的关闭方法
+                    self.db.close()
+                    pass
+                except Exception as e:
+                    print(f"关闭数据库连接时出错: {e}")
+        except Exception as e:
+            print(f"程序关闭时发生错误: {e}")
+            
+        # 调用父类的关闭事件
         super().closeEvent(event)
-        #记得关闭所有的数据库连接
 
 

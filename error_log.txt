@@ -1,0 +1,18 @@
+2025-04-07 16:11:15.677571 - 未捕获的异常: OperationalError: MySQL Connection not available.
+  File "C:\Users\shann\Desktop\SE\attendance_system\src\ui\main_window.py", line 253, in update_absent
+    self.attendance_info_dao.add_attendance_info(stu_id, self.course_name, cur_date, True)
+  File "C:\Users\shann\Desktop\SE\attendance_system\src\db\attendance_info_dao.py", line 67, in add_attendance_info
+    self.db.execute(query, params)
+  File "C:\Users\shann\Desktop\SE\attendance_system\src\db\database.py", line 66, in execute
+    with self.conn.cursor() as cursor:
+  File "c:\Users\shann\anaconda3\envs\SE\lib\site-packages\mysql\connector\connection_cext.py", line 773, in cursor
+    raise OperationalError("MySQL Connection not available.")
+2025-04-07 16:12:38.223112 - 未捕获的异常: OperationalError: MySQL Connection not available.
+  File "C:\Users\shann\Desktop\SE\attendance_system\src\ui\main_window.py", line 253, in update_absent
+    self.attendance_info_dao.add_attendance_info(stu_id, self.course_name, cur_date, True)
+  File "C:\Users\shann\Desktop\SE\attendance_system\src\db\attendance_info_dao.py", line 67, in add_attendance_info
+    self.db.execute(query, params)
+  File "C:\Users\shann\Desktop\SE\attendance_system\src\db\database.py", line 66, in execute
+    with self.conn.cursor() as cursor:
+  File "c:\Users\shann\anaconda3\envs\SE\lib\site-packages\mysql\connector\connection_cext.py", line 773, in cursor
+    raise OperationalError("MySQL Connection not available.")

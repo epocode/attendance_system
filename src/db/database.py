@@ -109,4 +109,29 @@ class DataBase:
                 self.conn = None
             except:
                 print("关闭数据库连接失败")
+
+    def begin_transaction(self):
+        conn = self.get_connection()
+        if conn is None:
+            print("无法获取数据库连接")
+            return False
+        
+        try:
+            conn.start_transaction()
+            return True
+        except Exception as e:
+            print(f"开始事务失败: {e}")
+            return False
+    def commit(self):
+        conn = self.get_connection()
+        if conn is None:
+            print("无法获取数据库连接")
+            return False
+        
+        try:
+            conn.commit()
+            return True
+        except Exception as e:
+            print(f"提交事务失败: {e}")
+            return False
         

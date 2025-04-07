@@ -1,3 +1,4 @@
+import os
 from PySide6.QtWidgets import (
     QMainWindow,
     QDialog,
@@ -11,11 +12,12 @@ from PySide6.QtWidgets import (
     QStyledItemDelegate,
     QWidget,
     QFileDialog,
-    QApplication
-
+    QApplication,
+    QLabel
 )
 from PySide6.QtCore import Signal, QTimer, Qt, QSize
-from PySide6.QtGui import QPixmap, QPainter
+from PySide6.QtGui import QPixmap, QPainter, QImage
+import cv2
 from src.ui.my_combo_delegate import MyComboDelegate
 from src.ui.ui_files.ui_admin_window import Ui_AdminWindow
 from src.db.database import DataBase
@@ -48,8 +50,15 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         self.db = DataBase()
         self.page_map = {"teacher_page":0, "course_page": 1,
                          "student_page":2, "stu_course_page":3,
-                         "enter_stu_page": 4}
-
+                         "enter_stu_page": 5, "enter_multi_stu_page": 4}
+        self.page_map_to_navi_info = {
+            "teacher_page": "老师管理",
+            "course_page": "课程管理",
+            "student_page": "学生管理",
+            "stu_course_page": "学生管理>学生课程管理",
+            "enter_stu_page": "学生管理>重新录入学生人脸",
+            "enter_multi_stu_page": "学生管理>批量录入学生信息",
+        }
         
         #绑定功能切换
         self.initialized_pages = set()
@@ -77,6 +86,9 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         """设置UI组件的初始状态和属性"""
         #状态栏
         self.status_bar = self.statusBar()
+        self.show_navi_info_label = QLabel()
+        self.status_bar.addPermanentWidget(self.show_navi_info_label)
+        self.show_navi_info_label.setText(self.page_map_to_navi_info['teacher_page'])
 
         # 初始化视频来源下拉框的内容。
         self.setup_source_combo_box()
@@ -134,6 +146,7 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         # 刷新后当前页面不是脏的
         self.data_dirty[page_key] = False
         self.stacked_widget.setCurrentIndex(self.page_map['teacher_page'])
+        self.show_navi_info_label.setText(self.page_map_to_navi_info['teacher_page'])
 
     def on_add_teacher_clicked(self):
         #创建新的老师信息
@@ -186,6 +199,7 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         
         self.data_dirty[page_key] = False  # 刷新后当前页面不是脏的
         self.stacked_widget.setCurrentIndex(self.page_map['course_page'])
+        self.show_navi_info_label.setText(self.page_map_to_navi_info['course_page'])
 
     def on_add_course_clicked(self):
         #新增课程
@@ -265,6 +279,7 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
 
         self.data_dirty[page_key] = False  # 刷新后当前页面不是脏的
         self.stacked_widget.setCurrentIndex(self.page_map['student_page'])
+        self.show_navi_info_label.setText(self.page_map_to_navi_info['student_page'])
 
     def on_delete_stu_clicked(self):
         """删除学生信息"""
@@ -289,8 +304,7 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
             age = res['age']
             self.student_dao.add_student(name, gender, age, 0)
             
-            self.student_table_model.refresh()
-            self.reset_delegates()
+            self.set_page_dirty(['student_page'])
     
     def on_add_multi_stu_clicked(self):
         """"批量添加学生信息"""
@@ -298,7 +312,8 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         self.btn_end_enter.clicked.connect(self.end_enter_face)
         self.btn_confirm_collect.clicked.connect(self.confirm_face_take)
 
-        self.stacked_widget.setCurrentIndex(self.page_map['enter_stu_page'])
+        self.stacked_widget.setCurrentIndex(self.page_map['enter_multi_stu_page'])
+        self.show_navi_info_label.setText(self.page_map_to_navi_info['enter_multi_stu_page'])
         
 
     def on_manage_face_clicked(self, row):
@@ -323,9 +338,12 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
 
         # 先断开所有连接
         try:
-            self.btn_start_cap_face_1.clicked.disconnect()
-            self.btn_end_cap_face_1.clicked.disconnect()
-            self.btn_confirm_this_face_1.clicked.disconnect()   
+            if self.btn_start_cap_face_1.receivers(self.btn_start_cap_face_1.clicked) > 0:
+                self.btn_start_cap_face_1.clicked.disconnect()
+            if self.btn_end_cap_face_1.receivers(self.btn_end_cap_face_1.clicked) > 0:
+                self.btn_end_cap_face_1.clicked.disconnect()
+            if self.btn_confirm_this_face_1.receivers(self.btn_confirm_this_face_1.clicked) > 0:
+                self.btn_confirm_this_face_1.clicked.disconnect()  
         except TypeError:
             pass
         self.btn_start_cap_face_1.clicked.connect(self.start_re_enter_face)
@@ -336,7 +354,8 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         self.cur_face = None
 
 
-        self.stacked_widget.setCurrentIndex(5)
+        self.stacked_widget.setCurrentIndex(self.page_map['enter_stu_page'])
+        self.show_navi_info_label.setText(self.page_map_to_navi_info['enter_stu_page'])
 
     def on_manage_course_clicked(self, row):
         """管理学生的课程，包括课程的增删,
@@ -353,6 +372,7 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         self.table_view_stu_course_availabel.setSelectionMode(QAbstractItemView.ExtendedSelection)
 
         self.stacked_widget.setCurrentIndex(self.page_map['stu_course_page'])
+        self.show_navi_info_label.setText(self.page_map_to_navi_info['stu_course_page'])
 
 
         # 给添加和移除按钮连接槽函数
@@ -439,15 +459,15 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
             self.login_window.show()
             self.close()
         elif item_name == '返回':
-            if self.stacked_widget.currentIndex() == 0:
-                pass
+            cur_page_idx = self.stacked_widget.currentIndex()
+            if cur_page_idx == self.page_map['stu_course_page'] or cur_page_idx == self.page_map['enter_stu_page'] or cur_page_idx == self.page_map['enter_multi_stu_page']:
+                self.enter_page_student()
             else:
-                cur_index = self.stacked_widget.currentIndex()
-                self.stacked_widget.setCurrentIndex(cur_index - 1)
+                pass    
         else: 
             pass
 
-        self.status_bar.showMessage('加载完成', 2000)
+        self.status_bar.showMessage('页面加载完成', 1)
 
 # --------------------人脸录入相关代码------------------------------------------------------------
 
@@ -480,7 +500,7 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
 
         # 断开之前所有的连接
         try:
-            self.btn_pass_this_face_1.clicked.disconnect()
+            self.btn_pass_collect.clicked.disconnect()
         except TypeError:
             pass
 
@@ -570,7 +590,8 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         
         is_face_collected = 1
         self.student_dao.add_student(name, gender, age, is_face_collected, face_feature)
-        self.student_table_model.refresh()
+        self.set_page_dirty(['student_page'])
+
         self.face_taker.resume()
 
         self.cur_face = None
@@ -578,18 +599,26 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
 
     def end_enter_face(self):
         if self.face_taker is not None:
+            blank_img = cv2.cvtColor(cv2.imread(os.path.join(my_config.PHOTO_PATH, 'blank.jpg')), cv2.COLOR_BGR2RGB)
+            blank_img_s = cv2.cvtColor(cv2.imread(os.path.join(my_config.PHOTO_PATH, 'blank_s.jpg')), cv2.COLOR_BGR2RGB)
+            
+            h, w, ch = blank_img.shape
+            qimage = QImage(blank_img, w, h, w * ch, QImage.Format_RGB888)
+            self.update_frame(qimage)
+            
+            h, w, ch = blank_img_s.shape
+            qimage_s = QImage(blank_img_s, w, h, w * ch, QImage.Format_RGB888)
+            self.get_face(qimage_s)
+            QApplication.processEvents()
+
             self.face_taker.stop()
             self.face_taker = None
-            self.student_dao.save_vec_db()
-            self.data_dirty['student_page'] = True  # 设置学生页面为脏
-            self.stacked_widget.setCurrentIndex(self.page_map['student_page'])
 
 
     def closeEvent(self, event):
         if hasattr(self, 'face_taker') and self.face_taker is not None:
             self.face_taker.stop()
             self.face_taker = None
-            self.student_dao.save_vec_db()
 
         return super().closeEvent(event)
 
@@ -604,7 +633,8 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         self.face_taker.select_face_signal.connect(self.get_face_1)
 
         try:
-            self.btn_pass_this_face_1.clicked.disconnect()
+            if self.btn_pass_this_face_1.receivers(self.btn_pass_this_face_1.clicked) > 0:
+                self.btn_pass_this_face_1.clicked.disconnect()
         except TypeError:
             pass
         self.btn_pass_this_face_1.clicked.connect(self.on_pass_this_face_clicked)
@@ -659,7 +689,7 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         id = int(self.label_id_1.text())
         self.student_dao.reset_face(id, face_feature)
         
-        self.student_table_model.refresh()
+        self.set_page_dirty(['student_page'])
         self.face_taker.resume()
         self.cur_face = None
 
@@ -676,10 +706,23 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
 
     def end_face_take_1(self):
         if self.face_taker is not None:
+            blank_img = cv2.cvtColor(cv2.imread(os.path.join(my_config.PHOTO_PATH, 'blank.jpg')), cv2.COLOR_BGR2RGB)
+            blank_img_s = cv2.cvtColor(cv2.imread(os.path.join(my_config.PHOTO_PATH, 'blank_s.jpg')), cv2.COLOR_BGR2RGB)
+            
+            h, w, ch = blank_img.shape
+            qimage = QImage(blank_img, w, h, w * ch, QImage.Format_RGB888)
+            self.update_frame_1(qimage)
+            
+            h, w, ch = blank_img_s.shape
+            qimage_s = QImage(blank_img_s, w, h, w * ch, QImage.Format_RGB888)
+            self.get_face_1(qimage_s)
+
+            QApplication.processEvents()
+            
             self.face_taker.stop()
             self.face_taker = None
-            self.student_dao.save_vec_db()
-        self.stacked_widget.setCurrentIndex(self.page_map['student_page'])
+            
+        
 
 
 
@@ -736,8 +779,8 @@ class StudentInputDialog(QDialog):
         self.setLayout(main_layout)
 
     def accept(self):
-        name = self.name.text()
-        age = self.age.text()
+        name = self.name.text().strip()
+        age = self.age.text().strip()
         gender = '男' if self.rbtn_male.isChecked() else '女' if self.rbtn_female.isChecked() else ''
         
         if name and age and gender:
@@ -788,9 +831,9 @@ class TeacherInputDialog(QDialog):
 
 
     def accept(self):
-        name = self.name.text()
-        username = self.username.text()
-        pswd = self.pswd.text()
+        name = self.name.text().strip()
+        username = self.username.text().strip()
+        pswd = self.pswd.text().strip()
         if name != '' and username != '' and pswd != '':
             self.value['name'] = name
             self.value['username'] = username
@@ -837,7 +880,7 @@ class CourseInputDialog(QDialog):
 
 
     def accept(self):
-        course_name = self.course_name.text()
+        course_name = self.course_name.text().strip()
         teacher_username = self.teacher_username.currentText()
         if course_name != '' and teacher_username != '':
             self.value['course_name'] = course_name

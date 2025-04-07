@@ -24,6 +24,29 @@ QWidget {
     font-size: 12px;
 }
 
+QPushButton[class=&quot;custom-btn&quot;] {
+        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+            stop:0 #ffffff, stop:1 #f0f0f0);
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 5px;
+        min-width: 80px;
+        transition: all 0.2s;
+    }
+
+    /* 悬停状态 */
+    QPushButton[class=&quot;custom-btn&quot;]:hover {
+        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+            stop:0 #f8f8f8, stop:1 #e0e0e0);
+        border-color: #ccc;
+    }
+
+    /* 按下状态 */
+    QPushButton[class=&quot;custom-btn&quot;]:pressed {
+        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+            stop:0 #e0e0e0, stop:1 #d0d0d0);
+    }
+
 
 /* 按钮基础样式 */
 QPushButton {
@@ -80,8 +103,29 @@ QLabel {
     font-size: 12px;
 }
 
-/* 其它你需要的控件样式都可以在这里继续添加 */
-</string>
+    /* 针对所有带 custom-btn 属性的 QPushButton */
+    QPushButton[class=&quot;custom-btn&quot;] {
+        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+            stop:0 #ffffff, stop:1 #f0f0f0);
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 5px;
+        min-width: 80px;
+        transition: all 0.2s;
+    }
+
+    /* 悬停状态 */
+    QPushButton[class=&quot;custom-btn&quot;]:hover {
+        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+            stop:0 #f8f8f8, stop:1 #e0e0e0);
+        border-color: #ccc;
+    }
+
+    /* 按下状态 */
+    QPushButton[class=&quot;custom-btn&quot;]:pressed {
+        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+            stop:0 #e0e0e0, stop:1 #d0d0d0);
+    }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="1,4">
@@ -128,7 +172,7 @@ color: white;
     <item>
      <widget class="QStackedWidget" name="stacked_widget">
       <property name="currentIndex">
-       <number>4</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="page_teacher">
        <layout class="QVBoxLayout" name="verticalLayout">

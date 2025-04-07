@@ -16,3 +16,39 @@
     with self.conn.cursor() as cursor:
   File "c:\Users\shann\anaconda3\envs\SE\lib\site-packages\mysql\connector\connection_cext.py", line 773, in cursor
     raise OperationalError("MySQL Connection not available.")
+2025-04-07 17:14:43.067514 - 未捕获的异常: AttributeError: 'MainWindow' object has no attribute 'initialize_pages'
+  File "C:\Users\shann\Desktop\SE\attendance_system\src\ui\login_window.py", line 60, in login
+    self.main_window = MainWindow(teacher_name, username, self.db)
+  File "C:\Users\shann\Desktop\SE\attendance_system\src\ui\main_window.py", line 102, in __init__
+    self.enter_course_info_page()
+  File "C:\Users\shann\Desktop\SE\attendance_system\src\ui\main_window.py", line 136, in enter_course_info_page
+    if 'course_info' not in self.initialize_pages:
+2025-04-07 17:25:36.707871 - 未捕获的异常: TypeError: MainWindow.show_stu_attendance_detail() takes from 1 to 2 positional arguments but 3 were given
+  File "C:\Users\shann\Desktop\SE\attendance_system\src\ui\main_window.py", line 225, in <lambda>
+    self.show_stu_attendance_detail_delegate.btn_clicked_signal.connect(lambda row: self.show_stu_attendance_detail(row, course_name))
+2025-04-07 17:27:45.652669 - 未捕获的异常: AttributeError: bn
+  File "C:\Users\shann\Desktop\SE\attendance_system\src\core\face_detect.py", line 81, in run
+    res = self.model(input, verbose=False)
+  File "c:\Users\shann\anaconda3\envs\SE\lib\site-packages\ultralytics\engine\model.py", line 179, in __call__
+    return self.predict(source, stream, **kwargs)
+  File "c:\Users\shann\anaconda3\envs\SE\lib\site-packages\ultralytics\engine\model.py", line 550, in predict
+    self.predictor.setup_model(model=self.model, verbose=is_cli)
+  File "c:\Users\shann\anaconda3\envs\SE\lib\site-packages\ultralytics\engine\predictor.py", line 308, in setup_model
+    self.model = AutoBackend(
+  File "c:\Users\shann\anaconda3\envs\SE\lib\site-packages\torch\utils\_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+  File "c:\Users\shann\anaconda3\envs\SE\lib\site-packages\ultralytics\nn\autobackend.py", line 148, in __init__
+    model = model.fuse(verbose=verbose)
+  File "c:\Users\shann\anaconda3\envs\SE\lib\site-packages\ultralytics\nn\tasks.py", line 208, in fuse
+    delattr(m, "bn")  # remove batchnorm
+  File "c:\Users\shann\anaconda3\envs\SE\lib\site-packages\torch\nn\modules\module.py", line 2043, in __delattr__
+    super().__delattr__(name)
+2025-04-07 17:33:35.916415 - 未捕获的异常: OperationalError: MySQL Connection not available.
+  File "C:\Users\shann\Desktop\SE\attendance_system\src\ui\main_window.py", line 296, in update_absent
+    self.attendance_info_dao.add_attendance_info(stu_id, self.course_name, cur_date, True)
+  File "C:\Users\shann\Desktop\SE\attendance_system\src\db\attendance_info_dao.py", line 67, in add_attendance_info
+    self.db.execute(query, params)
+  File "C:\Users\shann\Desktop\SE\attendance_system\src\db\database.py", line 66, in execute
+    with self.conn.cursor() as cursor:
+  File "c:\Users\shann\anaconda3\envs\SE\lib\site-packages\mysql\connector\connection_cext.py", line 773, in cursor
+    raise OperationalError("MySQL Connection not available.")

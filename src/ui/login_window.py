@@ -47,8 +47,8 @@ class LoginWindow(Ui_Form, QWidget):
         self.close()
     
     def login(self):
-        username = self.line_edit_uername.text()
-        pswd = self.line_edit_pswd.text()
+        username = self.line_edit_uername.text().strip()
+        pswd = self.line_edit_pswd.text().strip()
         res = self.teacher_dao.check_login(username, pswd)
         if res is None:
             QMessageBox.warning(self, '登陆失败', '当前用户名不存在或者密码错误')

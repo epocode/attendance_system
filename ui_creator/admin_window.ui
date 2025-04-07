@@ -24,29 +24,29 @@ QWidget {
     font-size: 12px;
 }
 
+/* 针对所有带 custom-btn 属性的 QPushButton */
 QPushButton[class=&quot;custom-btn&quot;] {
-        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-            stop:0 #ffffff, stop:1 #f0f0f0);
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        padding: 5px;
-        min-width: 80px;
-        transition: all 0.2s;
-    }
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #ffffff, stop:1 #f0f0f0);
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    min-width: 80px;
+    /* 移除不支持的 transition 属性 */
+}
 
-    /* 悬停状态 */
-    QPushButton[class=&quot;custom-btn&quot;]:hover {
-        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-            stop:0 #f8f8f8, stop:1 #e0e0e0);
-        border-color: #ccc;
-    }
+/* 悬停状态 */
+QPushButton[class=&quot;custom-btn&quot;]:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #f8f8f8, stop:1 #e0e0e0);
+    border-color: #ccc;
+}
 
-    /* 按下状态 */
-    QPushButton[class=&quot;custom-btn&quot;]:pressed {
-        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-            stop:0 #e0e0e0, stop:1 #d0d0d0);
-    }
-
+/* 按下状态 */
+QPushButton[class=&quot;custom-btn&quot;]:pressed {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #e0e0e0, stop:1 #d0d0d0);
+}
 
 /* 按钮基础样式 */
 QPushButton {
@@ -85,11 +85,10 @@ QGroupBox {
     border-radius: 5px;     
     margin-top: 1em;        
     background-color: #ffffff;
-    /* 可以根据需要增加 padding、margin 等 */
 }
 
 /* GroupBox 标题的位置和样式 */
-QGroupBox:title {
+QGroupBox::title {
     subcontrol-origin: margin;
     subcontrol-position: top center;
     padding: 0 5px;
@@ -97,35 +96,11 @@ QGroupBox:title {
     font-weight: bold; /* 标题加粗 */
 }
 
-/* Label 基本样式（可选） */
+/* Label 基本样式 */
 QLabel {
     color: #333333;
     font-size: 12px;
-}
-
-    /* 针对所有带 custom-btn 属性的 QPushButton */
-    QPushButton[class=&quot;custom-btn&quot;] {
-        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-            stop:0 #ffffff, stop:1 #f0f0f0);
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        padding: 5px;
-        min-width: 80px;
-        transition: all 0.2s;
-    }
-
-    /* 悬停状态 */
-    QPushButton[class=&quot;custom-btn&quot;]:hover {
-        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-            stop:0 #f8f8f8, stop:1 #e0e0e0);
-        border-color: #ccc;
-    }
-
-    /* 按下状态 */
-    QPushButton[class=&quot;custom-btn&quot;]:pressed {
-        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-            stop:0 #e0e0e0, stop:1 #d0d0d0);
-    }</string>
+}</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="1,4">
@@ -172,7 +147,7 @@ color: white;
     <item>
      <widget class="QStackedWidget" name="stacked_widget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>5</number>
       </property>
       <widget class="QWidget" name="page_teacher">
        <layout class="QVBoxLayout" name="verticalLayout">

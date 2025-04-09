@@ -177,7 +177,7 @@ border: 2px solid black;
 /* 其它你需要的控件样式都可以在这里继续添加 */
 </string>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,6">
+   <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,5">
     <item>
      <widget class="QTreeWidget" name="tree_widget">
       <column>
@@ -208,129 +208,152 @@ border: 2px solid black;
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>4</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="page_home">
-       <widget class="QTableView" name="table_view_course_teacher">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>10</y>
-          <width>951</width>
-          <height>501</height>
-         </rect>
-        </property>
-       </widget>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>当前老师的课程列表</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTableView" name="table_view_course_teacher"/>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="page_course_detail">
-       <widget class="QTableView" name="table_view_course_detail">
-        <property name="geometry">
-         <rect>
-          <x>30</x>
-          <y>10</y>
-          <width>801</width>
-          <height>501</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="btn_enter_attendance">
-        <property name="geometry">
-         <rect>
-          <x>190</x>
-          <y>530</y>
-          <width>93</width>
-          <height>28</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>开始考勤</string>
-        </property>
-       </widget>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>课程的考勤记录</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTableView" name="table_view_course_detail"/>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btn_enter_attendance">
+          <property name="text">
+           <string>开始考勤</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="page">
-       <widget class="QTableView" name="table_view_attendance_detail">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>20</y>
-          <width>791</width>
-          <height>461</height>
-         </rect>
-        </property>
-       </widget>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>某次考勤的详细信息</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTableView" name="table_view_attendance_detail"/>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="page_2">
-       <widget class="QTableView" name="table_view_stu_attendance_detail">
-        <property name="geometry">
-         <rect>
-          <x>40</x>
-          <y>30</y>
-          <width>681</width>
-          <height>471</height>
-         </rect>
-        </property>
-       </widget>
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item>
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>某学生的缺勤记录</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTableView" name="table_view_stu_attendance_detail"/>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="page_face_detect">
-       <widget class="QPushButton" name="btn_start_detect_face">
-        <property name="geometry">
-         <rect>
-          <x>100</x>
-          <y>500</y>
-          <width>93</width>
-          <height>28</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>开始</string>
-        </property>
-       </widget>
-       <widget class="QTableView" name="table_view_show_absent">
-        <property name="geometry">
-         <rect>
-          <x>570</x>
-          <y>50</y>
-          <width>231</width>
-          <height>171</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="btn_end_detect_face">
-        <property name="geometry">
-         <rect>
-          <x>340</x>
-          <y>500</y>
-          <width>75</width>
-          <height>23</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>停止</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_display_cap">
-        <property name="geometry">
-         <rect>
-          <x>30</x>
-          <y>20</y>
-          <width>491</width>
-          <height>421</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>TextLabel</string>
-        </property>
-       </widget>
-       <widget class="QComboBox" name="combo_box_video_source">
-        <property name="geometry">
-         <rect>
-          <x>230</x>
-          <y>500</y>
-          <width>83</width>
-          <height>25</height>
-         </rect>
-        </property>
-       </widget>
+       <layout class="QVBoxLayout" name="verticalLayout_9">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_8">
+          <item>
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>考勤页面</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="5,2">
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_6" stretch="1,0">
+              <item>
+               <widget class="QLabel" name="label_display_cap">
+                <property name="text">
+                 <string>TextLabel</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_2">
+                <item>
+                 <widget class="QPushButton" name="btn_start_detect_face">
+                  <property name="text">
+                   <string>开始</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="combo_box_video_source"/>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="btn_end_detect_face">
+                  <property name="text">
+                   <string>停止</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_7">
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_5">
+                <item>
+                 <widget class="QLabel" name="label_5">
+                  <property name="text">
+                   <string>还未签到的列表</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QTableView" name="table_view_show_absent"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <spacer name="verticalSpacer">
+                <property name="orientation">
+                 <enum>Qt::Orientation::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>68</width>
+                  <height>228</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>

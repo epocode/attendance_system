@@ -304,7 +304,8 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
             age = res['age']
             self.student_dao.add_student(name, gender, age, 0)
             
-            self.set_page_dirty(['student_page'])
+            self.student_table_model.refresh()
+            self.reset_delegates()
     
     def on_add_multi_stu_clicked(self):
         """"批量添加学生信息"""
@@ -413,20 +414,43 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         for row in range(self.student_table_model.rowCount() + 10):
             try:
                 self.table_view_students.closePersistentEditor(self.student_table_model.index(row, 5))
+                self.table_view_students.closePersistentEditor(self.student_table_model.index(row, 6))
+                self.table_view_students.closePersistentEditor(self.student_table_model.index(row, 7))
             except:
                 pass
 
         self.table_view_students.setItemDelegateForColumn(5, None)
+        self.table_view_students.setItemDelegateForColumn(6, None)
+        self.table_view_students.setItemDelegateForColumn(7, None)
+
         self.course_combo_delegate.deleteLater()
+        self.manage_course_delegate.deleteLater()
+        self.manage_face_delegate.deleteLater()
+
+
+
 
         QApplication.processEvents()  # 处理事件，确保UI更新
 
         self.course_combo_delegate = MyComboDelegate(self.table_view_students)
         self.table_view_students.setItemDelegateForColumn(5, self.course_combo_delegate)
+        self.manage_course_delegate = BtnDelegate('管理课程', self.table_view_students)
+        self.manage_course_delegate.btn_clicked_signal.connect(self.on_manage_course_clicked)
+        self.table_view_students.setItemDelegateForColumn(6, self.manage_course_delegate)
+        self.manage_face_delegate = BtnDelegate('(重新)录入人脸',self.table_view_students)
+        self.manage_face_delegate.btn_clicked_signal.connect(self.on_manage_face_clicked)
+        self.table_view_students.setItemDelegateForColumn(7, self.manage_face_delegate)
+
 
         for row in range(self.student_table_model.rowCount()):
             self.table_view_students.openPersistentEditor(
                 self.student_table_model.index(row, 5)
+            )
+            self.table_view_students.openPersistentEditor(
+                self.student_table_model.index(row, 6)
+            )
+            self.table_view_students.openPersistentEditor(
+                self.student_table_model.index(row, 7)  
             )
 
 
@@ -526,7 +550,7 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
     
 
     def update_frame(self, qimage):
-        label_size = self.label_camp_frame.size()
+        label_size = QSize(640, 480)
         pixmap = QPixmap(label_size)
         pixmap.fill(Qt.black)  # 设置背景色
         # 将QImage转换为QPixmap
@@ -554,7 +578,7 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         self.cur_face = qimage
         
         # Get the size of the label
-        label_size = self.label_face.size()
+        label_size = QSize(150, 150)
         
         # Convert QImage to QPixmap
         img_pixmap = QPixmap.fromImage(qimage)
@@ -671,7 +695,7 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
     def get_face_1(self, qimage):
         """将识别到的人脸放在label上"""
         self.cur_face = qimage
-        label_size = self.label_display_cap_face_1.size()
+        label_size = QSize(150, 150)
         img_pixmap = QPixmap.fromImage(qimage)
         scaled_pixmap = img_pixmap.scaled(
             label_size,

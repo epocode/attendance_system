@@ -27,9 +27,8 @@ class LoginWindow(Ui_Form, QWidget):
             self.main_window = main_window
             self.btn_login.clicked.connect(self.change_user)
 
-        
-        self.btn_register.clicked.connect(self.register)
         self.btn_admin.clicked.connect(self.enter_admin)
+        self.line_edit_pswd.setEchoMode(QLineEdit.Password)
         
 
     def change_user(self):
@@ -61,20 +60,19 @@ class LoginWindow(Ui_Form, QWidget):
         self.main_window.show()
         self.close()
 
-    def register(self):
-        input_dialog = InputDialog()
-        if input_dialog.exec() == QDialog.Accepted:
-            name, username, pswd = input_dialog.get_user_data()
-            res = self.teacher_dao.register(name, username, pswd)
-            if res is False:
-                QMessageBox.warning(self, '注册失败', '当前用户名已存在')
-            else:
-                QMessageBox.information(self, '注册成功', '注册成功，请登陆')
-
+  
     def enter_admin(self):
-        self.admin_window = AdminWindow()
-        self.admin_window.show()
-        self.close()
+        # Get admin credentials
+        username = self.line_edit_uername.text().strip()
+        pswd = self.line_edit_pswd.text().strip()
+        
+        # Check if the credentials match the default admin credentials
+        if username == "root" and pswd == "root":
+            self.admin_window = AdminWindow()
+            self.admin_window.show()
+            self.close()
+        else:
+            QMessageBox.warning(self, '管理员登录失败', '管理员用户名或密码错误')
             
     def exec_(self):
         self._event_loop = QEventLoop()

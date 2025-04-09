@@ -52,3 +52,25 @@
     with self.conn.cursor() as cursor:
   File "c:\Users\shann\anaconda3\envs\SE\lib\site-packages\mysql\connector\connection_cext.py", line 773, in cursor
     raise OperationalError("MySQL Connection not available.")
+2025-04-07 17:42:33.340846 - 未捕获的异常: AttributeError: 'LoginWindow' object has no attribute 'register'
+  File "C:\Users\shann\Desktop\SE\attendance_system\src\main.py", line 25, in <module>
+    login_window = LoginWindow()
+  File "C:\Users\shann\Desktop\SE\attendance_system\src\ui\login_window.py", line 31, in __init__
+    self.btn_register.clicked.connect(self.register)
+2025-04-07 17:43:04.589807 - 未捕获的异常: AttributeError: 'LoginWindow' object has no attribute 'register'
+  File "C:\Users\shann\Desktop\SE\attendance_system\src\main.py", line 25, in <module>
+    login_window = LoginWindow()
+  File "C:\Users\shann\Desktop\SE\attendance_system\src\ui\login_window.py", line 31, in __init__
+    self.line_edit_pswd.setEchoMode(QLineEdit.Password)
+2025-04-09 11:34:11.228550 - 未捕获的异常: AttributeError: 'MainWindow' object has no attribute 'course_name'
+  File "C:\Users\shann\Desktop\SE\attendance_system\src\ui\main_window.py", line 159, in show_course_detail
+    self.label_2.setText(f"课程：{self.course_name}的考勤记录")
+2025-04-09 11:46:54.748533 - 未捕获的异常: OperationalError: MySQL Connection not available.
+  File "C:\Users\shann\Desktop\SE\attendance_system\src\ui\main_window.py", line 303, in update_absent
+    self.attendance_info_dao.add_attendance_info(stu_id, self.course_name, cur_date, True)
+  File "C:\Users\shann\Desktop\SE\attendance_system\src\db\attendance_info_dao.py", line 67, in add_attendance_info
+    self.db.execute(query, params)
+  File "C:\Users\shann\Desktop\SE\attendance_system\src\db\database.py", line 66, in execute
+    with self.conn.cursor() as cursor:
+  File "c:\Users\shann\anaconda3\envs\SE\lib\site-packages\mysql\connector\connection_cext.py", line 773, in cursor
+    raise OperationalError("MySQL Connection not available.")

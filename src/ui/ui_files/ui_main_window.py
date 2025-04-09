@@ -17,8 +17,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QComboBox, QHBoxLayout, QHeaderView,
     QLabel, QMainWindow, QMenuBar, QPushButton,
-    QSizePolicy, QStackedWidget, QStatusBar, QTableView,
-    QTreeWidget, QTreeWidgetItem, QWidget)
+    QSizePolicy, QSpacerItem, QStackedWidget, QStatusBar,
+    QTableView, QTreeWidget, QTreeWidgetItem, QVBoxLayout,
+    QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -205,53 +206,151 @@ class Ui_MainWindow(object):
         self.stackedWidget.setStyleSheet(u"")
         self.page_home = QWidget()
         self.page_home.setObjectName(u"page_home")
+        self.verticalLayout = QVBoxLayout(self.page_home)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.label = QLabel(self.page_home)
+        self.label.setObjectName(u"label")
+
+        self.verticalLayout.addWidget(self.label)
+
         self.table_view_course_teacher = QTableView(self.page_home)
         self.table_view_course_teacher.setObjectName(u"table_view_course_teacher")
-        self.table_view_course_teacher.setGeometry(QRect(20, 10, 951, 501))
+
+        self.verticalLayout.addWidget(self.table_view_course_teacher)
+
         self.stackedWidget.addWidget(self.page_home)
         self.page_course_detail = QWidget()
         self.page_course_detail.setObjectName(u"page_course_detail")
+        self.verticalLayout_2 = QVBoxLayout(self.page_course_detail)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.label_2 = QLabel(self.page_course_detail)
+        self.label_2.setObjectName(u"label_2")
+
+        self.verticalLayout_2.addWidget(self.label_2)
+
         self.table_view_course_detail = QTableView(self.page_course_detail)
         self.table_view_course_detail.setObjectName(u"table_view_course_detail")
-        self.table_view_course_detail.setGeometry(QRect(30, 10, 801, 501))
+
+        self.verticalLayout_2.addWidget(self.table_view_course_detail)
+
         self.btn_enter_attendance = QPushButton(self.page_course_detail)
         self.btn_enter_attendance.setObjectName(u"btn_enter_attendance")
-        self.btn_enter_attendance.setGeometry(QRect(190, 530, 93, 28))
+
+        self.verticalLayout_2.addWidget(self.btn_enter_attendance)
+
         self.stackedWidget.addWidget(self.page_course_detail)
         self.page = QWidget()
         self.page.setObjectName(u"page")
+        self.verticalLayout_3 = QVBoxLayout(self.page)
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.label_3 = QLabel(self.page)
+        self.label_3.setObjectName(u"label_3")
+
+        self.verticalLayout_3.addWidget(self.label_3)
+
         self.table_view_attendance_detail = QTableView(self.page)
         self.table_view_attendance_detail.setObjectName(u"table_view_attendance_detail")
-        self.table_view_attendance_detail.setGeometry(QRect(20, 20, 791, 461))
+
+        self.verticalLayout_3.addWidget(self.table_view_attendance_detail)
+
         self.stackedWidget.addWidget(self.page)
         self.page_2 = QWidget()
         self.page_2.setObjectName(u"page_2")
+        self.verticalLayout_4 = QVBoxLayout(self.page_2)
+        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
+        self.label_4 = QLabel(self.page_2)
+        self.label_4.setObjectName(u"label_4")
+
+        self.verticalLayout_4.addWidget(self.label_4)
+
         self.table_view_stu_attendance_detail = QTableView(self.page_2)
         self.table_view_stu_attendance_detail.setObjectName(u"table_view_stu_attendance_detail")
-        self.table_view_stu_attendance_detail.setGeometry(QRect(40, 30, 681, 471))
+
+        self.verticalLayout_4.addWidget(self.table_view_stu_attendance_detail)
+
         self.stackedWidget.addWidget(self.page_2)
         self.page_face_detect = QWidget()
         self.page_face_detect.setObjectName(u"page_face_detect")
-        self.btn_start_detect_face = QPushButton(self.page_face_detect)
-        self.btn_start_detect_face.setObjectName(u"btn_start_detect_face")
-        self.btn_start_detect_face.setGeometry(QRect(100, 500, 93, 28))
-        self.table_view_show_absent = QTableView(self.page_face_detect)
-        self.table_view_show_absent.setObjectName(u"table_view_show_absent")
-        self.table_view_show_absent.setGeometry(QRect(570, 50, 231, 171))
-        self.btn_end_detect_face = QPushButton(self.page_face_detect)
-        self.btn_end_detect_face.setObjectName(u"btn_end_detect_face")
-        self.btn_end_detect_face.setGeometry(QRect(340, 500, 75, 23))
+        self.verticalLayout_9 = QVBoxLayout(self.page_face_detect)
+        self.verticalLayout_9.setObjectName(u"verticalLayout_9")
+        self.verticalLayout_8 = QVBoxLayout()
+        self.verticalLayout_8.setObjectName(u"verticalLayout_8")
+        self.label_6 = QLabel(self.page_face_detect)
+        self.label_6.setObjectName(u"label_6")
+
+        self.verticalLayout_8.addWidget(self.label_6)
+
+        self.horizontalLayout_3 = QHBoxLayout()
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.verticalLayout_6 = QVBoxLayout()
+        self.verticalLayout_6.setObjectName(u"verticalLayout_6")
         self.label_display_cap = QLabel(self.page_face_detect)
         self.label_display_cap.setObjectName(u"label_display_cap")
-        self.label_display_cap.setGeometry(QRect(30, 20, 491, 421))
+
+        self.verticalLayout_6.addWidget(self.label_display_cap)
+
+        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.btn_start_detect_face = QPushButton(self.page_face_detect)
+        self.btn_start_detect_face.setObjectName(u"btn_start_detect_face")
+
+        self.horizontalLayout_2.addWidget(self.btn_start_detect_face)
+
         self.combo_box_video_source = QComboBox(self.page_face_detect)
         self.combo_box_video_source.setObjectName(u"combo_box_video_source")
-        self.combo_box_video_source.setGeometry(QRect(230, 500, 83, 25))
+
+        self.horizontalLayout_2.addWidget(self.combo_box_video_source)
+
+        self.btn_end_detect_face = QPushButton(self.page_face_detect)
+        self.btn_end_detect_face.setObjectName(u"btn_end_detect_face")
+
+        self.horizontalLayout_2.addWidget(self.btn_end_detect_face)
+
+
+        self.verticalLayout_6.addLayout(self.horizontalLayout_2)
+
+        self.verticalLayout_6.setStretch(0, 1)
+
+        self.horizontalLayout_3.addLayout(self.verticalLayout_6)
+
+        self.verticalLayout_7 = QVBoxLayout()
+        self.verticalLayout_7.setObjectName(u"verticalLayout_7")
+        self.verticalLayout_5 = QVBoxLayout()
+        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
+        self.label_5 = QLabel(self.page_face_detect)
+        self.label_5.setObjectName(u"label_5")
+
+        self.verticalLayout_5.addWidget(self.label_5)
+
+        self.table_view_show_absent = QTableView(self.page_face_detect)
+        self.table_view_show_absent.setObjectName(u"table_view_show_absent")
+
+        self.verticalLayout_5.addWidget(self.table_view_show_absent)
+
+
+        self.verticalLayout_7.addLayout(self.verticalLayout_5)
+
+        self.verticalSpacer = QSpacerItem(68, 228, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_7.addItem(self.verticalSpacer)
+
+
+        self.horizontalLayout_3.addLayout(self.verticalLayout_7)
+
+        self.horizontalLayout_3.setStretch(0, 5)
+        self.horizontalLayout_3.setStretch(1, 2)
+
+        self.verticalLayout_8.addLayout(self.horizontalLayout_3)
+
+
+        self.verticalLayout_9.addLayout(self.verticalLayout_8)
+
         self.stackedWidget.addWidget(self.page_face_detect)
 
         self.horizontalLayout.addWidget(self.stackedWidget)
 
-        self.horizontalLayout.setStretch(1, 6)
+        self.horizontalLayout.setStretch(0, 1)
+        self.horizontalLayout.setStretch(1, 5)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
@@ -263,7 +362,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(2)
+        self.stackedWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -284,9 +383,15 @@ class Ui_MainWindow(object):
         ___qtreewidgetitem3.setText(0, QCoreApplication.translate("MainWindow", u"\u8fd4\u56de\u4e0a\u4e00\u7ea7", None));
         self.tree_widget.setSortingEnabled(__sortingEnabled)
 
+        self.label.setText(QCoreApplication.translate("MainWindow", u"\u5f53\u524d\u8001\u5e08\u7684\u8bfe\u7a0b\u5217\u8868", None))
+        self.label_2.setText(QCoreApplication.translate("MainWindow", u"\u8bfe\u7a0b\u7684\u8003\u52e4\u8bb0\u5f55", None))
         self.btn_enter_attendance.setText(QCoreApplication.translate("MainWindow", u"\u5f00\u59cb\u8003\u52e4", None))
+        self.label_3.setText(QCoreApplication.translate("MainWindow", u"\u67d0\u6b21\u8003\u52e4\u7684\u8be6\u7ec6\u4fe1\u606f", None))
+        self.label_4.setText(QCoreApplication.translate("MainWindow", u"\u67d0\u5b66\u751f\u7684\u7f3a\u52e4\u8bb0\u5f55", None))
+        self.label_6.setText(QCoreApplication.translate("MainWindow", u"\u8003\u52e4\u9875\u9762", None))
+        self.label_display_cap.setText(QCoreApplication.translate("MainWindow", u"TextLabel", None))
         self.btn_start_detect_face.setText(QCoreApplication.translate("MainWindow", u"\u5f00\u59cb", None))
         self.btn_end_detect_face.setText(QCoreApplication.translate("MainWindow", u"\u505c\u6b62", None))
-        self.label_display_cap.setText(QCoreApplication.translate("MainWindow", u"TextLabel", None))
+        self.label_5.setText(QCoreApplication.translate("MainWindow", u"\u8fd8\u672a\u7b7e\u5230\u7684\u5217\u8868", None))
     # retranslateUi
 

@@ -181,11 +181,6 @@ class Ui_Form(object):
 
         self.horizontalLayout.addWidget(self.btn_login)
 
-        self.btn_register = QPushButton(self.groupBox)
-        self.btn_register.setObjectName(u"btn_register")
-
-        self.horizontalLayout.addWidget(self.btn_register)
-
         self.btn_admin = QPushButton(self.groupBox)
         self.btn_admin.setObjectName(u"btn_admin")
 
@@ -209,7 +204,6 @@ class Ui_Form(object):
         self.label.setText(QCoreApplication.translate("Form", u"\u7528\u6237\u540d", None))
         self.label_2.setText(QCoreApplication.translate("Form", u"\u5bc6\u7801", None))
         self.btn_login.setText(QCoreApplication.translate("Form", u"\u767b\u9646", None))
-        self.btn_register.setText(QCoreApplication.translate("Form", u"\u6ce8\u518c", None))
         self.btn_admin.setText(QCoreApplication.translate("Form", u"\u7ba1\u7406\u5458", None))
     # retranslateUi
 

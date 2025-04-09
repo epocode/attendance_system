@@ -39,7 +39,7 @@ ON student.id = course_student.student_id;"""
         if face_feature is not None:
             """如果人脸特征存在"""
             dis, ids = self.vec_db.search(face_feature, 1)
-            if dis[0][0] > 0.95:
+            if dis[0][0] > 0.7:
                 existing_id = int(ids[0][0])
                 existing_name = self.get_name_by_id(existing_id)
                 print(f'警告：当前人脸与ID为{existing_id}的学生"{existing_name}"相似度达到{dis[0][0]:.2f}，可能是重复录入')
@@ -95,9 +95,13 @@ ON student.id = course_student.student_id;"""
 
     def search_id_by_feature(self, face_feature):
         """根据人脸特征查询id"""
+
+        # 打印
         dis, ids = self.vec_db.search(face_feature, 5)
+
+
         print("dis:", dis, "\nids:", ids)
-        if dis[0][0] > 0.9:
+        if dis[0][0] > 0.7:
             return ids[0][0], dis[0][0] 
         else:
             return None

@@ -180,13 +180,6 @@ QLabel {
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="btn_register">
-          <property name="text">
-           <string>注册</string>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QPushButton" name="btn_admin">
           <property name="text">
            <string>管理员</string>

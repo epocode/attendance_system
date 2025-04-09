@@ -115,7 +115,8 @@ class FaceDetection(QThread):
 
                     #将人名和id显示在对应的人脸框上边
                     frame_rgb = self.put_text_to_img(frame_rgb, f"{name}, {id}, {dis:.1f}", x1, y1)
-                
+                    
+
                 cv2.rectangle(frame_rgb, (x1, y1), (x2, y2), (0, 255, 0), 2)
             
             #完成这一帧的操作后，将对应的图片发送给界面进行显示

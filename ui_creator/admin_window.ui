@@ -103,7 +103,7 @@ QLabel {
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="1,4">
+   <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="1,6">
     <item>
      <widget class="QTreeWidget" name="tree_widget">
       <property name="styleSheet">
@@ -147,10 +147,10 @@ color: white;
     <item>
      <widget class="QStackedWidget" name="stacked_widget">
       <property name="currentIndex">
-       <number>5</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="page_teacher">
-       <layout class="QVBoxLayout" name="verticalLayout">
+       <layout class="QVBoxLayout" name="verticalLayout_11">
         <item>
          <widget class="QLabel" name="label">
           <property name="text">
@@ -253,425 +253,435 @@ color: white;
        </layout>
       </widget>
       <widget class="QWidget" name="page">
-       <widget class="QWidget" name="layoutWidget">
-        <property name="geometry">
-         <rect>
-          <x>23</x>
-          <y>0</y>
-          <width>821</width>
-          <height>511</height>
-         </rect>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_6">
-         <item>
-          <widget class="QLabel" name="label_5">
-           <property name="text">
-            <string>学生课程管理</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_5">
-           <item>
-            <widget class="QTableView" name="table_view_stu_course"/>
-           </item>
-           <item>
-            <layout class="QVBoxLayout" name="verticalLayout_5">
-             <item>
-              <widget class="QPushButton" name="btn_del_course_for_stu">
-               <property name="toolTip">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;从当前所选课程中移除&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="resources.qrc">
-                 <normaloff>:/icons/assets/icons/arrow_right.png</normaloff>:/icons/assets/icons/arrow_right.png</iconset>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="verticalSpacer">
-               <property name="orientation">
-                <enum>Qt::Orientation::Vertical</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>20</width>
-                 <height>40</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btn_add_course_for_stu">
-               <property name="toolTip">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;添加所选课程&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="resources.qrc">
-                 <normaloff>:/icons/arrow_right</normaloff>:/icons/arrow_right</iconset>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <widget class="QTableView" name="table_view_stu_course_availabel"/>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-      </widget>
-      <widget class="QWidget" name="page_4">
-       <widget class="QWidget" name="layoutWidget">
-        <property name="geometry">
-         <rect>
-          <x>30</x>
-          <y>12</y>
-          <width>901</width>
-          <height>551</height>
-         </rect>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="3,0">
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_4" stretch="5,0">
-           <item>
-            <widget class="QLabel" name="label_camp_frame">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>摄像头捕获画面</string>
-             </property>
-             <property name="wordWrap">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_6">
-             <item>
-              <widget class="QPushButton" name="btn_start_enter">
-               <property name="text">
-                <string>开始</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="combo_box_video_source"/>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btn_end_enter">
-               <property name="text">
-                <string>停止</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_7">
-           <item>
-            <widget class="QLabel" name="label_face">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>150</width>
-               <height>150</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>150</width>
-               <height>150</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>捕获的人脸</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QGroupBox" name="groupBox">
-             <property name="title">
-              <string>学生信息 </string>
-             </property>
-             <layout class="QFormLayout" name="formLayout">
-              <property name="horizontalSpacing">
-               <number>10</number>
-              </property>
-              <property name="verticalSpacing">
-               <number>34</number>
-              </property>
-              <item row="0" column="0">
-               <widget class="QLabel" name="label_2">
-                <property name="text">
-                 <string>姓名</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QLineEdit" name="line_edit_name">
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="label_6">
-                <property name="text">
-                 <string>性别</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <layout class="QHBoxLayout" name="horizontalLayout_8">
-                <item>
-                 <widget class="QRadioButton" name="rbtn_male">
-                  <property name="text">
-                   <string>男</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="rbtn_female">
-                  <property name="text">
-                   <string>女</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item row="2" column="0">
-               <widget class="QLabel" name="label_7">
-                <property name="text">
-                 <string>年龄</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1">
-               <widget class="QLineEdit" name="line_edit_age"/>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout">
-             <item>
-              <widget class="QPushButton" name="btn_confirm_collect">
-               <property name="styleSheet">
-                <string notr="true">QPushButton {
-    background-color: #3498db; /* 按钮背景颜色（蓝色） */
-    color: white;             /* 按钮文字颜色（白色） */
-    border: 2px solid #2980b9; /* 边框颜色（深蓝） */
-    border-radius: 5px;       /* 圆角半径 */
-    padding: 5px 10px;        /* 内边距 */
-    font: bold 12px;          /* 字体加粗 */
-}
-
-QPushButton:hover {
-    background-color: #2980b9; /* 鼠标悬停时背景颜色 */
-    border-color: #1c5c92;    /* 鼠标悬停时边框颜色 */
-}
-
-QPushButton:pressed {
-    background-color: #1c5c92; /* 按下时背景颜色 */
-    border-color: #15486d;    /* 按下时边框颜色 */
-}
-</string>
-               </property>
-               <property name="text">
-                <string>确认录入</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btn_pass_collect">
-               <property name="styleSheet">
-                <string notr="true">QPushButton {
-    background-color: #3498db; /* 按钮背景颜色（蓝色） */
-    color: white;             /* 按钮文字颜色（白色） */
-    border: 2px solid #2980b9; /* 边框颜色（深蓝） */
-    border-radius: 5px;       /* 圆角半径 */
-    padding: 5px 10px;        /* 内边距 */
-    font: bold 12px;          /* 字体加粗 */
-}
-
-QPushButton:hover {
-    background-color: #2980b9; /* 鼠标悬停时背景颜色 */
-    border-color: #1c5c92;    /* 鼠标悬停时边框颜色 */
-}
-
-QPushButton:pressed {
-    background-color: #1c5c92; /* 按下时背景颜色 */
-    border-color: #15486d;    /* 按下时边框颜色 */
-}
-</string>
-               </property>
-               <property name="text">
-                <string>跳过</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-      </widget>
-      <widget class="QWidget" name="page_2">
-       <layout class="QHBoxLayout" name="horizontalLayout_11" stretch="4,1">
+       <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_9" stretch="1,0">
+         <layout class="QVBoxLayout" name="verticalLayout_6">
           <item>
-           <widget class="QLabel" name="lable_display_cap_1">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">  border: 1px solid black;</string>
-            </property>
+           <widget class="QLabel" name="label_5">
             <property name="text">
-             <string>显示摄像头捕获的图像</string>
+             <string>学生课程管理</string>
             </property>
            </widget>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_10">
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
-             <widget class="QPushButton" name="btn_start_cap_face_1">
-              <property name="text">
-               <string>开始捕获人脸</string>
-              </property>
-             </widget>
+             <widget class="QTableView" name="table_view_stu_course"/>
             </item>
             <item>
-             <widget class="QComboBox" name="combo_box_select_video_source"/>
+             <layout class="QVBoxLayout" name="verticalLayout_5">
+              <item>
+               <widget class="QPushButton" name="btn_del_course_for_stu">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;从当前所选课程中移除&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="resources.qrc">
+                  <normaloff>:/icons/assets/icons/arrow_right.png</normaloff>:/icons/assets/icons/arrow_right.png</iconset>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="verticalSpacer">
+                <property name="orientation">
+                 <enum>Qt::Orientation::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btn_add_course_for_stu">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;添加所选课程&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="resources.qrc">
+                  <normaloff>:/icons/arrow_right</normaloff>:/icons/arrow_right</iconset>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
             <item>
-             <widget class="QPushButton" name="btn_end_cap_face_1">
-              <property name="text">
-               <string>停止</string>
-              </property>
-             </widget>
+             <widget class="QTableView" name="table_view_stu_course_availabel"/>
             </item>
            </layout>
           </item>
          </layout>
         </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_4">
+       <layout class="QHBoxLayout" name="horizontalLayout_11">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_8" stretch="2,3,0,0">
+         <layout class="QVBoxLayout" name="verticalLayout_10">
           <item>
-           <widget class="QLabel" name="label_display_cap_face_1">
-            <property name="styleSheet">
-             <string notr="true">  border: 1px solid black;</string>
-            </property>
+           <widget class="QLabel" name="label_8">
             <property name="text">
-             <string>TextLabel</string>
+             <string>批量录入人脸信息</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QGroupBox" name="groupBox_2">
-            <property name="title">
-             <string>GroupBox</string>
-            </property>
-            <layout class="QFormLayout" name="formLayout_2">
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_10">
-               <property name="text">
-                <string>ID</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QLabel" name="label_id_1">
-               <property name="text">
-                <string/>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_12">
-               <property name="text">
-                <string>姓名</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QLabel" name="label_name_1">
-               <property name="text">
-                <string/>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="label_14">
-               <property name="text">
-                <string>性别</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QLabel" name="label_gender_1">
-               <property name="text">
-                <string/>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="label_16">
-               <property name="text">
-                <string>年龄</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="1">
-              <widget class="QLabel" name="label_age_1">
-               <property name="text">
-                <string/>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
+           <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="3,0">
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_4" stretch="5,0">
+              <item>
+               <widget class="QLabel" name="label_camp_frame">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>摄像头捕获画面</string>
+                </property>
+                <property name="wordWrap">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_6">
+                <item>
+                 <widget class="QPushButton" name="btn_start_enter">
+                  <property name="text">
+                   <string>开始</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="combo_box_video_source"/>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="btn_end_enter">
+                  <property name="text">
+                   <string>停止</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_7">
+              <item>
+               <widget class="QLabel" name="label_face">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>150</width>
+                  <height>150</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>150</width>
+                  <height>150</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>捕获的人脸</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QGroupBox" name="groupBox">
+                <property name="title">
+                 <string>学生信息 </string>
+                </property>
+                <layout class="QFormLayout" name="formLayout">
+                 <property name="horizontalSpacing">
+                  <number>10</number>
+                 </property>
+                 <property name="verticalSpacing">
+                  <number>34</number>
+                 </property>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="label_2">
+                   <property name="text">
+                    <string>姓名</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QLineEdit" name="line_edit_name">
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="label_6">
+                   <property name="text">
+                    <string>性别</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <layout class="QHBoxLayout" name="horizontalLayout_8">
+                   <item>
+                    <widget class="QRadioButton" name="rbtn_male">
+                     <property name="text">
+                      <string>男</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="rbtn_female">
+                     <property name="text">
+                      <string>女</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="label_7">
+                   <property name="text">
+                    <string>年龄</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QLineEdit" name="line_edit_age"/>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout">
+                <item>
+                 <widget class="QPushButton" name="btn_confirm_collect">
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton {
+    background-color: #3498db; /* 按钮背景颜色（蓝色） */
+    color: white;             /* 按钮文字颜色（白色） */
+    border: 2px solid #2980b9; /* 边框颜色（深蓝） */
+    border-radius: 5px;       /* 圆角半径 */
+    padding: 5px 10px;        /* 内边距 */
+    font: bold 12px;          /* 字体加粗 */
+}
+
+QPushButton:hover {
+    background-color: #2980b9; /* 鼠标悬停时背景颜色 */
+    border-color: #1c5c92;    /* 鼠标悬停时边框颜色 */
+}
+
+QPushButton:pressed {
+    background-color: #1c5c92; /* 按下时背景颜色 */
+    border-color: #15486d;    /* 按下时边框颜色 */
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string>确认录入</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="btn_pass_collect">
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton {
+    background-color: #3498db; /* 按钮背景颜色（蓝色） */
+    color: white;             /* 按钮文字颜色（白色） */
+    border: 2px solid #2980b9; /* 边框颜色（深蓝） */
+    border-radius: 5px;       /* 圆角半径 */
+    padding: 5px 10px;        /* 内边距 */
+    font: bold 12px;          /* 字体加粗 */
+}
+
+QPushButton:hover {
+    background-color: #2980b9; /* 鼠标悬停时背景颜色 */
+    border-color: #1c5c92;    /* 鼠标悬停时边框颜色 */
+}
+
+QPushButton:pressed {
+    background-color: #1c5c92; /* 按下时背景颜色 */
+    border-color: #15486d;    /* 按下时边框颜色 */
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string>跳过</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_2">
+       <layout class="QVBoxLayout" name="verticalLayout_12">
+        <item>
+         <widget class="QLabel" name="label_9">
+          <property name="text">
+           <string>更新人脸数据</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_12" stretch="4,1">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_9" stretch="8,0">
+            <item>
+             <widget class="QLabel" name="lable_display_cap_1">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">  border: 1px solid black;</string>
+              </property>
+              <property name="text">
+               <string>显示摄像头捕获的图像</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_10">
+              <item>
+               <widget class="QPushButton" name="btn_start_cap_face_1">
+                <property name="text">
+                 <string>开始捕获人脸</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="combo_box_select_video_source"/>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btn_end_cap_face_1">
+                <property name="text">
+                 <string>停止</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
           </item>
           <item>
-           <widget class="QPushButton" name="btn_confirm_this_face_1">
-            <property name="text">
-             <string>录入</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="btn_pass_this_face_1">
-            <property name="text">
-             <string>放弃</string>
-            </property>
-           </widget>
+           <layout class="QVBoxLayout" name="verticalLayout_8" stretch="2,3,0,0">
+            <item>
+             <widget class="QLabel" name="label_display_cap_face_1">
+              <property name="styleSheet">
+               <string notr="true">  border: 1px solid black;</string>
+              </property>
+              <property name="text">
+               <string>TextLabel</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_2">
+              <property name="title">
+               <string>GroupBox</string>
+              </property>
+              <layout class="QFormLayout" name="formLayout_2">
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_10">
+                 <property name="text">
+                  <string>ID</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QLabel" name="label_id_1">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_12">
+                 <property name="text">
+                  <string>姓名</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QLabel" name="label_name_1">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_14">
+                 <property name="text">
+                  <string>性别</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QLabel" name="label_gender_1">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_16">
+                 <property name="text">
+                  <string>年龄</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="1">
+                <widget class="QLabel" name="label_age_1">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btn_confirm_this_face_1">
+              <property name="text">
+               <string>录入</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btn_pass_this_face_1">
+              <property name="text">
+               <string>放弃</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </item>

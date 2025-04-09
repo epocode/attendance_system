@@ -38,30 +38,30 @@ class Ui_AdminWindow(object):
 "    font-size: 12px;\n"
 "}\n"
 "\n"
+"/* \u9488\u5bf9\u6240\u6709\u5e26 custom-btn \u5c5e\u6027\u7684 QPushButton */\n"
 "QPushButton[class=\"custom-btn\"] {\n"
-"        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,\n"
-"            stop:0 #ffffff, stop:1 #f0f0f0);\n"
-"        border: 1px solid #ddd;\n"
-"        border-radius: 4px;\n"
-"        padding: 5px;\n"
-"        min-width: 80px;\n"
-"        transition: all 0.2s;\n"
-"    }\n"
+"    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,\n"
+"        stop:0 #ffffff, stop:1 #f0f0f0);\n"
+"    border: 1px solid #ddd;\n"
+"    border-radius: 4px;\n"
+"    padding: 5px;\n"
+"    min-width: 80px;\n"
+"    /* \u79fb\u9664\u4e0d\u652f\u6301\u7684 transition \u5c5e\u6027 */\n"
+"}\n"
 "\n"
-"    /* \u60ac\u505c\u72b6\u6001 */\n"
-"    QPushButton[class=\"custom-btn\"]:hover {\n"
-"        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,\n"
-"            stop:0 #f8f8f8, stop:1 #e0e0e0);\n"
-"        border-color: #ccc;\n"
-"    }\n"
+"/* \u60ac\u505c\u72b6\u6001 */\n"
+"QPushButton[class=\"custom-btn\"]:hover {\n"
+"    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,\n"
+"        stop:0 #f8f8f8, stop:1 #e0e0e0);\n"
+"    "
+                        "border-color: #ccc;\n"
+"}\n"
 "\n"
-"    /* \u6309\u4e0b\u72b6\u6001 */\n"
-""
-                        "    QPushButton[class=\"custom-btn\"]:pressed {\n"
-"        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,\n"
-"            stop:0 #e0e0e0, stop:1 #d0d0d0);\n"
-"    }\n"
-"\n"
+"/* \u6309\u4e0b\u72b6\u6001 */\n"
+"QPushButton[class=\"custom-btn\"]:pressed {\n"
+"    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,\n"
+"        stop:0 #e0e0e0, stop:1 #d0d0d0);\n"
+"}\n"
 "\n"
 "/* \u6309\u94ae\u57fa\u7840\u6837\u5f0f */\n"
 "QPushButton {\n"
@@ -87,10 +87,10 @@ class Ui_AdminWindow(object):
 "    padding: 2px 4px;\n"
 "    background-color: #ffffff;\n"
 "    color: #333333;\n"
-"}\n"
+""
+                        "}\n"
 "\n"
-"/* \u6587\u672c\u8f93\u5165\u6846\u83b7"
-                        "\u5f97\u7126\u70b9\u65f6\u8fb9\u6846\u9ad8\u4eae */\n"
+"/* \u6587\u672c\u8f93\u5165\u6846\u83b7\u5f97\u7126\u70b9\u65f6\u8fb9\u6846\u9ad8\u4eae */\n"
 "QLineEdit:focus {\n"
 "    border: 2px solid #3498db;\n"
 "}\n"
@@ -101,11 +101,10 @@ class Ui_AdminWindow(object):
 "    border-radius: 5px;     \n"
 "    margin-top: 1em;        \n"
 "    background-color: #ffffff;\n"
-"    /* \u53ef\u4ee5\u6839\u636e\u9700\u8981\u589e\u52a0 padding\u3001margin \u7b49 */\n"
 "}\n"
 "\n"
 "/* GroupBox \u6807\u9898\u7684\u4f4d\u7f6e\u548c\u6837\u5f0f */\n"
-"QGroupBox:title {\n"
+"QGroupBox::title {\n"
 "    subcontrol-origin: margin;\n"
 "    subcontrol-position: top center;\n"
 "    padding: 0 5px;\n"
@@ -113,36 +112,11 @@ class Ui_AdminWindow(object):
 "    font-weight: bold; /* \u6807\u9898\u52a0\u7c97 */\n"
 "}\n"
 "\n"
-"/* Label \u57fa\u672c\u6837\u5f0f\uff08\u53ef\u9009\uff09 */\n"
+"/* Label \u57fa\u672c\u6837\u5f0f */\n"
 "QLabel {\n"
 "    color: #333333;\n"
 "    font-size: 12px;\n"
-"}\n"
-"\n"
-"    /* \u9488\u5bf9\u6240\u6709\u5e26 custom-btn \u5c5e\u6027\u7684 QPushButton */\n"
-"    QPushButton[class=\"custom-btn\"] {\n"
-"        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,\n"
-"  "
-                        "          stop:0 #ffffff, stop:1 #f0f0f0);\n"
-"        border: 1px solid #ddd;\n"
-"        border-radius: 4px;\n"
-"        padding: 5px;\n"
-"        min-width: 80px;\n"
-"        transition: all 0.2s;\n"
-"    }\n"
-"\n"
-"    /* \u60ac\u505c\u72b6\u6001 */\n"
-"    QPushButton[class=\"custom-btn\"]:hover {\n"
-"        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,\n"
-"            stop:0 #f8f8f8, stop:1 #e0e0e0);\n"
-"        border-color: #ccc;\n"
-"    }\n"
-"\n"
-"    /* \u6309\u4e0b\u72b6\u6001 */\n"
-"    QPushButton[class=\"custom-btn\"]:pressed {\n"
-"        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,\n"
-"            stop:0 #e0e0e0, stop:1 #d0d0d0);\n"
-"    }")
+"}")
         self.centralwidget = QWidget(AdminWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.horizontalLayout_9 = QHBoxLayout(self.centralwidget)
@@ -165,17 +139,17 @@ class Ui_AdminWindow(object):
         self.stacked_widget.setObjectName(u"stacked_widget")
         self.page_teacher = QWidget()
         self.page_teacher.setObjectName(u"page_teacher")
-        self.verticalLayout = QVBoxLayout(self.page_teacher)
-        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout_11 = QVBoxLayout(self.page_teacher)
+        self.verticalLayout_11.setObjectName(u"verticalLayout_11")
         self.label = QLabel(self.page_teacher)
         self.label.setObjectName(u"label")
 
-        self.verticalLayout.addWidget(self.label)
+        self.verticalLayout_11.addWidget(self.label)
 
         self.table_view_teachers = QTableView(self.page_teacher)
         self.table_view_teachers.setObjectName(u"table_view_teachers")
 
-        self.verticalLayout.addWidget(self.table_view_teachers)
+        self.verticalLayout_11.addWidget(self.table_view_teachers)
 
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
@@ -190,7 +164,7 @@ class Ui_AdminWindow(object):
         self.horizontalLayout_2.addWidget(self.btn_delete_teacher)
 
 
-        self.verticalLayout.addLayout(self.horizontalLayout_2)
+        self.verticalLayout_11.addLayout(self.horizontalLayout_2)
 
         self.stacked_widget.addWidget(self.page_teacher)
         self.page_course = QWidget()
@@ -260,27 +234,25 @@ class Ui_AdminWindow(object):
         self.stacked_widget.addWidget(self.page_stu)
         self.page = QWidget()
         self.page.setObjectName(u"page")
-        self.layoutWidget = QWidget(self.page)
-        self.layoutWidget.setObjectName(u"layoutWidget")
-        self.layoutWidget.setGeometry(QRect(23, 0, 821, 511))
-        self.verticalLayout_6 = QVBoxLayout(self.layoutWidget)
+        self.verticalLayout = QVBoxLayout(self.page)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout_6 = QVBoxLayout()
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
-        self.verticalLayout_6.setContentsMargins(0, 0, 0, 0)
-        self.label_5 = QLabel(self.layoutWidget)
+        self.label_5 = QLabel(self.page)
         self.label_5.setObjectName(u"label_5")
 
         self.verticalLayout_6.addWidget(self.label_5)
 
         self.horizontalLayout_5 = QHBoxLayout()
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-        self.table_view_stu_course = QTableView(self.layoutWidget)
+        self.table_view_stu_course = QTableView(self.page)
         self.table_view_stu_course.setObjectName(u"table_view_stu_course")
 
         self.horizontalLayout_5.addWidget(self.table_view_stu_course)
 
         self.verticalLayout_5 = QVBoxLayout()
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
-        self.btn_del_course_for_stu = QPushButton(self.layoutWidget)
+        self.btn_del_course_for_stu = QPushButton(self.page)
         self.btn_del_course_for_stu.setObjectName(u"btn_del_course_for_stu")
         icon = QIcon()
         icon.addFile(u":/icons/assets/icons/arrow_right.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
@@ -292,7 +264,7 @@ class Ui_AdminWindow(object):
 
         self.verticalLayout_5.addItem(self.verticalSpacer)
 
-        self.btn_add_course_for_stu = QPushButton(self.layoutWidget)
+        self.btn_add_course_for_stu = QPushButton(self.page)
         self.btn_add_course_for_stu.setObjectName(u"btn_add_course_for_stu")
         icon1 = QIcon()
         icon1.addFile(u":/icons/arrow_right", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
@@ -303,7 +275,7 @@ class Ui_AdminWindow(object):
 
         self.horizontalLayout_5.addLayout(self.verticalLayout_5)
 
-        self.table_view_stu_course_availabel = QTableView(self.layoutWidget)
+        self.table_view_stu_course_availabel = QTableView(self.page)
         self.table_view_stu_course_availabel.setObjectName(u"table_view_stu_course_availabel")
 
         self.horizontalLayout_5.addWidget(self.table_view_stu_course_availabel)
@@ -311,18 +283,26 @@ class Ui_AdminWindow(object):
 
         self.verticalLayout_6.addLayout(self.horizontalLayout_5)
 
+
+        self.verticalLayout.addLayout(self.verticalLayout_6)
+
         self.stacked_widget.addWidget(self.page)
         self.page_4 = QWidget()
         self.page_4.setObjectName(u"page_4")
-        self.layoutWidget1 = QWidget(self.page_4)
-        self.layoutWidget1.setObjectName(u"layoutWidget1")
-        self.layoutWidget1.setGeometry(QRect(30, 12, 901, 551))
-        self.horizontalLayout_7 = QHBoxLayout(self.layoutWidget1)
+        self.horizontalLayout_11 = QHBoxLayout(self.page_4)
+        self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
+        self.verticalLayout_10 = QVBoxLayout()
+        self.verticalLayout_10.setObjectName(u"verticalLayout_10")
+        self.label_8 = QLabel(self.page_4)
+        self.label_8.setObjectName(u"label_8")
+
+        self.verticalLayout_10.addWidget(self.label_8)
+
+        self.horizontalLayout_7 = QHBoxLayout()
         self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
-        self.horizontalLayout_7.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_4 = QVBoxLayout()
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.label_camp_frame = QLabel(self.layoutWidget1)
+        self.label_camp_frame = QLabel(self.page_4)
         self.label_camp_frame.setObjectName(u"label_camp_frame")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -335,17 +315,17 @@ class Ui_AdminWindow(object):
 
         self.horizontalLayout_6 = QHBoxLayout()
         self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
-        self.btn_start_enter = QPushButton(self.layoutWidget1)
+        self.btn_start_enter = QPushButton(self.page_4)
         self.btn_start_enter.setObjectName(u"btn_start_enter")
 
         self.horizontalLayout_6.addWidget(self.btn_start_enter)
 
-        self.combo_box_video_source = QComboBox(self.layoutWidget1)
+        self.combo_box_video_source = QComboBox(self.page_4)
         self.combo_box_video_source.setObjectName(u"combo_box_video_source")
 
         self.horizontalLayout_6.addWidget(self.combo_box_video_source)
 
-        self.btn_end_enter = QPushButton(self.layoutWidget1)
+        self.btn_end_enter = QPushButton(self.page_4)
         self.btn_end_enter.setObjectName(u"btn_end_enter")
 
         self.horizontalLayout_6.addWidget(self.btn_end_enter)
@@ -359,7 +339,7 @@ class Ui_AdminWindow(object):
 
         self.verticalLayout_7 = QVBoxLayout()
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
-        self.label_face = QLabel(self.layoutWidget1)
+        self.label_face = QLabel(self.page_4)
         self.label_face.setObjectName(u"label_face")
         self.label_face.setEnabled(True)
         sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
@@ -372,7 +352,7 @@ class Ui_AdminWindow(object):
 
         self.verticalLayout_7.addWidget(self.label_face)
 
-        self.groupBox = QGroupBox(self.layoutWidget1)
+        self.groupBox = QGroupBox(self.page_4)
         self.groupBox.setObjectName(u"groupBox")
         self.formLayout = QFormLayout(self.groupBox)
         self.formLayout.setObjectName(u"formLayout")
@@ -423,7 +403,7 @@ class Ui_AdminWindow(object):
 
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.btn_confirm_collect = QPushButton(self.layoutWidget1)
+        self.btn_confirm_collect = QPushButton(self.page_4)
         self.btn_confirm_collect.setObjectName(u"btn_confirm_collect")
         self.btn_confirm_collect.setStyleSheet(u"QPushButton {\n"
 "    background-color: #3498db; /* \u6309\u94ae\u80cc\u666f\u989c\u8272\uff08\u84dd\u8272\uff09 */\n"
@@ -447,7 +427,7 @@ class Ui_AdminWindow(object):
 
         self.horizontalLayout.addWidget(self.btn_confirm_collect)
 
-        self.btn_pass_collect = QPushButton(self.layoutWidget1)
+        self.btn_pass_collect = QPushButton(self.page_4)
         self.btn_pass_collect.setObjectName(u"btn_pass_collect")
         self.btn_pass_collect.setStyleSheet(u"QPushButton {\n"
 "    background-color: #3498db; /* \u6309\u94ae\u80cc\u666f\u989c\u8272\uff08\u84dd\u8272\uff09 */\n"
@@ -478,11 +458,24 @@ class Ui_AdminWindow(object):
         self.horizontalLayout_7.addLayout(self.verticalLayout_7)
 
         self.horizontalLayout_7.setStretch(0, 3)
+
+        self.verticalLayout_10.addLayout(self.horizontalLayout_7)
+
+
+        self.horizontalLayout_11.addLayout(self.verticalLayout_10)
+
         self.stacked_widget.addWidget(self.page_4)
         self.page_2 = QWidget()
         self.page_2.setObjectName(u"page_2")
-        self.horizontalLayout_11 = QHBoxLayout(self.page_2)
-        self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
+        self.verticalLayout_12 = QVBoxLayout(self.page_2)
+        self.verticalLayout_12.setObjectName(u"verticalLayout_12")
+        self.label_9 = QLabel(self.page_2)
+        self.label_9.setObjectName(u"label_9")
+
+        self.verticalLayout_12.addWidget(self.label_9)
+
+        self.horizontalLayout_12 = QHBoxLayout()
+        self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
         self.verticalLayout_9 = QVBoxLayout()
         self.verticalLayout_9.setObjectName(u"verticalLayout_9")
         self.lable_display_cap_1 = QLabel(self.page_2)
@@ -513,9 +506,9 @@ class Ui_AdminWindow(object):
 
         self.verticalLayout_9.addLayout(self.horizontalLayout_10)
 
-        self.verticalLayout_9.setStretch(0, 1)
+        self.verticalLayout_9.setStretch(0, 8)
 
-        self.horizontalLayout_11.addLayout(self.verticalLayout_9)
+        self.horizontalLayout_12.addLayout(self.verticalLayout_9)
 
         self.verticalLayout_8 = QVBoxLayout()
         self.verticalLayout_8.setObjectName(u"verticalLayout_8")
@@ -585,16 +578,19 @@ class Ui_AdminWindow(object):
         self.verticalLayout_8.setStretch(0, 2)
         self.verticalLayout_8.setStretch(1, 3)
 
-        self.horizontalLayout_11.addLayout(self.verticalLayout_8)
+        self.horizontalLayout_12.addLayout(self.verticalLayout_8)
 
-        self.horizontalLayout_11.setStretch(0, 4)
-        self.horizontalLayout_11.setStretch(1, 1)
+        self.horizontalLayout_12.setStretch(0, 4)
+        self.horizontalLayout_12.setStretch(1, 1)
+
+        self.verticalLayout_12.addLayout(self.horizontalLayout_12)
+
         self.stacked_widget.addWidget(self.page_2)
 
         self.horizontalLayout_9.addWidget(self.stacked_widget)
 
         self.horizontalLayout_9.setStretch(0, 1)
-        self.horizontalLayout_9.setStretch(1, 4)
+        self.horizontalLayout_9.setStretch(1, 6)
         AdminWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(AdminWindow)
         self.menubar.setObjectName(u"menubar")
@@ -606,7 +602,7 @@ class Ui_AdminWindow(object):
 
         self.retranslateUi(AdminWindow)
 
-        self.stacked_widget.setCurrentIndex(2)
+        self.stacked_widget.setCurrentIndex(4)
 
 
         QMetaObject.connectSlotsByName(AdminWindow)
@@ -650,6 +646,7 @@ class Ui_AdminWindow(object):
         self.btn_add_course_for_stu.setToolTip(QCoreApplication.translate("AdminWindow", u"<html><head/><body><p>\u6dfb\u52a0\u6240\u9009\u8bfe\u7a0b</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
         self.btn_add_course_for_stu.setText("")
+        self.label_8.setText(QCoreApplication.translate("AdminWindow", u"\u6279\u91cf\u5f55\u5165\u4eba\u8138\u4fe1\u606f", None))
         self.label_camp_frame.setText(QCoreApplication.translate("AdminWindow", u"\u6444\u50cf\u5934\u6355\u83b7\u753b\u9762", None))
         self.btn_start_enter.setText(QCoreApplication.translate("AdminWindow", u"\u5f00\u59cb", None))
         self.btn_end_enter.setText(QCoreApplication.translate("AdminWindow", u"\u505c\u6b62", None))
@@ -663,6 +660,7 @@ class Ui_AdminWindow(object):
         self.label_7.setText(QCoreApplication.translate("AdminWindow", u"\u5e74\u9f84", None))
         self.btn_confirm_collect.setText(QCoreApplication.translate("AdminWindow", u"\u786e\u8ba4\u5f55\u5165", None))
         self.btn_pass_collect.setText(QCoreApplication.translate("AdminWindow", u"\u8df3\u8fc7", None))
+        self.label_9.setText(QCoreApplication.translate("AdminWindow", u"\u66f4\u65b0\u4eba\u8138\u6570\u636e", None))
         self.lable_display_cap_1.setText(QCoreApplication.translate("AdminWindow", u"\u663e\u793a\u6444\u50cf\u5934\u6355\u83b7\u7684\u56fe\u50cf", None))
         self.btn_start_cap_face_1.setText(QCoreApplication.translate("AdminWindow", u"\u5f00\u59cb\u6355\u83b7\u4eba\u8138", None))
         self.btn_end_cap_face_1.setText(QCoreApplication.translate("AdminWindow", u"\u505c\u6b62", None))

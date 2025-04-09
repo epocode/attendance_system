@@ -18,7 +18,8 @@ from PySide6.QtCore import (
     Signal,
     QMutex,
     Signal,
-    QTimer
+    QTimer,
+    QSize
 )
 from PySide6.QtGui import (
     QAction,
@@ -134,6 +135,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
 #------------------------------课程信息页面----------------------------------
     def enter_course_info_page(self):
         """course_info. <-课程名-操作->"""
+        self.label.setText(f"{self.teacher_name}的课程信息")
         self.course_dao = CourseDAO(self.db, self.teacher_username)
         self.course_teacher_model = CoursecherTableModel(self.course_dao, self.teacher_username)
         self.table_view_course_teacher.setModel(self.course_teacher_model)
@@ -153,6 +155,9 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         if row is not None:
             self.attendance_info_dao = AttendanceInfoDAO(self.db)
             course_name = self.course_teacher_model.data(self.course_teacher_model.index(row, 0), Qt.DisplayRole)
+            
+            self.label_2.setText(f"课程：{course_name}的考勤记录")
+            
             self.course_detail_model = CourseDetailModel(self.attendance_info_dao, course_name)
             self.table_view_course_detail.setModel(self.course_detail_model)
             
@@ -215,6 +220,9 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         if row is not None:
             date = self.course_detail_model.data(self.course_detail_model.index(row, 0), Qt.DisplayRole)
             self.attendance_detail_model = AttendanceDetailModel(self.attendance_info_dao, course_name, date)
+            
+            self.label_3.setText(f"课程{course_name}, 日期{date}的考勤详情")
+            
             self.table_view_attendance_detail.setModel(self.attendance_detail_model)
 
             self.show_stu_attendance_detail_delegate = BtnDelegate('查看', self.table_view_attendance_detail)
@@ -236,6 +244,9 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         # 进入学生的考勤详情界面，显示当前学生的考勤详情
         if row is not None:
             stu_id = self.attendance_detail_model.data(self.attendance_detail_model.index(row, 1), Qt.DisplayRole)
+            stu_name = self.attendance_detail_model.data(self.attendance_detail_model.index(row, 0), Qt.DisplayRole)
+            self.label_4.setText(f"学生{stu_name}的缺勤记录")
+
             self.stu_attendance_detail_model = StuAttendanceDetailModel(self.attendance_info_dao, stu_id)
             self.table_view_stu_attendance_detail.setModel(self.stu_attendance_detail_model)
         else:
@@ -299,7 +310,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
         pixmap = QPixmap.fromImage(qimage)
         self.label_display_cap.setPixmap(pixmap)
 
-        label_size = self.label_display_cap.size()
+        label_size = QSize(640, 480)
         pixmap = QPixmap(label_size)
         pixmap.fill(Qt.black)  # 设置背景色
         # 将QImage转换为QPixmap

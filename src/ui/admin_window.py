@@ -13,7 +13,8 @@ from PySide6.QtWidgets import (
     QWidget,
     QFileDialog,
     QApplication,
-    QLabel
+    QLabel,
+    QMessageBox
 )
 from PySide6.QtCore import Signal, QTimer, Qt, QSize
 from PySide6.QtGui import QPixmap, QPainter, QImage
@@ -613,7 +614,8 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
             return
         
         is_face_collected = 1
-        self.student_dao.add_student(name, gender, age, is_face_collected, face_feature)
+        if not self.student_dao.add_student(name, gender, age, is_face_collected, face_feature):
+            QMessageBox.warning(self, '人脸录入失败', '人脸已存在')
         self.set_page_dirty(['student_page'])
 
         self.face_taker.resume()

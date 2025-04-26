@@ -107,11 +107,12 @@ class FaceTaker(QThread):
                             aligned_face_bgr = dlib.get_face_chip(frame, landmarks, size=150, padding=0.25)
                             aligned_face_rgb = cv2.cvtColor(aligned_face_bgr, cv2.COLOR_BGR2RGB)
 
-                           
+                           # 不进行人脸质量的测试
                             check_result = self.quality_checker.check(frame, aligned_face_rgb)
                             
                             #check_result 格式(是否满足要求， 不满足要求的原因)
                             if check_result[0]:
+                            # if True:
                                 #将当前的bgr格式的人脸保存下来，便于后面进行特征的提取
                                 self.stored_face_rgb = aligned_face_rgb
 

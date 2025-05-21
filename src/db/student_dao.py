@@ -48,13 +48,16 @@ ON student.id = course_student.student_id;"""
             self.db.begin_transaction()
             query = 'INSERT INTO student (name, gender, age, is_face_collected) VALUES (%s, %s, %s, %s);'
             params = (name, gender, age, is_face_collected)  
-            last_id = self.db.execute_with_lastid(query, params)  
-            if face_feature is not None and last_id != 0:
+            last_id = self.db.execute_with_lastid(query, params)
+            if last_id == 0: # Indicates failure from DB side
+                self.db.rollback()
+                return None 
+            if face_feature is not None:
                 self.vec_db.add_with_ids(face_feature, np.array([last_id]))
             self.db.commit()
-            return True
+            return (last_id, name, gender, age, is_face_collected)
         except Exception as e:
-            print(e)
+            print(f"Error in add_student: {e}")
             self.db.rollback()
             return False
 
@@ -73,13 +76,35 @@ ON student.id = course_student.student_id;"""
             print(e)
             return False
 
-    def delete_student(self, row):
-        res = self.get_student_info()
-        id = res[row][0]
-        query = 'DELETE FROM student WHERE id = %s;'    
-        params = (id,)
-        self.db.execute(query, params)
-        self.vec_db.delete(np.array([id]))
+    def delete_student(self, row_index):
+        # Fetches student info to get ID based on row index
+        students_info = self.get_student_info()
+        if not (0 <= row_index < len(students_info)):
+            print(f"Error: Row index {row_index} is out of bounds.")
+            return False
+        
+        student_id_to_delete = students_info[row_index][0]
+        
+        try:
+            self.db.begin_transaction()
+            query = 'DELETE FROM student WHERE id = %s;'    
+            params = (student_id_to_delete,)
+            success_db = self.db.execute(query, params) # Assuming execute returns True/False or raises error
+            
+            if not success_db:
+                self.db.rollback()
+                print(f"DB deletion failed for student ID {student_id_to_delete}")
+                return False
+
+            # Assuming vec_db.delete does not return a status, or raises an error on failure
+            self.vec_db.delete(np.array([student_id_to_delete]))
+            
+            self.db.commit()
+            return True
+        except Exception as e:
+            print(f"Error in delete_student for ID {student_id_to_delete}: {e}")
+            self.db.rollback()
+            return False
 
     def get_name_by_id(self, id):
         """根据id查询姓名"""

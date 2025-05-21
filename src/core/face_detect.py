@@ -136,9 +136,20 @@ class FaceDetection(QThread):
         return img
 
     def stop(self):
-        self.is_running = False
-        self.quit()
-        self.wait()
+        logger.info("Stopping FaceDetection thread...")
+        self.is_running = False  # Signal the run loop to terminate
+        
+        if hasattr(self, 'cap') and self.cap.isOpened():
+            logger.info("Releasing camera capture in FaceDetection thread.")
+            self.cap.release()
+            
+        self.quit()  # Tell the event loop to exit (important if the thread has its own event loop)
+        
+        if not self.wait(1000):  # Wait for 1000 ms (1 second) for run() to finish
+            logger.warning("FaceDetection thread did not terminate gracefully in time.")
+            # self.terminate() # Forcefully terminate - use with caution
+        else:
+            logger.info("FaceDetection thread terminated successfully.")
 
 
 

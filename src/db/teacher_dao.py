@@ -49,7 +49,10 @@ class TeacherDAO:
     def add_new(self, name, username, pswd):
         query = 'INSERT INTO teacher (name, username, password) VALUES(%s, %s, %s);'
         params = [name, username, pswd]
-        self.db.execute(query, params)
+        success = self.db.execute(query, params)
+        if success: # Assuming execute returns True on success or similar
+            return (name, username)
+        return None # Or raise an exception
 
     def delete_row(self, row):
         res = self.get_data()

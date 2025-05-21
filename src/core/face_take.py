@@ -143,9 +143,21 @@ class FaceTaker(QThread):
         return img
 
     def stop(self):
-        self.is_running = False
-        self.quit()
-        self.wait()  
+        logger.info("Stopping FaceTaker thread...")
+        self.is_running = False  # Signal the run loop to terminate
+        
+        # Release camera resource if it's open
+        if hasattr(self, 'cap') and self.cap.isOpened():
+            logger.info("Releasing camera capture in FaceTaker thread.")
+            self.cap.release()
+            
+        self.quit()  # Tell the event loop to exit
+        
+        if not self.wait(1000):  # Wait for 1000 ms (1 second) for run() to finish
+            logger.warning("FaceTaker thread did not terminate gracefully in time.")
+            # self.terminate() # Forcefully terminate - use with caution
+        else:
+            logger.info("FaceTaker thread terminated successfully.")
 
     def send_img(self, img, s):
         #s表示要使用的信号

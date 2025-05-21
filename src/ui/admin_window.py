@@ -16,7 +16,7 @@ from PySide6.QtWidgets import (
     QLabel,
     QMessageBox
 )
-from PySide6.QtCore import Signal, QTimer, Qt, QSize
+from PySide6.QtCore import Signal, QTimer, Qt, QSize, QSortFilterProxyModel
 from PySide6.QtGui import QPixmap, QPainter, QImage
 import cv2
 from src.ui.my_combo_delegate import MyComboDelegate
@@ -139,15 +139,65 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
             self.btn_add_teacher.clicked.connect(self.on_add_teacher_clicked)
             self.btn_delete_teacher.clicked.connect(self.on_delete_teacher_clicked)
 
+            # Create and set up the filter input and proxy model only once
+            self.teacher_proxy_model = QSortFilterProxyModel(self)
+            self.teacher_proxy_model.setSourceModel(self.teacher_table_model)
+            self.teacher_proxy_model.setFilterCaseSensitivity(Qt.CaseInsensitive) # Set once
+            self.teacher_proxy_model.setFilterKeyColumn(-1) # Filter on all columns by default
 
-        elif self.data_dirty[page_key]:
-            #如果数据脏了，仅仅刷新数据模型即可
-            self.teacher_table_model.refresh()
+            self.table_view_teachers.setModel(self.teacher_proxy_model)
+            self.table_view_teachers.setSortingEnabled(True)
 
-        # 刷新后当前页面不是脏的
-        self.data_dirty[page_key] = False
+            # Create filter QLineEdit
+            self.teacher_filter_input = QLineEdit(self)
+            self.teacher_filter_input.setPlaceholderText("输入关键字筛选老师...")
+            self.teacher_filter_input.textChanged.connect(self.filter_teachers_table)
+
+            # Add QLineEdit to the layout of page_teacher
+            # Assuming self.page_teacher is self.stacked_widget.widget(0)
+            page_teacher_widget = self.stacked_widget.widget(0) 
+            if page_teacher_widget.layout() is None:
+                # If no layout exists, create a new QVBoxLayout
+                new_layout = QVBoxLayout(page_teacher_widget)
+                page_teacher_widget.setLayout(new_layout)
+            
+            # Insert the filter input at the top of the layout
+            # This might need adjustment based on the actual structure of ui_admin_window.py
+            # It assumes other widgets (like buttons) are potentially in a different part of the UI
+            # or this layout is the primary one for the table and its controls.
+            # A more robust way might be to ensure specific layout objects exist in your .ui file.
+            # For now, we'll try to insert into the existing layout or a new one.
+            
+            # Let's find the existing layout that contains the table_view_teachers
+            # Typically, the table view and buttons are within a main vertical layout for the page.
+            # We assume self.page_teacher's layout is QVBoxLayout.
+            # The ui file shows page_teacher has a QVBoxLayout (verticalLayout_4)
+            # which contains another QVBoxLayout (verticalLayout) for buttons and the table view.
+            # We should insert the filter input into this inner verticalLayout, above the table view.
+            
+            # Accessing via object names from Ui_AdminWindow setup
+            # self.verticalLayout is the layout containing buttons and table_view_teachers
+            if hasattr(self, 'verticalLayout') and isinstance(self.verticalLayout, QVBoxLayout):
+                 # Insert QLineEdit at the top of this specific layout
+                self.verticalLayout.insertWidget(0, self.teacher_filter_input)
+            else:
+                # Fallback if the specific layout name isn't found (e.g. if UI structure changes)
+                # This is less ideal as it might not place the filter correctly.
+                current_layout = page_teacher_widget.layout()
+                if current_layout is not None:
+                    current_layout.insertWidget(0, self.teacher_filter_input)
+                else: # Should have been created above if it was None
+                    logger.warning("Could not find a suitable layout to insert teacher filter input.")
+
+
+        # The table should now update automatically via model signals.
+        # No need for data_dirty flag for teacher_page.
         self.stacked_widget.setCurrentIndex(self.page_map['teacher_page'])
         self.show_navi_info_label.setText(self.page_map_to_navi_info['teacher_page'])
+
+    def filter_teachers_table(self, text):
+        if hasattr(self, 'teacher_proxy_model'):
+            self.teacher_proxy_model.setFilterFixedString(text)
 
     def on_add_teacher_clicked(self):
         #创建新的老师信息
@@ -160,24 +210,67 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
             name = res['name']
             username = res['username']
             pswd = res['pswd']
-            if not self.teacher_dao.check_single_username(username):
-                print('当前用户名已存在')
-                return
-            self.teacher_dao.add_new(name, username, pswd)
-            print('成功添加新老师')
 
-            # 刷新数据模型并且设置关联页面为脏
-            self.teacher_table_model.refresh()
-            self.set_page_dirty(['course_page', 'student_page'])
+            self.btn_add_teacher.setEnabled(False)
+            self.btn_delete_teacher.setEnabled(False)
+            self.status_bar.showMessage("正在添加新老师...")
+            QApplication.processEvents() # Ensure message is shown
+
+            try:
+                if not self.teacher_dao.check_single_username(username):
+                    self.status_bar.showMessage("添加老师失败，用户名已存在。", 3000)
+                    # QMessageBox.warning(self, "添加失败", "用户名已存在。") # Alternative
+                    return # Keep buttons disabled until dialog is closed or input changes
+            
+                if self.teacher_table_model.add_teacher(name, username, pswd):
+                    self.status_bar.showMessage(f"老师 {name} 添加成功。", 3000)
+                else:
+                    self.status_bar.showMessage("添加老师失败，发生未知错误。", 3000)
+                    # QMessageBox.warning(self, "添加失败", "添加新老师失败。") # Alternative
+            finally:
+                self.btn_add_teacher.setEnabled(True)
+                self.btn_delete_teacher.setEnabled(True)
         
     def on_delete_teacher_clicked(self):
         selected_indexes = self.table_view_teachers.selectionModel().selectedRows()
-        if selected_indexes:
-            selected_row = selected_indexes[0].row()
-            self.teacher_dao.delete_row(selected_row)
-            # 刷新数据模型并且设置关联页面为脏
-            self.teacher_table_model.refresh()
-            self.set_page_dirty(['course_page', 'student_page'])
+        if not selected_indexes:
+            self.status_bar.showMessage("请先选择要删除的老师。", 2000)
+            return
+
+        # Get the proxy model index for the selected row
+        proxy_model_index = selected_indexes[0]
+        # Map to the source model index
+        source_model_index = self.teacher_proxy_model.mapToSource(proxy_model_index)
+        source_row = source_model_index.row()
+
+        # Get teacher name from the source model for the confirmation dialog
+        # Assuming column 0 is '姓名' (Name)
+        teacher_name_to_delete = self.teacher_table_model.data(self.teacher_table_model.index(source_row, 0), Qt.DisplayRole)
+        # Fallback if name is not found, though it should be
+        if teacher_name_to_delete is None:
+            teacher_name_to_delete = "所选老师"
+
+
+        reply = QMessageBox.question(self, '确认删除', 
+                                     f"确定要删除老师 “{teacher_name_to_delete}” 吗？",
+                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+
+        if reply == QMessageBox.Yes:
+            self.btn_add_teacher.setEnabled(False)
+            self.btn_delete_teacher.setEnabled(False)
+            self.status_bar.showMessage(f"正在删除老师 {teacher_name_to_delete}...")
+            QApplication.processEvents() # Ensure message is shown
+
+            try:
+                # Call delete_teacher_by_index with the source model's row index
+                if self.teacher_table_model.delete_teacher_by_index(source_row):
+                    self.status_bar.showMessage(f"老师 {teacher_name_to_delete} 已删除。", 3000)
+                else:
+                    self.status_bar.showMessage("删除老师失败。", 3000)
+                    # QMessageBox.warning(self, "删除失败", "删除老师失败。") # Alternative
+            finally:
+                self.btn_add_teacher.setEnabled(True)
+                self.btn_delete_teacher.setEnabled(True)
 
 #---------------------课程管理相关代码------------------------------------------------------------
 
@@ -194,11 +287,8 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
             self.btn_add_course.clicked.connect(self.on_add_course_clicked)
             self.btn_delete_course.clicked.connect(self.on_delete_course_clicked)
 
-        elif self.data_dirty[page_key]:
-            #如果数据脏了，仅仅刷新数据模型即可
-            self.course_table_model.refresh()
-        
-        self.data_dirty[page_key] = False  # 刷新后当前页面不是脏的
+        # The table should now update automatically via model signals.
+        # No need for data_dirty flag for course_page.
         self.stacked_widget.setCurrentIndex(self.page_map['course_page'])
         self.show_navi_info_label.setText(self.page_map_to_navi_info['course_page'])
 
@@ -212,22 +302,55 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
                 return
             course_name = res['course_name']
             teacher_username = res['teacher_username']
-            if not self.course_dao.check_single_course_name(course_name):
-                print('当前课程名已经存在')
-                return
-            self.course_dao.add_new(course_name, teacher_username)
-            # 刷新数据模型并且设置关联页面为脏
-            self.course_table_model.refresh()
-            self.set_page_dirty(['student_page'])
+
+            self.btn_add_course.setEnabled(False)
+            self.btn_delete_course.setEnabled(False)
+            self.status_bar.showMessage("正在添加新课程...")
+            QApplication.processEvents()
+
+            try:
+                if not self.course_dao.check_single_course_name(course_name):
+                    self.status_bar.showMessage("添加课程失败，课程名已存在。", 3000)
+                    # QMessageBox.warning(self, "添加失败", "课程名已存在。")
+                    return # Keep buttons disabled until dialog is closed or input changes
+            
+                if self.course_table_model.add_course(course_name, teacher_username):
+                    self.status_bar.showMessage(f"课程 {course_name} 添加成功。", 3000)
+                else:
+                    self.status_bar.showMessage("添加课程失败，发生未知错误。", 3000)
+                    # QMessageBox.warning(self, "添加失败", f"添加课程 {course_name} 失败。")
+            finally:
+                self.btn_add_course.setEnabled(True)
+                self.btn_delete_course.setEnabled(True)
         
     def on_delete_course_clicked(self):
-        indexes = self.table_view_course.selectionModel().selectedRows()
-        if indexes:
-            row = indexes[0].row()
-            self.course_dao.delete_course_by_row(row)
-            # 刷新数据模型并且设置关联页面为脏
-            self.course_table_model.refresh()
-            self.set_page_dirty(['student_page'])
+        selected_indexes = self.table_view_course.selectionModel().selectedRows()
+        if not selected_indexes:
+            self.status_bar.showMessage("请先选择要删除的课程。", 2000)
+            return
+
+        selected_row = selected_indexes[0].row()
+        course_name_to_delete = self.course_table_model.data_cache[selected_row][0]
+
+        reply = QMessageBox.question(self, '确认删除', 
+                                     f"确定要删除课程 “{course_name_to_delete}” 吗？",
+                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+
+        if reply == QMessageBox.Yes:
+            self.btn_add_course.setEnabled(False)
+            self.btn_delete_course.setEnabled(False)
+            self.status_bar.showMessage(f"正在删除课程 {course_name_to_delete}...")
+            QApplication.processEvents()
+
+            try:
+                if self.course_table_model.delete_course_by_index(selected_row):
+                    self.status_bar.showMessage(f"课程 {course_name_to_delete} 已删除。", 3000)
+                else:
+                    self.status_bar.showMessage("删除课程失败。", 3000)
+                    # QMessageBox.warning(self, "删除失败", "删除课程失败。")
+            finally:
+                self.btn_add_course.setEnabled(True)
+                self.btn_delete_course.setEnabled(True)
 
 
 
@@ -273,24 +396,47 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
             )
 
 
-        elif self.data_dirty[page_key]:
-            #如果数据脏了，仅仅刷新数据模型即可
-            self.student_table_model.refresh()
-            self.reset_delegates()
-
-        self.data_dirty[page_key] = False  # 刷新后当前页面不是脏的
+        # The table should now update automatically via model signals for add/delete.
+        # No need for data_dirty flag for student_page.
+        # However, reset_delegates might still be needed after model operations
+        # if not called directly in on_delete_stu_clicked or on_add_stu_without_face_clicked.
+        # For now, we assume add/delete handlers will call reset_delegates if needed.
         self.stacked_widget.setCurrentIndex(self.page_map['student_page'])
         self.show_navi_info_label.setText(self.page_map_to_navi_info['student_page'])
 
     def on_delete_stu_clicked(self):
         """删除学生信息"""
         selected_indexes = self.table_view_students.selectionModel().selectedRows()
-        if selected_indexes:
-            selected_row = selected_indexes[0].row()
-            self.student_dao.delete_student(selected_row)
-            # 刷新学生数据模型以及对应的课程数据模型
-            self.student_table_model.refresh()
-            self.reset_delegates()
+        if not selected_indexes:
+            self.status_bar.showMessage("请先选择要删除的学生。", 2000)
+            return
+
+        selected_row = selected_indexes[0].row()
+        student_name_to_delete = self.student_table_model.data_cache[selected_row][1] # Name is at index 1
+
+        reply = QMessageBox.question(self, '确认删除', 
+                                     f"确定要删除学生 “{student_name_to_delete}” 吗？",
+                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+
+        if reply == QMessageBox.Yes:
+            self.btn_add_stu.setEnabled(False)
+            self.btn_delete_stu.setEnabled(False)
+            self.btn_add_stu_without_face.setEnabled(False)
+            self.status_bar.showMessage(f"正在删除学生 {student_name_to_delete}...")
+            QApplication.processEvents()
+
+            try:
+                if self.student_table_model.delete_student_by_index(selected_row):
+                    self.status_bar.showMessage(f"学生 {student_name_to_delete} 已删除。", 3000)
+                    self.reset_delegates() # Keep for UI consistency
+                else:
+                    self.status_bar.showMessage("删除学生失败。", 3000)
+                    # QMessageBox.warning(self, "删除失败", "删除学生信息失败。")
+            finally:
+                self.btn_add_stu.setEnabled(True)
+                self.btn_delete_stu.setEnabled(True)
+                self.btn_add_stu_without_face.setEnabled(True)
+
 
     def on_add_stu_without_face_clicked(self):
         """添加简单的学生信息，不带有人脸的"""
@@ -298,15 +444,29 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         if input_dialog.exec() == QDialog.Accepted:
             res = input_dialog.get_value()
             if len(res) == 0:
-                print('请输入正确的课程信息')
-                return
+                # User likely closed dialog without submitting valid data
+                return 
             name = res['name']
             gender = res['gender']
             age = res['age']
-            self.student_dao.add_student(name, gender, age, 0)
-            
-            self.student_table_model.refresh()
-            self.reset_delegates()
+
+            self.btn_add_stu.setEnabled(False)
+            self.btn_delete_stu.setEnabled(False)
+            self.btn_add_stu_without_face.setEnabled(False)
+            self.status_bar.showMessage(f"正在添加学生 {name}...")
+            QApplication.processEvents()
+
+            try:
+                if self.student_table_model.add_student_data(name, gender, age, is_face_collected=0, face_feature=None):
+                    self.status_bar.showMessage(f"学生 {name} 添加成功。", 3000)
+                    self.reset_delegates() # Keep for UI consistency
+                else:
+                    self.status_bar.showMessage("添加学生失败，发生未知错误。", 3000)
+                    # QMessageBox.warning(self, "添加失败", "添加学生信息失败。")
+            finally:
+                self.btn_add_stu.setEnabled(True)
+                self.btn_delete_stu.setEnabled(True)
+                self.btn_add_stu_without_face.setEnabled(True)
     
     def on_add_multi_stu_clicked(self):
         """"批量添加学生信息"""
@@ -387,25 +547,63 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         """选择还能选的课程，一次性添加到学生的选课表中"""
         selected_indexes = self.table_view_stu_course_availabel.selectionModel().selectedRows()
         if selected_indexes:
-            course_names = [self.stu_course_available_model.data(index, Qt.DisplayRole) for index in selected_indexes]
-            stu_id = self.student_table_model.data_cache[row][0]
-            self.stu_course_dao.add_stu_to_courses(stu_id, course_names)
-            self.stu_course_model.refresh()
-            self.stu_course_available_model.refresh()
-            
-            self.set_page_dirty(['student_page'])
+            self.btn_add_course_for_stu.setEnabled(False)
+            self.btn_del_course_for_stu.setEnabled(False)
+            self.status_bar.showMessage("正在为学生添加课程...")
+            QApplication.processEvents() # Ensure message is shown
+
+            try:
+                course_names = [self.stu_course_available_model.data(index, Qt.DisplayRole) for index in selected_indexes]
+                stu_id = self.student_table_model.data_cache[row][0] # 'row' here is the student's row in student_table_model
+                
+                self.stu_course_dao.add_stu_to_courses(stu_id, course_names) 
+                
+                self.stu_course_model.refresh() 
+                self.stu_course_available_model.refresh()
+                self.status_bar.showMessage("课程添加成功。", 3000)
+            except Exception as e:
+                self.status_bar.showMessage(f"添加课程失败: {e}", 5000) # Show error for longer
+                logger.error(f"Error in on_add_stu_to_course: {e}")
+            finally:
+                self.btn_add_course_for_stu.setEnabled(True)
+                self.btn_del_course_for_stu.setEnabled(True)
+        else:
+            self.status_bar.showMessage("请先选择要添加的课程。", 2000)
+
 
     def on_del_course_for_stu(self, row):
         """删除学生的课程"""
         selected_indexes = self.table_view_stu_course.selectionModel().selectedRows()
         if selected_indexes:
-            course_names = [self.stu_course_model.data(index, Qt.DisplayRole) for index in selected_indexes]
-            stu_id = self.student_table_model.data_cache[row][0]
-            self.stu_course_dao.del_course_from_stu(stu_id, course_names)
-            self.stu_course_model.refresh()
-            self.stu_course_available_model.refresh()
+            course_names_to_delete = [self.stu_course_model.data(index, Qt.DisplayRole) for index in selected_indexes]
+            # 'row' is the student's row in the main student_table_model, used to get student's name for the message
+            student_name = self.student_table_model.data_cache[row][1] 
 
-            self.set_page_dirty(['student_page'])
+            reply = QMessageBox.question(self, '确认移除课程', 
+                                         f"确定要为学生 “{student_name}” 移除选中的 {len(course_names_to_delete)} 门课程吗？",
+                                         QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+
+            if reply == QMessageBox.Yes:
+                self.btn_add_course_for_stu.setEnabled(False)
+                self.btn_del_course_for_stu.setEnabled(False)
+                self.status_bar.showMessage(f"正在为学生 {student_name} 移除课程...")
+                QApplication.processEvents() # Ensure message is shown
+
+                try:
+                    stu_id = self.student_table_model.data_cache[row][0]
+                    self.stu_course_dao.del_course_from_stu(stu_id, course_names_to_delete)
+                    
+                    self.stu_course_model.refresh()
+                    self.stu_course_available_model.refresh()
+                    self.status_bar.showMessage("课程移除成功。", 3000)
+                except Exception as e:
+                    self.status_bar.showMessage(f"移除课程失败: {e}", 5000) # Show error for longer
+                    logger.error(f"Error in on_del_course_for_stu: {e}")
+                finally:
+                    self.btn_add_course_for_stu.setEnabled(True)
+                    self.btn_del_course_for_stu.setEnabled(True)
+        else:
+            self.status_bar.showMessage("请先选择要移除的课程。", 2000)
 
 
     def reset_delegates(self):
@@ -470,7 +668,7 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
 
         # 显示一个小的加载指示器
         self.status_bar.showMessage(f'正在加载 {item_name}...')
-        QApplication.processEvents()  # 处理事件，确保UI更新
+        # QApplication.processEvents()  # Removed: To see if UI updates promptly without it.
 
         if item_name == '老师管理':
             self.enter_page_teacher()
@@ -540,12 +738,16 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         self.status_bar.showMessage('正在启动摄像头...')
 
         # 使用非阻塞方式启动
-        QTimer.singleShot(100, self.delayed_start_face_taker)
+        # Pass context for different status messages
+        QTimer.singleShot(100, lambda: self.delayed_start_face_taker(is_bulk_entry=True))
 
-    def delayed_start_face_taker(self):
+    def delayed_start_face_taker(self, is_bulk_entry=True):
         """延迟启动线程，避免UI阻塞"""
         self.face_taker.start()
-        self.status_bar.showMessage('正在录入人脸...')
+        if is_bulk_entry:
+            self.status_bar.showMessage("摄像头已启动，请将人脸对准摄像头。")
+        else: # For single re-entry
+            self.status_bar.showMessage("摄像头已启动，请将人脸对准摄像头进行重新录入。")
         self.setCursor(Qt.ArrowCursor)
 
     
@@ -593,38 +795,52 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         
         # Set the scaled pixmap to the label
         self.label_face.setPixmap(scaled_pixmap)
+        self.status_bar.showMessage("检测到人脸，请输入学生信息并确认。", 3000)
 
 
     def confirm_face_take(self):
         if self.cur_face is None:
+            QMessageBox.warning(self, "无选中人脸", "请先确保已通过摄像头捕捉到人脸。")
             return
-        face_feature = self.face_taker.get_face_feature()
-
-        name = self.line_edit_name.text()
-        age = self.line_edit_age.text()
+            
+        name = self.line_edit_name.text().strip()
+        age = self.line_edit_age.text().strip()
+        gender = ''
         if self.rbtn_male.isChecked():
             gender = '男'
         elif self.rbtn_female.isChecked():
             gender = '女'
-        else:
-            gender = ''
 
-        if name == ' ' or age == '  ' or gender == '':
-            print('请输入正确的人脸信息')
+        if not name or not age or not gender: # Check for empty strings
+            QMessageBox.warning(self, "信息不完整", "请输入完整的学生姓名、年龄和性别。")
             return
         
+        self.status_bar.showMessage(f"正在保存学生 {name} 的信息及人脸特征...")
+        face_feature = self.face_taker.get_face_feature()
         is_face_collected = 1
-        if not self.student_dao.add_student(name, gender, age, is_face_collected, face_feature):
-            QMessageBox.warning(self, '人脸录入失败', '人脸已存在')
-        self.set_page_dirty(['student_page'])
-
-        self.face_taker.resume()
-
-        self.cur_face = None
+        
+        # Call model's method
+        if self.student_table_model.add_student_data(name, gender, age, is_face_collected, face_feature):
+            self.status_bar.showMessage(f"学生 {name} 的信息保存成功！请继续下一位或结束录入。", 4000)
+            # Clear input fields
+            self.line_edit_name.clear()
+            self.line_edit_age.clear()
+            # Assuming rbtn_male and rbtn_female are part of a QButtonGroup that handles exclusivity,
+            # or they need to be manually unchecked. If they are independent, this is fine.
+            self.rbtn_male.setChecked(False) 
+            self.rbtn_female.setChecked(False)
+            self.label_face.clear() # Clear the displayed face
+            self.cur_face = None # Reset current face
+        else:
+            QMessageBox.warning(self, '人脸录入失败', '添加学生数据失败或人脸已存在。')
+            self.status_bar.showMessage("保存失败，可能人脸已存在或输入信息有误。", 3000)
+        
+        self.face_taker.resume() # Allow next face capture
    
 
     def end_enter_face(self):
         if self.face_taker is not None:
+            self.status_bar.showMessage("批量人脸录入已结束。", 3000)
             blank_img = cv2.cvtColor(cv2.imread(os.path.join(my_config.PHOTO_PATH, 'blank.jpg')), cv2.COLOR_BGR2RGB)
             blank_img_s = cv2.cvtColor(cv2.imread(os.path.join(my_config.PHOTO_PATH, 'blank_s.jpg')), cv2.COLOR_BGR2RGB)
             
@@ -635,7 +851,7 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
             h, w, ch = blank_img_s.shape
             qimage_s = QImage(blank_img_s, w, h, w * ch, QImage.Format_RGB888)
             self.get_face(qimage_s)
-            QApplication.processEvents()
+            # QApplication.processEvents() # Removed
 
             self.face_taker.stop()
             self.face_taker = None
@@ -668,7 +884,7 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
         self.status_bar.showMessage('正在启动摄像头...')
 
         # 使用非阻塞方式启动
-        QTimer.singleShot(100, self.delayed_start_face_taker)
+        QTimer.singleShot(100, lambda: self.delayed_start_face_taker(is_bulk_entry=False))
 
   
     def update_frame_1(self, qimage):
@@ -705,33 +921,46 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
             Qt.SmoothTransformation  # Use smooth scaling algorithm
         )
         self.label_display_cap_face_1.setPixmap(scaled_pixmap)
+        self.status_bar.showMessage("检测到人脸，请确认是否使用此图像。", 3000)
 
     def confirm_face_take_1(self):
         """确定将这张人脸录入数据库，因为对于重新录入人脸这个过程来说，录上了就可以直接退出了"""
         if self.cur_face is None:
+            QMessageBox.warning(self, "无选中人脸", "请先确保已通过摄像头捕捉到人脸。")
             return
         
+        student_name_for_status = self.label_name_1.text() # Get name before potential clear
+        self.status_bar.showMessage(f"正在为学生 {student_name_for_status} 更新人脸特征...")
         face_feature = self.face_taker.get_face_feature()
         id = int(self.label_id_1.text())
-        self.student_dao.reset_face(id, face_feature)
         
-        self.set_page_dirty(['student_page'])
-        self.face_taker.resume()
+        if self.student_dao.reset_face(id, face_feature):
+             self.student_table_model.refresh() # To ensure 'is_face_collected' status updates in the table
+             self.status_bar.showMessage(f"学生 {student_name_for_status} 的人脸特征更新成功！", 3000)
+        else:
+            self.status_bar.showMessage(f"学生 {student_name_for_status} 的人脸特征更新失败。", 3000)
+            QMessageBox.warning(self, "更新失败", "更新人脸特征失败。")
+
+        # self.set_page_dirty(['student_page']) # Removed
+        if self.face_taker: # Ensure face_taker still exists
+            self.face_taker.resume() # resume or stop, depending on desired flow
         self.cur_face = None
 
-        # 结束
-        self.end_face_take_1()
+        # 结束 and clear
+        self.end_face_take_1() # This will also set a status message
 
     def on_pass_this_face_clicked(self):
         """跳过当前人脸录入"""
         if self.face_taker is not None:
             self.face_taker.resume()
+            self.status_bar.showMessage("已跳过当前人脸，请对准下一张。", 2000)
         else:
             print("face_taker 不存在")
 
 
     def end_face_take_1(self):
         if self.face_taker is not None:
+            self.status_bar.showMessage("人脸录入已取消/结束。", 3000)
             blank_img = cv2.cvtColor(cv2.imread(os.path.join(my_config.PHOTO_PATH, 'blank.jpg')), cv2.COLOR_BGR2RGB)
             blank_img_s = cv2.cvtColor(cv2.imread(os.path.join(my_config.PHOTO_PATH, 'blank_s.jpg')), cv2.COLOR_BGR2RGB)
             
@@ -743,7 +972,7 @@ class AdminWindow(Ui_AdminWindow, QMainWindow):
             qimage_s = QImage(blank_img_s, w, h, w * ch, QImage.Format_RGB888)
             self.get_face_1(qimage_s)
 
-            QApplication.processEvents()
+            # QApplication.processEvents() # Removed
             
             self.face_taker.stop()
             self.face_taker = None

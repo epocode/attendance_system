@@ -153,40 +153,68 @@ class MainWindow(Ui_MainWindow, QMainWindow):
     def show_course_detail(self, row=None):
         """ course_detail.<-日期-总人数- 出勤人数-出勤率-操作->"""
         if row is not None:
-            self.attendance_info_dao = AttendanceInfoDAO(self.db)
+            # This is when a specific course's details are being loaded for the first time or by selection
             course_name = self.course_teacher_model.data(self.course_teacher_model.index(row, 0), Qt.DisplayRole)
-            
+            self.status_bar.showMessage(f"正在加载课程 {course_name} 的考勤记录...")
+            QApplication.processEvents() # Ensure message is displayed
+
+            self.attendance_info_dao = AttendanceInfoDAO(self.db)
             self.label_2.setText(f"课程：{course_name}的考勤记录")
             
             self.course_detail_model = CourseDetailModel(self.attendance_info_dao, course_name)
             self.table_view_course_detail.setModel(self.course_detail_model)
             
             self.show_attendance_detail_delegate = BtnDelegate('查看', self.table_view_course_detail)
-            self.show_attendance_detail_delegate.btn_clicked_signal.connect(lambda row: self.show_attendance_detail(row, course_name))
+            # Ensure old connections are disconnected if any, or manage connection uniqueness
+            try:
+                self.show_attendance_detail_delegate.btn_clicked_signal.disconnect()
+            except (RuntimeError, TypeError):
+                pass # No connections or already disconnected
+            self.show_attendance_detail_delegate.btn_clicked_signal.connect(lambda r, c_name=course_name: self.show_attendance_detail(row=r, course_name=c_name))
             self.table_view_course_detail.setItemDelegateForColumn(4, self.show_attendance_detail_delegate) 
-            for row in range(self.course_detail_model.rowCount()):
+            for r_idx in range(self.course_detail_model.rowCount()): # Use a different loop variable
                 self.table_view_course_detail.openPersistentEditor(
-                    self.course_detail_model.index(row, 4)
+                    self.course_detail_model.index(r_idx, 4)
                 )   
 
-            # 绑定考勤按钮对应的槽函数
-            self.btn_enter_attendance.clicked.connect(lambda: self.on_btn_enter_attendance_clicked(course_name))
+            # Bind attendance button, ensure old connections are handled if course_name changes
+            try:
+                self.btn_enter_attendance.clicked.disconnect()
+            except (RuntimeError, TypeError):
+                pass
+            self.btn_enter_attendance.clicked.connect(lambda checked, c_name=course_name: self.on_btn_enter_attendance_clicked(course_name=c_name))
+            self.status_bar.showMessage(f"课程 {course_name} 考勤记录加载完毕。", 2000)
         else:
+            # This case is when returning to the page, possibly after a 'dirty_page' refresh
             if self.dirty_pages['course_detail']:
-                self.course_detail_model.refresh()
+                self.status_bar.showMessage("正在刷新考勤记录...")
+                QApplication.processEvents()
+                if hasattr(self, 'course_detail_model') and self.course_detail_model:
+                    self.course_detail_model.refresh()
+                    self.status_bar.showMessage("考勤记录刷新完毕。", 2000)
+                else:
+                    self.status_bar.showMessage("无法刷新，考勤记录未初始化。", 2000) # Should not happen if page was visited
                 self.dirty_pages['course_detail'] = False
+        
         self.stackedWidget.setCurrentIndex(self.page_map['course_detail'])  
         self.show_navi_info_Label.setText(self.navaigate_map['course_detail'])
 
 #---------------------------------考勤界面------------------------------------------
     def on_btn_enter_attendance_clicked(self, course_name=None):
         """进入考勤的界面，初始化考勤所需要的属性，绑定组件对应的槽函数"""
+        if course_name: # Ensure course_name is provided
+            self.status_bar.showMessage(f"正在准备课程 {course_name} 的签到页面...")
+            QApplication.processEvents() # Ensure message is displayed
+
         self.btn_start_detect_face.clicked.connect(lambda:self.on_start_detect_face_clicked(course_name))
         self.btn_end_detect_face.clicked.connect(self.on_end_detect_face_clicked)   
 
         self.stu_course_dao = StuCourseDao(self.db)
         self.absent_model = AbsentModel(self.stu_course_dao, course_name)
         self.table_view_show_absent.setModel(self.absent_model)
+        
+        if course_name: # Show ready message only if setup was for a course
+            self.status_bar.showMessage("签到页面准备就绪，请开始人脸检测。", 3000)
 
         # 设置combo box内容
         if self.combo_box_video_source.count() == 0:
@@ -287,6 +315,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
             self.absent_stu_set.add(stu_id)
 
         self.face_detector.start()
+        self.status_bar.showMessage("正在检测人脸...")
 
 
     def update_absent(self, id):
@@ -306,32 +335,34 @@ class MainWindow(Ui_MainWindow, QMainWindow):
                     break
 
         
-    def update_frame(self, qimage):
-        pixmap = QPixmap.fromImage(qimage)
-        self.label_display_cap.setPixmap(pixmap)
-
-        label_size = QSize(640, 480)
-        pixmap = QPixmap(label_size)
-        pixmap.fill(Qt.black)  # 设置背景色
-        # 将QImage转换为QPixmap
-        img_pixmap = QPixmap.fromImage(qimage)
-        # 等比例缩放图像，保持宽高比
-        scaled_pixmap = img_pixmap.scaled(
-            label_size, 
-            Qt.KeepAspectRatio,  # 保持宽高比
-            Qt.SmoothTransformation  # 使用平滑的缩放算法
-        )
-        painter = QPainter(pixmap)
-    
-        # 计算在标签中的居中位置
-        x = (label_size.width() - scaled_pixmap.width()) // 2
-        y = (label_size.height() - scaled_pixmap.height()) // 2
+    def update_frame(self, qimage: QImage):
+        # Optimized: Directly create the target pixmap and paint the scaled qimage onto it.
         
-        # 在指定位置绘制缩放后的图像
-        painter.drawPixmap(x, y, scaled_pixmap)
+        # Assuming label_display_cap is the target QLabel.
+        # Use a fixed size for rendering the video frame, as was originally intended.
+        label_size = QSize(640, 480) # Or self.label_display_cap.size() if dynamic sizing is desired
+
+        # Create a blank pixmap with the target size and black background
+        final_pixmap = QPixmap(label_size)
+        final_pixmap.fill(Qt.black)
+
+        # Scale the input QImage to fit within label_size while maintaining aspect ratio
+        # QPixmap.fromImage() is used here as scaled() is a QPixmap method.
+        # An alternative would be to use QImage.scaled() then convert to QPixmap.
+        img_pixmap_scaled = QPixmap.fromImage(qimage).scaled(
+            label_size,
+            Qt.KeepAspectRatio,
+            Qt.SmoothTransformation
+        )
+
+        # Paint the scaled pixmap onto the target pixmap, centered.
+        painter = QPainter(final_pixmap)
+        x = (label_size.width() - img_pixmap_scaled.width()) // 2
+        y = (label_size.height() - img_pixmap_scaled.height()) // 2
+        painter.drawPixmap(x, y, img_pixmap_scaled)
         painter.end()
-        # 设置标签的pixmap
-        self.label_display_cap.setPixmap(pixmap)
+
+        self.label_display_cap.setPixmap(final_pixmap)
 
 
     def on_end_detect_face_clicked(self):
@@ -360,7 +391,7 @@ class MainWindow(Ui_MainWindow, QMainWindow):
                 blank_pixmap.fill(Qt.black)
                 self.label_display_cap.setPixmap(blank_pixmap)
                 
-                QApplication.processEvents()  # 确保UI更新
+                # QApplication.processEvents()  # Removed
                 # 提示用户
                 self.status_bar.showMessage("考勤已结束")
         except Exception as e:
